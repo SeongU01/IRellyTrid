@@ -8,23 +8,27 @@ public class TestMiniGame2 : MiniGameBase
         Debug.Log("위 방향키 누르기 미니게임 시작");
     }
 
-    private void Update()
-    {
-        if (!IsPlaying)
-            return;
+private void Update()
+{
+    if (!IsPlaying)
+        return;
 
-        if (Keyboard.current.anyKey.wasPressedThisFrame)
+    var keyboard = Keyboard.current;
+    if (keyboard == null)
+        return;
+
+    if (keyboard.anyKey.wasPressedThisFrame)
+    {
+        if (keyboard.upArrowKey.wasPressedThisFrame)
         {
-            if (Keyboard.current.upArrowKey.wasPressedThisFrame)
-            {
-                Success();
-            }
-            else
-            {
-                Fail();
-            }
+            Success();
+        }
+        else
+        {
+            Fail();
         }
     }
+}
 
     protected override void Success()
     {
