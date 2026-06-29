@@ -2,10 +2,10 @@
 
 public class MiniGameResult
 {
-    public bool Sucess { get; }
+    public bool Success { get; }
 
     public MiniGameResult(bool sucess)
     {
-        Sucess = sucess;
+        Success = sucess;
     }
 }
