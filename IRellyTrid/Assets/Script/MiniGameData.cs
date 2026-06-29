@@ -6,5 +6,5 @@ public class MiniGameData
     public string name;
     public string commandText;
     public float timeLimit = 30f;
-    public MiniGameBase prefeb;
+    public MiniGameBase prefab;
 }
