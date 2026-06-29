@@ -24,15 +24,18 @@ public class MiniGameManager : MonoBehaviour
         StartMiniGameFlow();
     }
 
-    public void StartMiniGameFlow()
+public void StartMiniGameFlow()
+{
+    if (gameRoutine != null)
     {
-        if (gameRoutine != null)
-        {
-            StopCoroutine(gameRoutine);
-        }
-
-        gameRoutine = StartCoroutine(GameFlowRoutine());
+        StopCoroutine(gameRoutine);
+        gameRoutine = null;
     }
+
+    DestroyCurrentMiniGame();
+
+    gameRoutine = StartCoroutine(GameFlowRoutine());
+}
 
     private IEnumerator GameFlowRoutine()
     {
