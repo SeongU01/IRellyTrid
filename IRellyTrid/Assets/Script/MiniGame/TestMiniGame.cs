@@ -35,25 +35,29 @@ public class TestMiniGame : MiniGameBase
     /// <summary>
     /// 미니 게임 로직을 처리하는 Update 함수.
     /// </summary>
-    private void Update()
+private void Update()
+{
+    if (!IsPlaying)
+        return;
+
+    var keyboard = Keyboard.current;
+    if (keyboard == null)
+        return;
+
+    if (keyboard.anyKey.wasPressedThisFrame)
     {
-        if (!IsPlaying)
-            return;
+        inputCount++;
 
-        if (Keyboard.current.anyKey.wasPressedThisFrame)
+        if (keyboard.spaceKey.wasPressedThisFrame)
         {
-            inputCount++;
-
-            if (Keyboard.current.spaceKey.wasPressedThisFrame)
-            {
-                Success();
-            }
-            else
-            {
-                Fail();
-            }
+            Success();
+        }
+        else
+        {
+            Fail();
         }
     }
+}
 
     /// <summary>
     /// 성공 처리 함수.
