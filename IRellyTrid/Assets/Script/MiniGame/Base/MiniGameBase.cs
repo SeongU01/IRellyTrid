@@ -47,15 +47,15 @@ public abstract class MiniGameBase : MonoBehaviour
     {
         Finish(false);
     }
-private void Finish(bool success)
-{
-    if (!isPlaying)
-        return;
-
-    isPlaying = false;
-    OnEnd();
-    OnFinished?.Invoke(new MiniGameResult(success));
-}
+    private void Finish(bool success)
+    {
+        if (!isPlaying)
+            return;
+    
+        isPlaying = false;
+        OnEnd();
+        OnFinished?.Invoke(new MiniGameResult(success));
+    }
     virtual protected void OnEnd()
     {
     }
