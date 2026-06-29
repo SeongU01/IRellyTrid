@@ -71,8 +71,7 @@ public class MiniGameManager : MonoBehaviour
 #if UNITY_EDITOR
                 Debug.Log("시간 초과");
 #endif
-
-                DestroyCurrentMiniGame();
+                currentMiniGame.Timeout();
             }
             yield return new WaitForSeconds(resultTime);
         }
