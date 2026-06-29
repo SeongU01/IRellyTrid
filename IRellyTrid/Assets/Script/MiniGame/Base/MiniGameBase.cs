@@ -16,7 +16,7 @@ public abstract class MiniGameBase : MonoBehaviour
     {
         isPlaying = false;
     }
-    
+    abstract protected void OnStart();
     public void Play()
     {
         if (isPlaying)
@@ -56,7 +56,6 @@ public abstract class MiniGameBase : MonoBehaviour
         OnFinished?.Invoke(new MiniGameResult(success));
         OnEnd();
     }
-    abstract protected void OnStart();
     virtual protected void OnEnd()
     {
     }
