@@ -1,11 +1,9 @@
-﻿using UnityEngine;
-
 public class MiniGameResult
 {
     public bool Success { get; }
 
-    public MiniGameResult(bool sucess)
+    public MiniGameResult(bool success)
     {
-        Success = sucess;
+        Success = success;
     }
 }
