@@ -78,4 +78,7 @@ IRellyTrid/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Proper
 IRellyTrid/[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 
 # Scene Dependency Cache
-IRellyTrid/[Aa]ssets/[Ss]ceneDependencyCache*
+IRellyTrid/[Aa]ssets/[Ss]ceneDependencyCache*"Library/" 
+"Temp/" 
+"Logs/" 
+"obj/" 
