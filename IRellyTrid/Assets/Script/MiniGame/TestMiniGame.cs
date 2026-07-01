@@ -15,9 +15,9 @@ public class TestMiniGame : MiniGameBase
     /// 미니게임 생성 후 실행 직전에 초기화할 때 호출된다.
     /// 점수, 입력 횟수, 상태값 등을 초기화할 때 사용한다.
     /// </summary>
-    public override void Init()
+    public override void Init(MiniGameData data)
     {
-        base.Init();
+        base.Init(data);
 
         inputCount = 0;
 

@@ -11,10 +11,14 @@ public abstract class MiniGameBase : MonoBehaviour
     public bool IsPlaying => isPlaying;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    
-    public virtual void Init()
+    protected int timeLimit;
+    protected string commandText;
+
+    public virtual void Init(MiniGameData data)
     {
         isPlaying = false;
+        timeLimit = (int)data.timeLimit;
+        commandText = data.commandText;
     }
     abstract protected void OnStart();
     public void Play()
