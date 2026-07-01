@@ -17,9 +17,8 @@ public abstract class MiniGameBase : MonoBehaviour
     public virtual void Init(MiniGameData data)
     {
         isPlaying = false;
-        data.timeLimit = timeLimit;
-        data.commandText = commandText; 
-        data.prefab = this;
+        timeLimit = (int)data.timeLimit;
+        commandText = data.commandText;
     }
     abstract protected void OnStart();
     public void Play()
