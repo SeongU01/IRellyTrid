@@ -369,7 +369,7 @@ MonoBehaviour:
   - name: math mini game
     commandText: "\uD480\uC5B4\uB77C!"
     timeLimit: 30
-    prefab: {fileID: 308782309644700341}
+    prefab: {fileID: 6262087453267821407, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
   readyTime: 2
   resultTime: 3
 --- !u!4 &1946716101
@@ -387,18 +387,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &308782309644700341 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3981449495581806537, guid: 87bfc837ea8cc41478d51f74e38012bb, type: 3}
-  m_PrefabInstance: {fileID: 5463981369011591643}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad73284b437fdc04c9978334c13daa59, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MathQuizGame
---- !u!1001 &5463981369011591643
+--- !u!1001 &7200681178152762995
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -406,63 +395,47 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1008224867284908105, guid: 87bfc837ea8cc41478d51f74e38012bb, type: 3}
+    - target: {fileID: 5738586241080865577, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1002.88544
       objectReference: {fileID: 0}
-    - target: {fileID: 1008224867284908105, guid: 87bfc837ea8cc41478d51f74e38012bb, type: 3}
+    - target: {fileID: 5738586241080865577, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
       propertyPath: m_LocalPosition.y
       value: 530.79675
       objectReference: {fileID: 0}
-    - target: {fileID: 1008224867284908105, guid: 87bfc837ea8cc41478d51f74e38012bb, type: 3}
+    - target: {fileID: 5738586241080865577, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1008224867284908105, guid: 87bfc837ea8cc41478d51f74e38012bb, type: 3}
+    - target: {fileID: 5738586241080865577, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1008224867284908105, guid: 87bfc837ea8cc41478d51f74e38012bb, type: 3}
+    - target: {fileID: 5738586241080865577, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1008224867284908105, guid: 87bfc837ea8cc41478d51f74e38012bb, type: 3}
+    - target: {fileID: 5738586241080865577, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1008224867284908105, guid: 87bfc837ea8cc41478d51f74e38012bb, type: 3}
+    - target: {fileID: 5738586241080865577, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1008224867284908105, guid: 87bfc837ea8cc41478d51f74e38012bb, type: 3}
+    - target: {fileID: 5738586241080865577, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1008224867284908105, guid: 87bfc837ea8cc41478d51f74e38012bb, type: 3}
+    - target: {fileID: 5738586241080865577, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1008224867284908105, guid: 87bfc837ea8cc41478d51f74e38012bb, type: 3}
+    - target: {fileID: 5738586241080865577, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1640156702686273132, guid: 87bfc837ea8cc41478d51f74e38012bb, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 255
-      objectReference: {fileID: 0}
-    - target: {fileID: 1640156702686273132, guid: 87bfc837ea8cc41478d51f74e38012bb, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 3981449495581806537, guid: 87bfc837ea8cc41478d51f74e38012bb, type: 3}
-      propertyPath: timeText
-      value: 
-      objectReference: {fileID: 5463981369011591644}
-    - target: {fileID: 3992077001568548959, guid: 87bfc837ea8cc41478d51f74e38012bb, type: 3}
-      propertyPath: m_text
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7391447557509654832, guid: 87bfc837ea8cc41478d51f74e38012bb, type: 3}
+    - target: {fileID: 8566283799517277753, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
       propertyPath: m_Name
       value: MathQuizMiniGame
       objectReference: {fileID: 0}
@@ -470,18 +443,7 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 87bfc837ea8cc41478d51f74e38012bb, type: 3}
---- !u!114 &5463981369011591644 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3992077001568548959, guid: 87bfc837ea8cc41478d51f74e38012bb, type: 3}
-  m_PrefabInstance: {fileID: 5463981369011591643}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_SourcePrefab: {fileID: 100100000, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -489,4 +451,4 @@ SceneRoots:
   - {fileID: 1748732240}
   - {fileID: 1946716101}
   - {fileID: 292250201}
-  - {fileID: 5463981369011591643}
+  - {fileID: 7200681178152762995}
