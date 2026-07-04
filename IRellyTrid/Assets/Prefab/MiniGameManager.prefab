@@ -189,10 +189,10 @@ MonoBehaviour:
   - name: typing mini game
     commandText: "\uC368\uB77C!"
     timeLimit: 30
-    prefab: {fileID: 0}
+    prefab: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
   readyTime: 2
   resultTime: 3
-  timerText: {fileID: 0}
+  timerText: {fileID: 1423861765855288475}
 --- !u!1 &9220465776586677027
 GameObject:
   m_ObjectHideFlags: 0
