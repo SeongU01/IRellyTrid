@@ -121,22 +121,25 @@ public class TypingWordGame : MiniGameBase
         {
             if (resultText != null)
                 resultText.text = "O";
+
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex >= totalQuestionCount)
+            {
+                Success();
+                return;
+            }
+
+            GenerateQuestion();
         }
         else
         {
             if (resultText != null)
                 resultText.text = "X";
+
+            inputField.text = "";
+            inputField.ActivateInputField();
         }
-
-        currentQuestionIndex++;
-
-        if (currentQuestionIndex >= totalQuestionCount)
-        {
-            Success();
-            return;
-        }
-
-        GenerateQuestion();
     }
 
     protected override void OnEnd()

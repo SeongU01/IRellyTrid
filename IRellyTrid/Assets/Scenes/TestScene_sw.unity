@@ -119,6 +119,143 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &89406059
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5716716546570358831, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 922.93585
+      objectReference: {fileID: 0}
+    - target: {fileID: 5716716546570358831, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 601.99835
+      objectReference: {fileID: 0}
+    - target: {fileID: 5716716546570358831, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5716716546570358831, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5716716546570358831, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5716716546570358831, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5716716546570358831, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5716716546570358831, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5716716546570358831, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5716716546570358831, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: 'words.Array.data[0]'
+      value: apple
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: 'words.Array.data[1]'
+      value: banana
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: 'words.Array.data[2]'
+      value: computer
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: 'words.Array.data[3]'
+      value: school
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: 'words.Array.data[4]'
+      value: student
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: 'words.Array.data[5]'
+      value: teacher
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: 'words.Array.data[6]'
+      value: keyboard
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: 'words.Array.data[7]'
+      value: monitor
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: 'words.Array.data[8]'
+      value: window
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: 'words.Array.data[9]'
+      value: camera
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: 'words.Array.data[10]'
+      value: library
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: 'words.Array.data[11]'
+      value: hospital
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: 'words.Array.data[12]'
+      value: airport
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: 'words.Array.data[13]'
+      value: telephone
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: 'words.Array.data[14]'
+      value: umbrella
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: 'words.Array.data[15]'
+      value: notebook
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: 'words.Array.data[16]'
+      value: bottle
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: 'words.Array.data[17]'
+      value: orange
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: 'words.Array.data[18]'
+      value: chicken
+      objectReference: {fileID: 0}
+    - target: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: 'words.Array.data[19]'
+      value: elephant
+      objectReference: {fileID: 0}
+    - target: {fileID: 7045223679257411827, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+      propertyPath: m_Name
+      value: TypingWordGame
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
 --- !u!1 &292250198
 GameObject:
   m_ObjectHideFlags: 0
@@ -366,10 +503,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MiniGameManager
   miniGameRoot: {fileID: 1946716101}
   miniGames:
-  - name: math mini game
-    commandText: "\uD480\uC5B4\uB77C!"
+  - name: typing mini game
+    commandText: "\uC368\uB77C!"
     timeLimit: 30
-    prefab: {fileID: 6262087453267821407, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
+    prefab: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
   readyTime: 2
   resultTime: 3
 --- !u!4 &1946716101
@@ -452,3 +589,4 @@ SceneRoots:
   - {fileID: 1946716101}
   - {fileID: 292250201}
   - {fileID: 7200681178152762995}
+  - {fileID: 89406059}
