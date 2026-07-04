@@ -77,7 +77,7 @@ public void StartMiniGameFlow()
                 UpdateTimerText(timer);
                 yield return null;
             }
-
+            ClearTimerText();
             if (currentMiniGame != null && currentMiniGame.IsPlaying)
             {
 #if UNITY_EDITOR
