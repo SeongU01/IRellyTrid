@@ -11,8 +11,6 @@ public class MathQuizGame : MiniGameBase
     [SerializeField] private TMP_Text inputText;
     // TODO : 결과 표시용 텍스트 나중에 제거하고 연출로 바꾸면 됨
     [SerializeField] private TMP_Text resultText;
-    // TODO : 남은 시간 표기용, 나중에 다른걸로 교체
-    [SerializeField] private TMP_Text timeText;
 
     [Header("Quiz Settings")]
     [SerializeField] private int totalQuestionCount = 20;
@@ -22,29 +20,19 @@ public class MathQuizGame : MiniGameBase
     private int currentQuestionIndex;
     private int correctAnswer;
     private string currentInput = "";
-    private float remainTime;
     protected override void OnStart()
     {
         currentQuestionIndex = 0;
         currentInput = "";
-        remainTime = timeLimit;
         if(resultText != null)
         {
             resultText.text = "";
         }
 
         GenerateQuestion();
-        UpdateTimerText();
 #if UNITY_EDITOR
         Debug.Log("간단 연산 게임 시작");
 #endif
-    }
-    private void UpdateTimerText()
-    {
-        if (timeText != null)
-        {
-            timeText.text = Mathf.CeilToInt(remainTime).ToString();
-        }
     }
     private void Update()
     {
@@ -52,9 +40,6 @@ public class MathQuizGame : MiniGameBase
         {
             return;
         }
-
-        remainTime -= Time.deltaTime;
-        UpdateTimerText();
 
         HandleNumberInput();
         HandleBackSpace();

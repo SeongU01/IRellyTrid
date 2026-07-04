@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
-
+using TMPro;
 public class MiniGameManager : MonoBehaviour
 {
     [Header("MiniGame Settings")]
@@ -11,6 +11,9 @@ public class MiniGameManager : MonoBehaviour
     [Header("Flow Settings")]
     [SerializeField] private float readyTime = 1f;
     [SerializeField] private float resultTime = 1f;
+
+    [Header("Common UI")]
+    [SerializeField] private TMP_Text timerText;
 
     private MiniGameBase currentMiniGame;
     private Coroutine gameRoutine;
@@ -54,6 +57,10 @@ public void StartMiniGameFlow()
             Debug.Log($"명령어 : {data.commandText}");
 #endif
 
+
+            // 시간 ui 관련
+            ClearTimerText();
+
             yield return new WaitForSeconds(readyTime);
 
             if (!SpawnMiniGame(data))
@@ -62,10 +69,12 @@ public void StartMiniGameFlow()
                 continue;
             }
             float timer = data.timeLimit;
+            UpdateTimerText(timer);
             // 미니게임이 재생중이고 제한시간이 남아있으면 계속 반복
             while (timer > 0f && currentMiniGame != null && currentMiniGame.IsPlaying)
             {
                 timer -= Time.deltaTime;
+                UpdateTimerText(timer);
                 yield return null;
             }
 
@@ -81,6 +90,22 @@ public void StartMiniGameFlow()
 
     }
 
+    private void ClearTimerText()
+    {
+        if (timerText != null)
+        {
+            timerText.text = "";
+        }
+    }
+
+    private void UpdateTimerText(float time)
+    {
+        if(timerText == null)
+        {
+            return;
+        }
+        timerText.text = Mathf.CeilToInt(Mathf.Max(0f,time)).ToString();
+    }
     // random으로 미니게임을 선택하는 함수
     private MiniGameData GetRandomMiniGame()
     {
