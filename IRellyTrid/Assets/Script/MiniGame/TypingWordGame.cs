@@ -29,6 +29,8 @@ public class TypingWordGame : MiniGameBase
             resultText.text = "";
 
         CreateQuizWords();
+        if (!IsPlaying)
+            return;
 
         GenerateQuestion();
 
