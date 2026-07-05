@@ -1164,6 +1164,7 @@ GameObject:
   - component: {fileID: 1925290979}
   - component: {fileID: 1925290978}
   - component: {fileID: 1925290977}
+  - component: {fileID: 1925290980}
   m_Layer: 5
   m_Name: StartButton
   m_TagString: Untagged
@@ -1273,6 +1274,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1925290975}
   m_CullTransparentMesh: 1
+--- !u!114 &1925290980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1925290975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 869a560cc9b7323498bdb07c2eccb201, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
+  sceneName: 
+  sceneIndex: -1
 --- !u!1 &2112121306
 GameObject:
   m_ObjectHideFlags: 0
