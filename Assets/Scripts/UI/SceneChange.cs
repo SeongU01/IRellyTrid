@@ -1,7 +1,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+[RequireComponent(typeof(Button))]
+public class SceneChange : MonoBehaviour
 {
     // Set the target scene name in the Inspector and assign `LoadSceneByName` to the Button's OnClick.
     public string sceneName;
@@ -12,14 +14,21 @@ public class NewMonoBehaviourScript : MonoBehaviour
     // Call this from a UI Button (no parameter) to load the `sceneName` set on this component.
     public void LoadSceneByName()
     {
-        if (!string.IsNullOrEmpty(sceneName))
+        if (string.IsNullOrEmpty(sceneName))
         {
-            SceneManager.LoadScene(sceneName);
+            Debug.LogWarning($"Scene name is empty on GameObject: {gameObject.name}");
+            return;
         }
-        else
+
+        Debug.Log($"SceneChange: Loading scene '{sceneName}' from GameObject '{gameObject.name}'");
+
+        if (!Application.CanStreamedLevelBeLoaded(sceneName))
         {
-            Debug.LogWarning("Scene name is empty on GameObject: " + gameObject.name);
+            Debug.LogWarning($"SceneChange: Scene '{sceneName}' cannot be loaded. Check Build Settings and spelling.");
+            return;
         }
+
+        SceneManager.LoadScene(sceneName);
     }
 
     // Call this from a UI Button to load a scene by index.
@@ -35,12 +44,13 @@ public class NewMonoBehaviourScript : MonoBehaviour
         }
     }
 
-    // Optional: Keep Start/Update if needed later.
     void Start()
     {
-    }
-
-    void Update()
-    {
+        var button = GetComponent<Button>();
+        if (button != null)
+        {
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(LoadSceneByName);
+        }
     }
 }
