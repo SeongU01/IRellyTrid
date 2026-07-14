@@ -1,20 +1,26 @@
 ﻿using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BookStackGame : MiniGameBase
 {
     [Header("UI")]
-    [SerializeField] private TMP_Text targetText;
+    [SerializeField] private Image targetImage;
     [SerializeField] private TMP_Text progressText;
     [SerializeField] private TMP_Text resultText;
 
     [Header("Book Spawn")]
     [SerializeField] private Transform bookRoot;
+    [SerializeField] private Transform pileCenter;
     [SerializeField] private BookItem bookPrefab;
-    [SerializeField] private float bookYOffset = 0.35f;
-    [SerializeField] private float bookXOffset = 0.08f;
+
+    [Header("Pile Settings")]
+    [SerializeField] private Vector2 pileArea = new Vector2(4f, 3f);
+    [SerializeField] private float maxSpawnRotation = 60f;
+
+    [Header("Drop Zone")]
+    [SerializeField] private BookDropZone dropZone;
 
     [Header("Stage Settings")]
     [SerializeField]
@@ -32,157 +38,344 @@ public class BookStackGame : MiniGameBase
     [SerializeField] private BookData[] similarBooks;
     [SerializeField] private BookData[] normalBooks;
 
+    private readonly List<BookItem> activeBooks =
+        new List<BookItem>();
+
+    private readonly List<BookItem> placedBooks =
+        new List<BookItem>();
+
+    private readonly List<BookData> remainingTargetBooks =
+        new List<BookData>();
+
     private int currentStageIndex;
-    private readonly List<BookItem> spawnedBooks = new List<BookItem>();
+    private int nextSortingOrder;
 
     protected override void OnStart()
     {
         currentStageIndex = 0;
-        if(resultText != null) 
+        nextSortingOrder = 1000;
+
+        ClearAllBooks();
+        CreateTargetBookPool();
+
+        if (resultText != null)
         {
             resultText.text = "";
+        }
+
+        if (targetImage != null)
+        {
+            targetImage.sprite = null;
+            targetImage.enabled = false;
+        }
+
+        if (stages != null &&
+            remainingTargetBooks.Count < stages.Length)
+        {
+#if UNITY_EDITOR
+            Debug.LogError(
+                $"목표 책이 부족합니다. " +
+                $"필요: {stages.Length}, " +
+                $"등록: {remainingTargetBooks.Count}");
+#endif
+            Fail();
+            return;
         }
 
         CreateStage();
     }
 
+   private void CreateTargetBookPool()
+{
+    remainingTargetBooks.Clear();
+
+    if (targetBooks == null)
+    {
+        return;
+    }
+
+    HashSet<Sprite> addedSprites =
+        new HashSet<Sprite>();
+
+    for (int i = 0; i < targetBooks.Length; i++)
+    {
+        BookData targetBook = targetBooks[i];
+
+        if (targetBook == null ||
+            targetBook.sprite == null)
+        {
+            continue;
+        }
+
+        // 같은 스프라이트가 여러 번 등록되어도 한 번만 추가한다.
+        if (!addedSprites.Add(targetBook.sprite))
+        {
+            continue;
+        }
+
+        remainingTargetBooks.Add(targetBook);
+    }
+
+    Shuffle(remainingTargetBooks);
+}
+
+private BookData GetNextTargetBook()
+{
+    if (remainingTargetBooks.Count == 0)
+    {
+        return null;
+    }
+
+    int lastIndex = remainingTargetBooks.Count - 1;
+    BookData targetBook =
+        remainingTargetBooks[lastIndex];
+
+    remainingTargetBooks.RemoveAt(lastIndex);
+    return targetBook;
+}
     private void CreateStage()
     {
-        ClearBooks();
+        ClearActiveBooks();
 
-        if(stages == null || stages.Length ==0)
+        if (!ValidateSettings())
         {
-#if UNITY_EDITOR
-            Debug.LogError("스테이지 데이터가 없습니다.");
-#endif
-            Fail();
-            return;
-        }
-
-        if(bookPrefab == null || bookRoot == null)
-        {
-#if UNITY_EDITOR
-            Debug.LogError("책 프리팹 또는 루트가 설정되지 않았습니다.");
-#endif
-            Fail();
-            return;
-        }
-        
-        if (targetBooks == null || targetBooks.Length == 0)
-        {
-#if UNITY_EDITOR
-            Debug.LogError("타겟 책 데이터가 없습니다.");
-#endif
             Fail();
             return;
         }
 
         BookStageData stage = stages[currentStageIndex];
 
+        if (stage == null)
+        {
+#if UNITY_EDITOR
+            Debug.LogError("현재 스테이지 데이터가 없습니다.");
+#endif
+            Fail();
+            return;
+        }
+
+        BookData targetBook = GetNextTargetBook();
+
+        if (targetBook == null)
+        {
+#if UNITY_EDITOR
+            Debug.LogError("유효한 목표 책 데이터가 없습니다.");
+#endif
+            Fail();
+            return;
+        }
+
         int bookCount = Mathf.Max(1, stage.bookCount);
-        int similarBookCount = Mathf.Clamp(stage.similarBookCount, 0, bookCount - 1);
-        int normalBookCount = bookCount - similarBookCount - 1;
 
-        BookData targetBook = GetRandomBook(targetBooks);
+        int similarBookCount = Mathf.Clamp(
+            stage.similarBookCount,
+            0,
+            bookCount - 1);
 
-        List<(BookData data,bool isTarget)> stageBooks = new List<(BookData, bool)>();
+        int normalBookCount =
+            bookCount - similarBookCount - 1;
+
+        BookData matchingSimilarBook =
+            GetMatchingSimilarBook(targetBook);
+
+        if (matchingSimilarBook == null)
+        {
+#if UNITY_EDITOR
+            Debug.LogError(
+                $"목표 책과 짝이 맞는 비슷한 책이 없습니다: " +
+                $"{targetBook.bookName}");
+#endif
+            Fail();
+            return;
+        }
+
+        List<(BookData data, bool isTarget)> stageBooks =
+            new List<(BookData, bool)>();
 
         stageBooks.Add((targetBook, true));
 
         for (int i = 0; i < similarBookCount; i++)
         {
-            BookData similarBook = GetRandomBook(similarBooks);
-        
-            if(similarBook == null)
-            {
-                similarBook = targetBook;
-            }
-
-            stageBooks.Add((similarBook, false));
+            stageBooks.Add((matchingSimilarBook, false));
         }
 
-        for(int i = 0; i < normalBookCount; i++)
-        {
-            BookData normalBook = GetRandomBook(normalBooks);
-                    
-            if(normalBook == null)
-            {
-                normalBook = targetBook;
-            }
+        List<BookData> selectedNormalBooks =
+            GetUniqueRandomBooks(
+                normalBooks,
+                normalBookCount,
+                matchingSimilarBook.sprite);
 
-            stageBooks.Add((normalBook, false));
+        if (selectedNormalBooks.Count < normalBookCount)
+        {
+#if UNITY_EDITOR
+            Debug.LogError(
+                $"서로 다른 일반책이 부족합니다. " +
+                $"필요: {normalBookCount}, " +
+                $"사용 가능: {selectedNormalBooks.Count}");
+#endif
+            Fail();
+            return;
+        }
+
+        for (int i = 0; i < selectedNormalBooks.Count; i++)
+        {
+            stageBooks.Add((selectedNormalBooks[i], false));
         }
 
         Shuffle(stageBooks);
-        SpawnBooks(stageBooks);
+        SpawnScatteredBooks(stageBooks);
 
-        if (targetText != null)
-            targetText.text = $"Find: {targetBook.bookName}";
+        if (targetImage != null)
+        {
+            targetImage.sprite = targetBook.sprite;
+            targetImage.color = Color.white;
+            targetImage.preserveAspect = true;
+            targetImage.enabled = true;
+        }
 
         if (progressText != null)
-            progressText.text = $"{currentStageIndex + 1} / {stages.Length}";
+        {
+            progressText.text =
+                $"{currentStageIndex + 1} / {stages.Length}";
+        }
 
 #if UNITY_EDITOR
-        Debug.Log($"Stage {currentStageIndex + 1} 시작 / 목표 책: {targetBook.bookName}");
+        Debug.Log(
+            $"Stage {currentStageIndex + 1} 시작 " +
+            $"/ 목표 책: {targetBook.bookName}");
 #endif
     }
 
-    public void OnBookClicked(BookItem clickedBook)
+    public void BeginBookDrag(BookItem book)
     {
-        if (!IsPlaying)
-            return;
-
-        if (clickedBook == null)
-            return;
-
-        BookItem topBook = GetTopBook();
-
-        if (clickedBook != topBook)
+        if (!IsPlaying || book == null || book.IsLocked)
         {
-            if (resultText != null)
-                resultText.text = "X";
-
-#if UNITY_EDITOR
-            Debug.Log("위에 있는 책부터 치워야 합니다.");
-#endif
             return;
         }
 
-        if (clickedBook.IsTarget)
-        {
-            if (resultText != null)
-                resultText.text = "O";
+        nextSortingOrder++;
 
-            NextStage();
-        }
-        else
-        {
-            RemoveBook(clickedBook);
-        }
-    }
+        float frontZ =
+            -1f - nextSortingOrder * 0.0001f;
 
-    private BookItem GetTopBook()
-    {
-        if (spawnedBooks.Count == 0)
-            return null;
-
-        return spawnedBooks[spawnedBooks.Count - 1];
-    }
-
-    private void RemoveBook(BookItem book)
-    {
-        if (book == null)
-            return;
-
-        spawnedBooks.Remove(book);
-        Destroy(book.gameObject);
+        book.BringToFront(
+            nextSortingOrder,
+            frontZ);
 
         if (resultText != null)
+        {
             resultText.text = "";
+        }
+    }
+
+    public void OnBookDropped(BookItem book)
+    {
+        if (!IsPlaying || book == null || book.IsLocked)
+        {
+            return;
+        }
+
+        if (!IsBookInsideDropZone(book))
+        {
+            return;
+        }
+
+        if (!book.IsTarget)
+        {
+            if (resultText != null)
+            {
+                resultText.text = "X";
+            }
 
 #if UNITY_EDITOR
-        Debug.Log($"책 제거: {book.BookName}");
+            Debug.Log($"잘못된 책: {book.BookName}");
 #endif
+            return;
+        }
+
+        PlaceTargetBook(book);
+        NextStage();
+    }
+
+    private bool IsBookInsideDropZone(BookItem book)
+    {
+        if (dropZone == null || book == null)
+        {
+            return false;
+        }
+
+        return dropZone.Contains(
+            book.transform.position);
+    }
+
+    private void PlaceTargetBook(BookItem book)
+    {
+        activeBooks.Remove(book);
+
+        int placedIndex = placedBooks.Count;
+        placedBooks.Add(book);
+
+        Vector3 localPosition =
+            dropZone.GetPlacedLocalPosition(placedIndex);
+
+        int sortingOrder = 2000 + placedIndex;
+
+        book.LockAt(
+            dropZone.PlacedBookRoot,
+            localPosition,
+            sortingOrder);
+
+        if (resultText != null)
+        {
+            resultText.text = "O";
+        }
+
+#if UNITY_EDITOR
+        Debug.Log($"목표 책 배치 완료: {book.BookName}");
+#endif
+    }
+
+    private void SpawnScatteredBooks(
+        List<(BookData data, bool isTarget)> stageBooks)
+    {
+        for (int i = 0; i < stageBooks.Count; i++)
+        {
+            float randomX = Random.Range(
+                -pileArea.x * 0.5f,
+                pileArea.x * 0.5f);
+
+            float randomY = Random.Range(
+                -pileArea.y * 0.5f,
+                pileArea.y * 0.5f);
+
+            float randomRotation = Random.Range(
+                -maxSpawnRotation,
+                maxSpawnRotation);
+
+            Vector3 worldPosition =
+                pileCenter.position +
+                new Vector3(
+                    randomX,
+                    randomY,
+                    -i * 0.01f);
+
+            BookItem book = Instantiate(
+                bookPrefab,
+                worldPosition,
+                Quaternion.Euler(
+                    0f,
+                    0f,
+                    randomRotation),
+                bookRoot);
+
+            book.Init(
+                this,
+                stageBooks[i].data,
+                stageBooks[i].isTarget,
+                i);
+
+            activeBooks.Add(book);
+        }
     }
 
     private void NextStage()
@@ -197,60 +390,193 @@ public class BookStackGame : MiniGameBase
 
         CreateStage();
     }
-    private void SpawnBooks(List<(BookData data, bool isTarget)> stageBooks)
+
+    private bool ValidateSettings()
     {
-        for (int i = 0; i < stageBooks.Count; i++)
+        if (stages == null || stages.Length == 0)
         {
-            Vector3 position = new Vector3(
-                i * bookXOffset,
-                i * bookYOffset,
-                -i * 0.01f
-            );
-
-            BookItem book = Instantiate(bookPrefab, bookRoot);
-            book.transform.localPosition = position;
-
-            book.Init(this, stageBooks[i].data, stageBooks[i].isTarget, i);
-
-            spawnedBooks.Add(book);
+#if UNITY_EDITOR
+            Debug.LogError("스테이지 데이터가 없습니다.");
+#endif
+            return false;
         }
+
+        if (currentStageIndex < 0 ||
+            currentStageIndex >= stages.Length)
+        {
+#if UNITY_EDITOR
+            Debug.LogError("잘못된 스테이지 인덱스입니다.");
+#endif
+            return false;
+        }
+
+        if (bookPrefab == null ||
+            bookRoot == null ||
+            pileCenter == null)
+        {
+#if UNITY_EDITOR
+            Debug.LogError(
+                "책 프리팹, BookRoot 또는 PileCenter가 " +
+                "설정되지 않았습니다.");
+#endif
+            return false;
+        }
+
+        if (dropZone == null)
+        {
+#if UNITY_EDITOR
+            Debug.LogError(
+                "BookDropZone이 설정되지 않았습니다.");
+#endif
+            return false;
+        }
+
+        return true;
     }
 
-    private BookData GetRandomBook(BookData[] books)
+    private BookData GetMatchingSimilarBook(
+        BookData targetBook)
     {
-        if (books == null || books.Length==0)
+        if (targetBook == null ||
+            targetBooks == null ||
+            similarBooks == null)
         {
             return null;
         }
-        return books[Random.Range(0, books.Length)];
+
+        for (int i = 0; i < targetBooks.Length; i++)
+        {
+            BookData registeredTarget = targetBooks[i];
+
+            if (registeredTarget == null ||
+                registeredTarget.sprite != targetBook.sprite)
+            {
+                continue;
+            }
+
+            if (i >= similarBooks.Length)
+            {
+                return null;
+            }
+
+            return similarBooks[i];
+        }
+
+        return null;
+    }
+
+    private List<BookData> GetUniqueRandomBooks(
+        BookData[] books,
+        int count,
+        Sprite excludedSprite)
+    {
+        List<BookData> candidates =
+            new List<BookData>();
+
+        HashSet<Sprite> addedSprites =
+            new HashSet<Sprite>();
+
+        if (books == null)
+        {
+            return candidates;
+        }
+
+        for (int i = 0; i < books.Length; i++)
+        {
+            BookData book = books[i];
+
+            if (book == null ||
+                book.sprite == null ||
+                book.sprite == excludedSprite ||
+                !addedSprites.Add(book.sprite))
+            {
+                continue;
+            }
+
+            candidates.Add(book);
+        }
+
+        Shuffle(candidates);
+
+        if (candidates.Count > count)
+        {
+            candidates.RemoveRange(
+                count,
+                candidates.Count - count);
+        }
+
+        return candidates;
+    }
+
+    private BookData GetRandomValidBook(
+        BookData[] books)
+    {
+        if (books == null || books.Length == 0)
+        {
+            return null;
+        }
+
+        int startIndex = Random.Range(0, books.Length);
+
+        for (int i = 0; i < books.Length; i++)
+        {
+            int index =
+                (startIndex + i) % books.Length;
+
+            if (books[index] != null)
+            {
+                return books[index];
+            }
+        }
+
+        return null;
     }
 
     private void Shuffle<T>(List<T> list)
     {
-        for(int i = list.Count - 1; i>0;i--)
+        for (int i = list.Count - 1; i > 0; i--)
         {
-            int randomIndex = Random.Range(0, i +1);
-            (list[i], list[randomIndex]) = (list[randomIndex], list[i]);
+            int randomIndex = Random.Range(0, i + 1);
+
+            (list[i], list[randomIndex]) =
+                (list[randomIndex], list[i]);
         }
     }
-    protected override void OnEnd()
-    {
-        ClearBooks();
 
-#if UNITY_EDITOR
-        Debug.Log("책 무더기 미니게임 종료");
-#endif
-    }
-
-    private void ClearBooks()
+    private void ClearActiveBooks()
     {
-        for (int i = 0; i < spawnedBooks.Count; i++)
+        for (int i = 0; i < activeBooks.Count; i++)
         {
-            if (spawnedBooks[i] != null)
+            if (activeBooks[i] != null)
             {
-                Destroy(spawnedBooks[i].gameObject);
+                Destroy(activeBooks[i].gameObject);
             }
         }
-        spawnedBooks.Clear();
+
+        activeBooks.Clear();
+    }
+
+    private void ClearAllBooks()
+    {
+        ClearActiveBooks();
+
+        for (int i = 0; i < placedBooks.Count; i++)
+        {
+            if (placedBooks[i] != null)
+            {
+                Destroy(placedBooks[i].gameObject);
+            }
+        }
+
+        placedBooks.Clear();
+    }
+
+    protected override void OnEnd()
+    {
+        ClearAllBooks();
+
+#if UNITY_EDITOR
+        Debug.Log("책 찾기 미니게임 종료");
+#endif
     }
 }
