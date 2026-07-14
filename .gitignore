@@ -79,3 +79,7 @@ IRellyTrid/[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 
 # Scene Dependency Cache
 IRellyTrid/[Aa]ssets/[Ss]ceneDependencyCache*
+
+# Asset
+*.png
+*.jpg
