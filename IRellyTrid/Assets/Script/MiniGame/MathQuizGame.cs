@@ -135,6 +135,9 @@ public class MathQuizGame : MiniGameBase
             {
                 resultText.text = "X";
             }
+            currentInput = "";
+            UpdateInputText();
+            return;
         }
 
         currentQuestionIndex++;
