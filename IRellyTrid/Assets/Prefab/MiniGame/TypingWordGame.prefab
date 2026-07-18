@@ -934,28 +934,30 @@ MonoBehaviour:
   progressText: {fileID: 8768532064296863679}
   resultText: {fileID: 501874710692366361}
   inputField: {fileID: 2464396731706336991}
-  totalQuestionCount: 10
-  words:
-  - apple
-  - banana
-  - computer
-  - school
-  - student
-  - teacher
-  - keyboard
-  - monitor
-  - window
-  - camera
-  - library
-  - hospital
-  - airport
-  - telephone
-  - umbrella
-  - notebook
-  - bottle
-  - orange
-  - chicken
-  - elephant
+  dayDifficulties:
+  - startDay: 1
+    totalQuestionCount: 10
+    words:
+    - apple
+    - banana
+    - computer
+    - school
+    - student
+    - teacher
+    - keyboard
+    - monitor
+    - window
+    - camera
+    - library
+    - hospital
+    - airport
+    - telephone
+    - umbrella
+    - notebook
+    - bottle
+    - orange
+    - chicken
+    - elephant
 --- !u!1 &7738808554123520547
 GameObject:
   m_ObjectHideFlags: 0

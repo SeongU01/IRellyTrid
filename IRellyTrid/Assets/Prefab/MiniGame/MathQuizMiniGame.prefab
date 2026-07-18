@@ -703,6 +703,12 @@ MonoBehaviour:
   progressText: {fileID: 3827771196279198085}
   inputText: {fileID: 8091300543611531352}
   resultText: {fileID: 5132309920599754010}
-  totalQuestionCount: 20
-  minNumber: 1
-  maxNumber: 9
+  dayDifficulties:
+  - startDay: 1
+    totalQuestionCount: 20
+    minNumber: 1
+    maxNumber: 9
+    useAddition: 1
+    useSubtraction: 1
+    useMultiplication: 1
+    useDivision: 1

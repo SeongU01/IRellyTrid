@@ -9,6 +9,7 @@ public abstract class MiniGameBase : MonoBehaviour
 
     // getter
     public bool IsPlaying => isPlaying;
+    public int CurrentDay { get; private set; } = 1;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected int timeLimit;
@@ -19,6 +20,14 @@ public abstract class MiniGameBase : MonoBehaviour
         isPlaying = false;
         timeLimit = (int)data.timeLimit;
         commandText = data.commandText;
+    }
+
+    public void Init(MiniGameData data, int currentDay)
+    {
+        CurrentDay = Mathf.Max(1, currentDay);
+
+        // 기존 Init 오버라이드가 있는 미니게임도 그대로 호출한다.
+        Init(data);
     }
     abstract protected void OnStart();
     public void Play()

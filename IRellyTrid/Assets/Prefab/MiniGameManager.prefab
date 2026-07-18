@@ -190,6 +190,14 @@ MonoBehaviour:
     commandText: "\uC368\uB77C!"
     timeLimit: 30
     prefab: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+  - name: math quiz game
+    commandText: "\uACC4\uC0B0\uD574\uB77C!"
+    timeLimit: 30
+    prefab: {fileID: 6262087453267821407, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
+  - name: book stack game
+    commandText: "\uCC45\uC744 \uCC3E\uC544\uB77C!"
+    timeLimit: 30
+    prefab: {fileID: 6335680773905131617, guid: 617ab2d54d266f849a3ba4ccf6a37332, type: 3}
   readyTime: 2
   resultTime: 3
   timerText: {fileID: 1423861765855288475}

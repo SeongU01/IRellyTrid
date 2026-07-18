@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using UnityEngine.InputSystem;
+using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class MathQuizGame : MiniGameBase
 {
@@ -9,34 +9,58 @@ public class MathQuizGame : MiniGameBase
     [SerializeField] private TMP_Text questionText;
     [SerializeField] private TMP_Text progressText;
     [SerializeField] private TMP_Text inputText;
-    // TODO : 결과 표시용 텍스트 나중에 제거하고 연출로 바꾸면 됨
     [SerializeField] private TMP_Text resultText;
 
-    [Header("Quiz Settings")]
-    [SerializeField] private int totalQuestionCount = 20;
-    [SerializeField] private int minNumber = 1;
-    [SerializeField] private int maxNumber = 9;
+    [Header("Day Difficulties")]
+    [SerializeField]
+    private MathQuizDayDifficulty[] dayDifficulties;
 
+    private readonly List<int> availableOperations =
+        new List<int>();
+
+    private MathQuizDayDifficulty currentDifficulty;
+    private int activeQuestionCount;
     private int currentQuestionIndex;
     private int correctAnswer;
     private string currentInput = "";
+
     protected override void OnStart()
     {
+        currentDifficulty =
+            DayDifficultySelector.GetForDay(
+                dayDifficulties,
+                CurrentDay);
+
+        if (!ValidateDifficulty())
+        {
+            Fail();
+            return;
+        }
+
+        CreateAvailableOperations();
+        activeQuestionCount = Mathf.Max(
+            1,
+            currentDifficulty.totalQuestionCount);
+
         currentQuestionIndex = 0;
         currentInput = "";
-        if(resultText != null)
+
+        if (resultText != null)
         {
             resultText.text = "";
         }
 
         GenerateQuestion();
+
 #if UNITY_EDITOR
-        Debug.Log("간단 연산 게임 시작");
+        Debug.Log(
+            $"간단 연산 게임 시작 / {CurrentDay}일차");
 #endif
     }
+
     private void Update()
     {
-        if(!IsPlaying)
+        if (!IsPlaying)
         {
             return;
         }
@@ -49,7 +73,8 @@ public class MathQuizGame : MiniGameBase
     private void HandleNumberInput()
     {
         Keyboard keyboard = Keyboard.current;
-        if(keyboard== null)
+
+        if (keyboard == null)
         {
 #if UNITY_EDITOR
             Debug.LogWarning("키보드 입력을 감지할 수 없습니다.");
@@ -57,11 +82,10 @@ public class MathQuizGame : MiniGameBase
             return;
         }
 
-        // 0~9까지의 숫자 키 입력 처리
-        for (int i =0; i<=9; ++i)
+        for (int i = 0; i <= 9; i++)
         {
-            Key key = Key.Digit0 + i;
-            // 키보드의 숫자 키가 눌렸는지 확인
+            Key key = (Key)((int)Key.Digit0 + i);
+
             if (keyboard[key].wasPressedThisFrame)
             {
                 currentInput += i.ToString();
@@ -69,12 +93,12 @@ public class MathQuizGame : MiniGameBase
                 return;
             }
 
-            Key numpadKey = Key.Numpad0 + i;
-            // 키보드의 숫자 패드 키가 눌렸는지 확인
+            Key numpadKey = (Key)((int)Key.Numpad0 + i);
+
             if (keyboard[numpadKey].wasPressedThisFrame)
             {
                 currentInput += i.ToString();
-                UpdateInputText(); 
+                UpdateInputText();
                 return;
             }
         }
@@ -84,66 +108,59 @@ public class MathQuizGame : MiniGameBase
     {
         Keyboard keyboard = Keyboard.current;
 
-        if (keyboard == null)
-        {
-            return;
-        }
-        if(!keyboard.backspaceKey.wasPressedThisFrame)
-        {
-            return;
-        }
-        // 지울 문자가 없으면 처리하지 않음
-        if (currentInput.Length<=0)
+        if (keyboard == null ||
+            !keyboard.backspaceKey.wasPressedThisFrame ||
+            currentInput.Length <= 0)
         {
             return;
         }
 
-        currentInput = currentInput.Substring(0, currentInput.Length - 1);
+        currentInput = currentInput.Substring(
+            0,
+            currentInput.Length - 1);
+
         UpdateInputText();
     }
 
     private void HandleSubmit()
     {
         Keyboard keyboard = Keyboard.current;
-        
-        if(keyboard == null)
-        {
-            return;
-        }
-        if(!keyboard.enterKey.wasPressedThisFrame && 
-           !keyboard.numpadEnterKey.wasPressedThisFrame)
-        {
-            return;
-        }
-        if(string.IsNullOrEmpty(currentInput))
-        {
-            return;
-        }
-        
-        int playerAnswer = int.Parse(currentInput);
 
-        if (playerAnswer == correctAnswer)
+        if (keyboard == null ||
+            (!keyboard.enterKey.wasPressedThisFrame &&
+             !keyboard.numpadEnterKey.wasPressedThisFrame) ||
+            string.IsNullOrEmpty(currentInput))
         {
-            if (resultText != null)
-            {
-                resultText.text = "O";
-            }
+            return;
         }
-        else
+
+        if (!int.TryParse(currentInput, out int playerAnswer))
         {
-            if(resultText != null)
-            {
-                resultText.text = "X";
-            }
             currentInput = "";
             UpdateInputText();
             return;
         }
 
-        currentQuestionIndex++;
-        
+        if (playerAnswer != correctAnswer)
+        {
+            if (resultText != null)
+            {
+                resultText.text = "X";
+            }
 
-        if(currentQuestionIndex>= totalQuestionCount)
+            currentInput = "";
+            UpdateInputText();
+            return;
+        }
+
+        if (resultText != null)
+        {
+            resultText.text = "O";
+        }
+
+        currentQuestionIndex++;
+
+        if (currentQuestionIndex >= activeQuestionCount)
         {
             Success();
             return;
@@ -153,25 +170,37 @@ public class MathQuizGame : MiniGameBase
         UpdateInputText();
         GenerateQuestion();
     }
+
     private void GenerateQuestion()
     {
-        int op = Random.Range(0, 4);
+        int operation = availableOperations[
+            Random.Range(0, availableOperations.Count)];
+
+        int minNumber = Mathf.Max(
+            1,
+            Mathf.Min(
+                currentDifficulty.minNumber,
+                currentDifficulty.maxNumber));
+
+        int maxNumber = Mathf.Max(
+            minNumber,
+            Mathf.Max(
+                currentDifficulty.minNumber,
+                currentDifficulty.maxNumber));
+
         int left = 0;
         int right = 0;
         char operatorChar = '+';
 
-        switch (op)
+        switch (operation)
         {
-            // 덧셈
             case 0:
                 left = Random.Range(minNumber, maxNumber + 1);
                 right = Random.Range(minNumber, maxNumber + 1);
-
                 correctAnswer = left + right;
                 operatorChar = '+';
                 break;
 
-            // 뺄셈 (음수가 나오지 않도록)
             case 1:
                 left = Random.Range(minNumber, maxNumber + 1);
                 right = Random.Range(minNumber, maxNumber + 1);
@@ -185,29 +214,33 @@ public class MathQuizGame : MiniGameBase
                 operatorChar = '-';
                 break;
 
-            // 곱셈
             case 2:
                 left = Random.Range(minNumber, maxNumber + 1);
                 right = Random.Range(minNumber, maxNumber + 1);
-
                 correctAnswer = left * right;
                 operatorChar = '×';
                 break;
 
-            // 나눗셈 (항상 정수)
             case 3:
                 right = Random.Range(minNumber, maxNumber + 1);
-
                 correctAnswer = Random.Range(minNumber, maxNumber + 1);
                 left = right * correctAnswer;
-
                 operatorChar = '÷';
                 break;
         }
 
-        questionText.text = $"{left} {operatorChar} {right} = ?";
+        if (questionText != null)
+        {
+            questionText.text =
+                $"{left} {operatorChar} {right} = ?";
+        }
 
-        progressText.text = $"{currentQuestionIndex + 1} / {totalQuestionCount}";
+        if (progressText != null)
+        {
+            progressText.text =
+                $"{currentQuestionIndex + 1} / " +
+                $"{activeQuestionCount}";
+        }
 
         UpdateInputText();
 
@@ -216,9 +249,50 @@ public class MathQuizGame : MiniGameBase
 #endif
     }
 
+    private void CreateAvailableOperations()
+    {
+        availableOperations.Clear();
+
+        if (currentDifficulty.useAddition)
+            availableOperations.Add(0);
+
+        if (currentDifficulty.useSubtraction)
+            availableOperations.Add(1);
+
+        if (currentDifficulty.useMultiplication)
+            availableOperations.Add(2);
+
+        if (currentDifficulty.useDivision)
+            availableOperations.Add(3);
+    }
+
+    private bool ValidateDifficulty()
+    {
+        if (currentDifficulty == null)
+        {
+#if UNITY_EDITOR
+            Debug.LogError("수학 게임 일차 설정이 없습니다.");
+#endif
+            return false;
+        }
+
+        if (!currentDifficulty.useAddition &&
+            !currentDifficulty.useSubtraction &&
+            !currentDifficulty.useMultiplication &&
+            !currentDifficulty.useDivision)
+        {
+#if UNITY_EDITOR
+            Debug.LogError("사용할 연산자가 하나도 없습니다.");
+#endif
+            return false;
+        }
+
+        return true;
+    }
+
     private void UpdateInputText()
     {
-        if(inputText != null)
+        if (inputText != null)
         {
             inputText.text = currentInput;
         }
@@ -230,5 +304,4 @@ public class MathQuizGame : MiniGameBase
         Debug.Log("간단 연산 게임 종료");
 #endif
     }
-
 }

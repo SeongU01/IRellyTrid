@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -10,27 +10,48 @@ public class TypingWordGame : MiniGameBase
     [SerializeField] private TMP_Text resultText;
     [SerializeField] private TMP_InputField inputField;
 
-    [Header("Game Settings")]
-    [SerializeField] private int totalQuestionCount = 10;
+    [Header("Day Difficulties")]
+    [SerializeField]
+    private TypingWordDayDifficulty[] dayDifficulties;
 
-    [Header("Words")]
-    [SerializeField] private string[] words;
+    private readonly List<string> quizWords =
+        new List<string>();
 
+    private TypingWordDayDifficulty currentDifficulty;
+    private int activeQuestionCount;
     private int currentQuestionIndex;
     private string currentAnswer;
 
-    private readonly List<string> quizWords = new List<string>();
-
     protected override void OnStart()
     {
+        currentDifficulty =
+            DayDifficultySelector.GetForDay(
+                dayDifficulties,
+                CurrentDay);
+
+        if (!ValidateDifficulty())
+        {
+            Fail();
+            return;
+        }
+
         currentQuestionIndex = 0;
 
         if (resultText != null)
+        {
             resultText.text = "";
+        }
 
         CreateQuizWords();
-        if (!IsPlaying)
+
+        if (quizWords.Count == 0)
+        {
+#if UNITY_EDITOR
+            Debug.LogError("사용 가능한 단어가 없습니다.");
+#endif
+            Fail();
             return;
+        }
 
         GenerateQuestion();
 
@@ -41,17 +62,17 @@ public class TypingWordGame : MiniGameBase
         }
 
 #if UNITY_EDITOR
-        Debug.Log("단어 맞추기 미니게임 시작");
+        Debug.Log(
+            $"단어 맞추기 미니게임 시작 / {CurrentDay}일차");
 #endif
     }
 
     private void Update()
     {
-        if (!IsPlaying)
+        if (!IsPlaying || inputField == null)
+        {
             return;
-
-        if (inputField == null)
-            return;
+        }
 
         if (Input.GetKeyDown(KeyCode.Return) ||
             Input.GetKeyDown(KeyCode.KeypadEnter))
@@ -60,35 +81,55 @@ public class TypingWordGame : MiniGameBase
         }
     }
 
-    private void CreateQuizWords()
+    private bool ValidateDifficulty()
     {
-        quizWords.Clear();
+        if (currentDifficulty == null)
+        {
+#if UNITY_EDITOR
+            Debug.LogError("타이핑 게임 일차 설정이 없습니다.");
+#endif
+            return false;
+        }
 
-        if (words == null || words.Length == 0)
+        if (currentDifficulty.words == null ||
+            currentDifficulty.words.Length == 0)
         {
 #if UNITY_EDITOR
             Debug.LogError("등록된 단어가 없습니다.");
 #endif
-            Fail();
-            return;
+            return false;
         }
 
-        quizWords.AddRange(words);
+        return true;
+    }
+
+    private void CreateQuizWords()
+    {
+        quizWords.Clear();
+
+        for (int i = 0;
+             i < currentDifficulty.words.Length;
+             i++)
+        {
+            string word = currentDifficulty.words[i];
+
+            if (!string.IsNullOrWhiteSpace(word))
+            {
+                quizWords.Add(word.Trim());
+            }
+        }
 
         for (int i = quizWords.Count - 1; i > 0; i--)
         {
             int randomIndex = Random.Range(0, i + 1);
+
             (quizWords[i], quizWords[randomIndex]) =
                 (quizWords[randomIndex], quizWords[i]);
         }
 
-        if (totalQuestionCount > quizWords.Count)
-        {
-#if UNITY_EDITOR
-            Debug.LogWarning("문제 수가 등록된 단어 수보다 많습니다. 문제 수를 단어 수에 맞춥니다.");
-#endif
-            totalQuestionCount = quizWords.Count;
-        }
+        activeQuestionCount = Mathf.Min(
+            Mathf.Max(1, currentDifficulty.totalQuestionCount),
+            quizWords.Count);
     }
 
     private void GenerateQuestion()
@@ -96,10 +137,16 @@ public class TypingWordGame : MiniGameBase
         currentAnswer = quizWords[currentQuestionIndex];
 
         if (wordText != null)
+        {
             wordText.text = currentAnswer;
+        }
 
         if (progressText != null)
-            progressText.text = $"{currentQuestionIndex + 1} / {totalQuestionCount}";
+        {
+            progressText.text =
+                $"{currentQuestionIndex + 1} / " +
+                $"{activeQuestionCount}";
+        }
 
         if (inputField != null)
         {
@@ -117,37 +164,44 @@ public class TypingWordGame : MiniGameBase
         string playerInput = inputField.text.Trim();
 
         if (string.IsNullOrEmpty(playerInput))
+        {
             return;
-
-        if (playerInput == currentAnswer)
-        {
-            if (resultText != null)
-                resultText.text = "O";
-
-            currentQuestionIndex++;
-
-            if (currentQuestionIndex >= totalQuestionCount)
-            {
-                Success();
-                return;
-            }
-
-            GenerateQuestion();
         }
-        else
+
+        if (playerInput != currentAnswer)
         {
             if (resultText != null)
+            {
                 resultText.text = "X";
+            }
 
             inputField.text = "";
             inputField.ActivateInputField();
+            return;
         }
+
+        if (resultText != null)
+        {
+            resultText.text = "O";
+        }
+
+        currentQuestionIndex++;
+
+        if (currentQuestionIndex >= activeQuestionCount)
+        {
+            Success();
+            return;
+        }
+
+        GenerateQuestion();
     }
 
     protected override void OnEnd()
     {
         if (inputField != null)
+        {
             inputField.DeactivateInputField();
+        }
 
 #if UNITY_EDITOR
         Debug.Log("단어 맞추기 미니게임 종료");
