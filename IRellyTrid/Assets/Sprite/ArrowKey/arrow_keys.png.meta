@@ -4,16 +4,16 @@ TextureImporter:
   internalIDToNameTable:
   - first:
       213: 6552060196920312030
-    second: arrow_keys_0
+    second: Arrow_Right
   - first:
       213: 30064537844054092
-    second: arrow_keys_1
+    second: Arrow_Left
   - first:
       213: -4639942764790953303
-    second: arrow_keys_2
+    second: Arrow_Down
   - first:
       213: 4337145382710925652
-    second: arrow_keys_3
+    second: Arrow_Up
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -109,7 +109,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: arrow_keys_0
+      name: Arrow_Right
       rect:
         serializedVersion: 2
         x: 115
@@ -131,7 +131,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: arrow_keys_1
+      name: Arrow_Left
       rect:
         serializedVersion: 2
         x: 647
@@ -153,7 +153,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: arrow_keys_2
+      name: Arrow_Down
       rect:
         serializedVersion: 2
         x: 1177
@@ -175,7 +175,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: arrow_keys_3
+      name: Arrow_Up
       rect:
         serializedVersion: 2
         x: 1720
@@ -210,10 +210,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      arrow_keys_0: 6552060196920312030
-      arrow_keys_1: 30064537844054092
-      arrow_keys_2: -4639942764790953303
-      arrow_keys_3: 4337145382710925652
+      Arrow_Down: -4639942764790953303
+      Arrow_Left: 30064537844054092
+      Arrow_Right: 6552060196920312030
+      Arrow_Up: 4337145382710925652
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
