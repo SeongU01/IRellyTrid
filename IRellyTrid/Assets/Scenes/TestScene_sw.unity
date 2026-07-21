@@ -119,17 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &38981115 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1423861765855288475, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-  m_PrefabInstance: {fileID: 978647389571962750}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &292250198
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,86 +290,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
---- !u!1 &1166253644
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1166253645}
-  - component: {fileID: 1166253647}
-  - component: {fileID: 1166253646}
-  m_Layer: 5
-  m_Name: BG
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &1166253645
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1166253644}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1490749893}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1920, y: 1080}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1166253646
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1166253644}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 4984212003625794178, guid: 4e3bea43d73618146bdfcd464ef824aa, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1166253647
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1166253644}
-  m_CullTransparentMesh: 1
---- !u!224 &1490749893 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6374967082091295067, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-  m_PrefabInstance: {fileID: 978647389571962750}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1748732237
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,51 +436,31 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: timerText
-      value: 
-      objectReference: {fileID: 38981115}
-    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: miniGames.Array.size
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: miniGames.Array.data[0].name
-      value: SortingMiniGame
-      objectReference: {fileID: 0}
-    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[1].name
-      value: ArrowMiniGame
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: miniGames.Array.data[2].name
-      value: TypingWordGame
-      objectReference: {fileID: 0}
-    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[3].name
       value: MathQuizGame
       objectReference: {fileID: 0}
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[4].name
+      propertyPath: miniGames.Array.data[3].name
       value: BookStackGame
       objectReference: {fileID: 0}
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: miniGames.Array.data[0].prefab
       value: 
-      objectReference: {fileID: 7050204041929986303, guid: 7cdd71a34d294ec0aa1d5777e8a78c3b, type: 3}
-    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[1].prefab
-      value: 
-      objectReference: {fileID: 3030303030303030303, guid: cc7fee2fe4b14ffbaeae67094defa06c, type: 3}
+      objectReference: {fileID: 6262087453267821407, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: miniGames.Array.data[2].prefab
       value: 
-      objectReference: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
-    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[3].prefab
-      value: 
       objectReference: {fileID: 6262087453267821407, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[4].prefab
+      propertyPath: miniGames.Array.data[3].prefab
       value: 
       objectReference: {fileID: 6335680773905131617, guid: 617ab2d54d266f849a3ba4ccf6a37332, type: 3}
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
@@ -579,68 +468,16 @@ PrefabInstance:
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[1].timeLimit
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[2].timeLimit
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[3].timeLimit
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[4].timeLimit
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: miniGames.Array.data[0].commandText
-      value: "\uBD84\uB958!"
-      objectReference: {fileID: 0}
-    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[1].commandText
-      value: "\uB530\uB77C\uD574!"
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: miniGames.Array.data[2].commandText
-      value: "\uBC1B\uC544\uC368!"
-      objectReference: {fileID: 0}
-    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[3].commandText
       value: "\uD480\uC5B4!"
       objectReference: {fileID: 0}
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[4].commandText
+      propertyPath: miniGames.Array.data[3].commandText
       value: "\uCC3E\uC544!"
-      objectReference: {fileID: 0}
-    - target: {fileID: 1423861765855288475, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: m_fontSize
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 1423861765855288475, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: m_fontStyle
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1423861765855288475, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: m_fontColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1423861765855288475, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: m_fontColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1423861765855288475, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: m_fontColor.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1423861765855288475, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: m_fontSizeBase
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 1423861765855288475, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: m_fontColor32.rgba
-      value: 4278190080
       objectReference: {fileID: 0}
     - target: {fileID: 3128394647255388015, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -682,36 +519,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3178760416903015970, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: m_SortingOrder
-      value: -10
-      objectReference: {fileID: 0}
     - target: {fileID: 6066698840990365924, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: m_Name
       value: MiniGameManager
       objectReference: {fileID: 0}
-    - target: {fileID: 7101874459570427646, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 248.9388
-      objectReference: {fileID: 0}
-    - target: {fileID: 7101874459570427646, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 111.1736
-      objectReference: {fileID: 0}
-    - target: {fileID: 7101874459570427646, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -460
-      objectReference: {fileID: 0}
-    - target: {fileID: 7101874459570427646, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 135
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 6374967082091295067, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      insertIndex: 0
-      addedObject: {fileID: 1166253645}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
 --- !u!1660057539 &9223372036854775807
