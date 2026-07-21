@@ -2,13 +2,15 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class MathQuizGame : MiniGameBase
 {
     [Header("UI")]
     [SerializeField] private TMP_Text questionText;
     [SerializeField] private TMP_Text progressText;
-    [SerializeField] private TMP_Text inputText;
+    [FormerlySerializedAs("inputText")]
+    [SerializeField] private TMP_Text answerText;
     [SerializeField] private TMP_Text resultText;
 
     [Header("Day Difficulties")]
@@ -292,9 +294,9 @@ public class MathQuizGame : MiniGameBase
 
     private void UpdateInputText()
     {
-        if (inputText != null)
+        if (answerText != null)
         {
-            inputText.text = currentInput;
+            answerText.text = currentInput;
         }
     }
 

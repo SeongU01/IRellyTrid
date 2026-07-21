@@ -1,4 +1,4 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,6 +43,7 @@ public class ArrowPathCellView : MonoBehaviour
 
         markerText.text = isStart ? "START" : "";
         markerText.enabled = isStart;
+        markerText.color = Color.black;
         markerText.rectTransform.anchoredPosition =
             new Vector2(0f, 48f);
 
@@ -56,6 +57,7 @@ public class ArrowPathCellView : MonoBehaviour
 
         markerText.text = "GOAL";
         markerText.enabled = true;
+        markerText.color = Color.black;
         markerText.rectTransform.anchoredPosition = Vector2.zero;
 
         backgroundImage.color = goalColor;

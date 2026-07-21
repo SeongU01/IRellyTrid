@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class SortingMiniGame : MiniGameBase
 {
+    private const float BoardCenterX = -165f;
+
     private enum SortSide
     {
         Left,
@@ -353,7 +355,7 @@ public class SortingMiniGame : MiniGameBase
             new Vector2(320f, 60f),
             32f);
         progressText.rectTransform.anchoredPosition =
-            new Vector2(-190f, -70f);
+            new Vector2(-340f, -350f);
 
         mistakeText = CreateText(
             "MistakeText",
@@ -362,7 +364,7 @@ public class SortingMiniGame : MiniGameBase
             new Vector2(320f, 60f),
             32f);
         mistakeText.rectTransform.anchoredPosition =
-            new Vector2(190f, -70f);
+            new Vector2(10f, -350f);
 
         resultText = CreateText(
             "ResultText",
@@ -371,10 +373,10 @@ public class SortingMiniGame : MiniGameBase
             new Vector2(260f, 55f),
             36f);
         resultText.rectTransform.anchoredPosition =
-            new Vector2(0f, 95f);
+            new Vector2(BoardCenterX, 95f);
 
         CreateGuideViews(SortSide.Left, -430f);
-        CreateGuideViews(SortSide.Right, 430f);
+        CreateGuideViews(SortSide.Right, 100f);
         CreateItemQueueViews();
         CreateSortButton(
             "LeftButton",
@@ -387,7 +389,7 @@ public class SortingMiniGame : MiniGameBase
             SortSide.Right,
             rightButtonSprite,
             "RIGHT",
-            360f);
+            30f);
     }
 
     private void CreateGuideViews(SortSide side, float xPosition)
@@ -422,7 +424,7 @@ public class SortingMiniGame : MiniGameBase
             guideRect.sizeDelta = guideSize;
             guideRect.anchoredPosition = new Vector2(
                 xPosition,
-                (i - (sideCategories.Count - 1) * 0.5f) * step + 45f);
+                (i - (sideCategories.Count - 1) * 0.5f) * step - 128f);
 
             Image icon = CreateImage(
                 "GuideImage",
@@ -470,13 +472,15 @@ public class SortingMiniGame : MiniGameBase
             20f);
         currentMarker.text = "CURRENT";
         currentMarker.rectTransform.anchoredPosition =
-            new Vector2(0f, 135f);
+            new Vector2(BoardCenterX, 135f);
     }
 
     private Vector2 GetQueueItemPosition(int index)
     {
         float step = itemSize.y + queueSpacing;
-        return new Vector2(0f, 185f + index * step);
+        return new Vector2(
+            BoardCenterX,
+            185f + index * step);
     }
 
     private void RefreshItemQueueViews()
@@ -596,7 +600,7 @@ public class SortingMiniGame : MiniGameBase
         text.font = TMP_Settings.defaultFontAsset;
         text.fontSize = fontSize;
         text.alignment = TextAlignmentOptions.Center;
-        text.color = Color.white;
+        text.color = Color.black;
         text.raycastTarget = false;
         return text;
     }

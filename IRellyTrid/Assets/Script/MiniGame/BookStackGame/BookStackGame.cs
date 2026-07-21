@@ -72,7 +72,7 @@ public class BookStackGame : MiniGameBase
         }
 
         currentStageIndex = 0;
-        nextSortingOrder = 1000;
+        nextSortingOrder = 2000;
 
         ClearAllBooks();
         CreateTargetBookPool();
@@ -337,7 +337,7 @@ private BookData GetNextTargetBook()
         Vector3 localPosition =
             dropZone.GetPlacedLocalPosition(placedIndex);
 
-        int sortingOrder = 2000 + placedIndex;
+        int sortingOrder = 3000 + placedIndex;
 
         book.LockAt(
             dropZone.PlacedBookRoot,
@@ -391,7 +391,7 @@ private BookData GetNextTargetBook()
                 this,
                 stageBooks[i].data,
                 stageBooks[i].isTarget,
-                i);
+                1000 + i);
 
             activeBooks.Add(book);
         }

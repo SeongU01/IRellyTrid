@@ -28,6 +28,15 @@ public class ArrowKeyGame : MiniGameBase
     [SerializeField] private float pathLineThickness = 10f;
     [SerializeField] private Color pathLineColor = new Color(0.65f, 0.75f, 0.9f, 0.8f);
 
+    [Header("Game Area")]
+    [SerializeField] private Vector2 gameAreaCenter =
+        new Vector2(-165f, -150f);
+    [SerializeField] private Vector2 gameAreaSize =
+        new Vector2(860f, 700f);
+    [SerializeField] private float gameAreaPadding = 24f;
+    [SerializeField] private Color uiTextColor =
+        new Color(0.12f, 0.12f, 0.12f, 1f);
+
     private readonly List<Vector2Int> pathPositions =
         new List<Vector2Int>();
 
@@ -48,6 +57,7 @@ public class ArrowKeyGame : MiniGameBase
 
     private ArrowKeyDayDifficulty currentDifficulty;
     private ArrowPathCellView goalView;
+    private Vector2 pathGridCenter;
 
     private RectTransform boardRoot;
     private TMP_Text mistakeText;
@@ -86,6 +96,7 @@ public class ArrowKeyGame : MiniGameBase
             return;
         }
 
+        CalculatePathLayout();
         CreateRandomNotes();
         CreatePathViews();
         UpdateUI("");
@@ -573,12 +584,60 @@ public class ArrowKeyGame : MiniGameBase
     private Vector2 GetBoardPosition(Vector2Int gridPosition)
     {
         return new Vector2(
-            (gridPosition.x -
-             (activeBoardSize.x - 1) * 0.5f) *
+            (gridPosition.x - pathGridCenter.x) *
             currentDifficulty.cellSpacing.x,
-            (gridPosition.y -
-             (activeBoardSize.y - 1) * 0.5f) *
+            (gridPosition.y - pathGridCenter.y) *
             currentDifficulty.cellSpacing.y);
+    }
+
+    private void CalculatePathLayout()
+    {
+        if (pathPositions.Count == 0 || boardRoot == null)
+        {
+            return;
+        }
+
+        int minX = pathPositions[0].x;
+        int maxX = pathPositions[0].x;
+        int minY = pathPositions[0].y;
+        int maxY = pathPositions[0].y;
+
+        for (int i = 1; i < pathPositions.Count; i++)
+        {
+            Vector2Int position = pathPositions[i];
+            minX = Mathf.Min(minX, position.x);
+            maxX = Mathf.Max(maxX, position.x);
+            minY = Mathf.Min(minY, position.y);
+            maxY = Mathf.Max(maxY, position.y);
+        }
+
+        pathGridCenter = new Vector2(
+            (minX + maxX) * 0.5f,
+            (minY + maxY) * 0.5f);
+
+        float contentWidth =
+            (maxX - minX) * currentDifficulty.cellSpacing.x +
+            cellSize.x;
+
+        float contentHeight =
+            (maxY - minY) * currentDifficulty.cellSpacing.y +
+            cellSize.y;
+
+        float availableWidth = Mathf.Max(
+            1f,
+            gameAreaSize.x - gameAreaPadding * 2f);
+
+        float availableHeight = Mathf.Max(
+            1f,
+            gameAreaSize.y - gameAreaPadding * 2f);
+
+        float layoutScale = Mathf.Min(
+            1f,
+            availableWidth / Mathf.Max(1f, contentWidth),
+            availableHeight / Mathf.Max(1f, contentHeight));
+
+        boardRoot.localScale =
+            new Vector3(layoutScale, layoutScale, 1f);
     }
 
     private void BuildInterface()
@@ -599,6 +658,7 @@ public class ArrowKeyGame : MiniGameBase
 
         Canvas canvas = canvasObject.GetComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 10;
 
         CanvasScaler scaler =
             canvasObject.GetComponent<CanvasScaler>();
@@ -619,28 +679,32 @@ public class ArrowKeyGame : MiniGameBase
         boardRoot.SetParent(canvasObject.transform, false);
         boardRoot.anchorMin = new Vector2(0.5f, 0.5f);
         boardRoot.anchorMax = new Vector2(0.5f, 0.5f);
-        boardRoot.sizeDelta = new Vector2(1000f, 650f);
-        boardRoot.anchoredPosition = new Vector2(0f, -20f);
+        boardRoot.sizeDelta = gameAreaSize;
+        boardRoot.anchoredPosition = gameAreaCenter;
 
         mistakeText = CreateText(
             "MistakeText",
             canvasObject.transform,
-            new Vector2(0.5f, 1f),
+            new Vector2(0.5f, 0.5f),
             new Vector2(260f, 60f),
             30f);
 
         mistakeText.rectTransform.anchoredPosition =
-            new Vector2(-170f, -70f);
+            gameAreaCenter +
+            new Vector2(-220f, gameAreaSize.y * 0.5f - 38f);
+        mistakeText.color = uiTextColor;
 
         resultText = CreateText(
             "ResultText",
             canvasObject.transform,
-            new Vector2(0.5f, 1f),
+            new Vector2(0.5f, 0.5f),
             new Vector2(260f, 60f),
             34f);
 
         resultText.rectTransform.anchoredPosition =
-            new Vector2(170f, -70f);
+            gameAreaCenter +
+            new Vector2(220f, gameAreaSize.y * 0.5f - 38f);
+        resultText.color = uiTextColor;
     }
 
     private TMP_Text CreateText(
