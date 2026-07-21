@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -31,6 +32,10 @@ public class SortingMiniGame : MiniGameBase
     [SerializeField] private float queueSpacing = 10f;
     [SerializeField] private float guideSpacing = 18f;
 
+    [Header("Animation")]
+    [SerializeField, Min(0.05f)]
+    private float queueMoveDuration = 0.2f;
+
     private readonly List<int> activeCategoryIndices =
         new List<int>();
     private readonly List<int> categoryBag = new List<int>();
@@ -53,6 +58,7 @@ public class SortingMiniGame : MiniGameBase
     private int sortedCount;
     private int mistakeCount;
     private int lastGeneratedCategoryIndex = -1;
+    private bool isQueueAnimating;
 
     protected override void OnStart()
     {
@@ -70,6 +76,7 @@ public class SortingMiniGame : MiniGameBase
         sortedCount = 0;
         mistakeCount = 0;
         lastGeneratedCategoryIndex = -1;
+        isQueueAnimating = false;
 
         ClearRuntimeData();
         AssignCategorySides();
@@ -179,7 +186,9 @@ public class SortingMiniGame : MiniGameBase
 
     private void SubmitSide(SortSide selectedSide)
     {
-        if (!IsPlaying || itemQueue.Count == 0)
+        if (!IsPlaying ||
+            isQueueAnimating ||
+            itemQueue.Count == 0)
         {
             return;
         }
@@ -212,8 +221,60 @@ public class SortingMiniGame : MiniGameBase
         }
 
         FillItemQueue();
-        RefreshItemQueueViews();
         UpdateStatus("O");
+        StartCoroutine(AnimateQueueDown());
+    }
+
+    private IEnumerator AnimateQueueDown()
+    {
+        isQueueAnimating = true;
+
+        int oldVisibleCount = 0;
+
+        for (int i = 0; i < itemViews.Count; i++)
+        {
+            if (itemViews[i].enabled)
+            {
+                oldVisibleCount++;
+            }
+        }
+
+        if (oldVisibleCount > 0)
+        {
+            itemViews[0].enabled = false;
+        }
+
+        float duration = Mathf.Max(0.05f, queueMoveDuration);
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+
+            float ratio = Mathf.Clamp01(elapsed / duration);
+            float easedRatio =
+                1f - Mathf.Pow(1f - ratio, 3f);
+
+            for (int i = 1; i < oldVisibleCount; i++)
+            {
+                itemViews[i].rectTransform.anchoredPosition =
+                    Vector2.Lerp(
+                        GetQueueItemPosition(i),
+                        GetQueueItemPosition(i - 1),
+                        easedRatio);
+            }
+
+            yield return null;
+        }
+
+        for (int i = 0; i < itemViews.Count; i++)
+        {
+            itemViews[i].rectTransform.anchoredPosition =
+                GetQueueItemPosition(i);
+        }
+
+        RefreshItemQueueViews();
+        isQueueAnimating = false;
     }
 
     private void FillItemQueue()
@@ -388,7 +449,6 @@ public class SortingMiniGame : MiniGameBase
     private void CreateItemQueueViews()
     {
         int viewCount = Mathf.Max(1, visibleQueueCount);
-        float step = itemSize.y + queueSpacing;
 
         for (int i = 0; i < viewCount; i++)
         {
@@ -398,7 +458,7 @@ public class SortingMiniGame : MiniGameBase
                 new Vector2(0.5f, 0f),
                 itemSize);
             itemView.rectTransform.anchoredPosition =
-                new Vector2(0f, 185f + i * step);
+                GetQueueItemPosition(i);
             itemViews.Add(itemView);
         }
 
@@ -411,6 +471,12 @@ public class SortingMiniGame : MiniGameBase
         currentMarker.text = "CURRENT";
         currentMarker.rectTransform.anchoredPosition =
             new Vector2(0f, 135f);
+    }
+
+    private Vector2 GetQueueItemPosition(int index)
+    {
+        float step = itemSize.y + queueSpacing;
+        return new Vector2(0f, 185f + index * step);
     }
 
     private void RefreshItemQueueViews()
@@ -546,6 +612,9 @@ public class SortingMiniGame : MiniGameBase
 
     protected override void OnEnd()
     {
+        StopAllCoroutines();
+        isQueueAnimating = false;
+
         activeCategoryIndices.Clear();
         categoryBag.Clear();
         itemQueue.Clear();

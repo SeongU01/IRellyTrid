@@ -84,11 +84,12 @@ MonoBehaviour:
     categoryCount: 6
     requiredSortCount: 24
     allowedMistakes: 3
-  leftButtonSprite: {fileID: 0}
-  rightButtonSprite: {fileID: 0}
+  leftButtonSprite: {fileID: 30064537844054092, guid: 002b7ab7935f8524485f833e7523b0a9, type: 3}
+  rightButtonSprite: {fileID: 6552060196920312030, guid: 002b7ab7935f8524485f833e7523b0a9, type: 3}
   itemSize: {x: 92, y: 92}
   guideSize: {x: 110, y: 125}
   sortButtonSize: {x: 125, y: 95}
   visibleQueueCount: 6
   queueSpacing: 10
   guideSpacing: 18
+  queueMoveDuration: 0.1
