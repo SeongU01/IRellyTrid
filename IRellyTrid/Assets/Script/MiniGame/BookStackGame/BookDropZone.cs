@@ -3,8 +3,11 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 public class BookDropZone : MonoBehaviour
 {
+    private static Sprite generatedZoneSprite;
+
     [Header("Zone")]
     [SerializeField] private Collider2D zoneCollider;
+    [SerializeField] private SpriteRenderer zoneVisual;
 
     [Header("Book Placement")]
     [SerializeField] private Transform placedBookRoot;
@@ -30,6 +33,43 @@ public class BookDropZone : MonoBehaviour
         {
             zoneCollider = GetComponent<Collider2D>();
         }
+
+        EnsureZoneVisual();
+    }
+
+    private void EnsureZoneVisual()
+    {
+        if (zoneVisual == null)
+        {
+            SpriteRenderer[] renderers =
+                GetComponentsInChildren<SpriteRenderer>(true);
+
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                if (renderers[i].transform != transform)
+                {
+                    zoneVisual = renderers[i];
+                    break;
+                }
+            }
+        }
+
+        if (zoneVisual == null || zoneVisual.sprite != null)
+        {
+            return;
+        }
+
+        if (generatedZoneSprite == null)
+        {
+            generatedZoneSprite = Sprite.Create(
+                Texture2D.whiteTexture,
+                new Rect(0f, 0f, 1f, 1f),
+                new Vector2(0.5f, 0.5f),
+                1f);
+            generatedZoneSprite.name = "GeneratedDropZoneSquare";
+        }
+
+        zoneVisual.sprite = generatedZoneSprite;
     }
 
     public bool Contains(Vector3 worldPosition)
