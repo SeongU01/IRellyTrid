@@ -186,10 +186,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MiniGameManager
   miniGameRoot: {fileID: 3128394647255388015}
   miniGames:
-  - name: typing mini game
-    commandText: "\uC368\uB77C!"
+  - name: arrow key game
+    commandText: "\uBC29\uD5A5\uD0A4\uB97C \uC785\uB825\uD574\uB77C!"
     timeLimit: 30
-    prefab: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+    prefab: {fileID: 3030303030303030303, guid: cc7fee2fe4b14ffbaeae67094defa06c, type: 3}
   readyTime: 2
   resultTime: 3
   timerText: {fileID: 1423861765855288475}

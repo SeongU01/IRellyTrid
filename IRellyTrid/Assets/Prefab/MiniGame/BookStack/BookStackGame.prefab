@@ -110,7 +110,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -100
+  m_SortingOrder: 100
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.5882353, g: 0.5882353, b: 0.5882353, a: 0.3137255}
@@ -197,8 +197,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -314,68 +314,70 @@ MonoBehaviour:
   bookRoot: {fileID: 8055380876678261634}
   pileCenter: {fileID: 5236874100685099754}
   bookPrefab: {fileID: 6626991179149957730, guid: fb41703eb5875064293c7f7816fb7e9b, type: 3}
-  pileArea: {x: 4, y: 3}
-  maxSpawnRotation: 60
   dropZone: {fileID: 2955965238042120377}
-  stages:
-  - bookCount: 4
-    similarBookCount: 0
-  - bookCount: 5
-    similarBookCount: 2
-  - bookCount: 6
-    similarBookCount: 3
-  - bookCount: 7
-    similarBookCount: 4
-  - bookCount: 8
-    similarBookCount: 5
-  targetBooks:
-  - bookName: blue real
-    sprite: {fileID: 21300000, guid: 3dd82e5f22e474545971c2cafd154b90, type: 3}
-    color: {r: 1, g: 1, b: 1, a: 1}
-  - bookName: purple real
-    sprite: {fileID: 21300000, guid: 4ec811755ab6d9342883aea8334ff6d0, type: 3}
-    color: {r: 1, g: 1, b: 1, a: 1}
-  - bookName: red real
-    sprite: {fileID: 21300000, guid: bab13779dcc9f5d4584b8c7f06dd58f5, type: 3}
-    color: {r: 1, g: 1, b: 1, a: 1}
-  - bookName: yellow real
-    sprite: {fileID: 21300000, guid: e39ca64f6a684264eb3e16a6bbb1eb56, type: 3}
-    color: {r: 1, g: 1, b: 1, a: 1}
-  - bookName: green real
-    sprite: {fileID: -1650504585288434639, guid: d011165cff9883d468e794817c2caf3d, type: 3}
-    color: {r: 1, g: 1, b: 1, a: 1}
-  similarBooks:
-  - bookName: blue fake
-    sprite: {fileID: 21300000, guid: f378ee80893495f40a908d85427b2519, type: 3}
-    color: {r: 1, g: 1, b: 1, a: 1}
-  - bookName: purple fake
-    sprite: {fileID: 21300000, guid: 4f069609eafa4a7469b404acacaf1ab1, type: 3}
-    color: {r: 1, g: 1, b: 1, a: 1}
-  - bookName: red fake
-    sprite: {fileID: 21300000, guid: 47e683b901d3a6649b7b89d6ffa253f2, type: 3}
-    color: {r: 1, g: 1, b: 1, a: 1}
-  - bookName: yellow fake
-    sprite: {fileID: 21300000, guid: 0dba73c6b93fa3d40b552173710b3b7b, type: 3}
-    color: {r: 1, g: 1, b: 1, a: 1}
-  - bookName: green fake
-    sprite: {fileID: -6060739831708070957, guid: 98fe1f2438b575e40a1b100699235044, type: 3}
-    color: {r: 1, g: 1, b: 1, a: 1}
-  normalBooks:
-  - bookName: blue normal
-    sprite: {fileID: 21300000, guid: f378ee80893495f40a908d85427b2519, type: 3}
-    color: {r: 1, g: 1, b: 1, a: 1}
-  - bookName: purple normal
-    sprite: {fileID: 21300000, guid: 4f069609eafa4a7469b404acacaf1ab1, type: 3}
-    color: {r: 1, g: 1, b: 1, a: 1}
-  - bookName: red normal
-    sprite: {fileID: 21300000, guid: 47e683b901d3a6649b7b89d6ffa253f2, type: 3}
-    color: {r: 1, g: 1, b: 1, a: 1}
-  - bookName: yellow normal
-    sprite: {fileID: 21300000, guid: 0dba73c6b93fa3d40b552173710b3b7b, type: 3}
-    color: {r: 1, g: 1, b: 1, a: 1}
-  - bookName: green normal
-    sprite: {fileID: -6060739831708070957, guid: 98fe1f2438b575e40a1b100699235044, type: 3}
-    color: {r: 1, g: 1, b: 1, a: 1}
+  dayDifficulties:
+  - startDay: 1
+    pileArea: {x: 4, y: 3}
+    maxSpawnRotation: 60
+    stages:
+    - bookCount: 4
+      similarBookCount: 0
+    - bookCount: 5
+      similarBookCount: 2
+    - bookCount: 6
+      similarBookCount: 3
+    - bookCount: 7
+      similarBookCount: 4
+    - bookCount: 8
+      similarBookCount: 5
+    targetBooks:
+    - bookName: blue real
+      sprite: {fileID: 6484367311293896999, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      color: {r: 1, g: 1, b: 1, a: 1}
+    - bookName: purple real
+      sprite: {fileID: -4663605349952217464, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      color: {r: 1, g: 1, b: 1, a: 1}
+    - bookName: red real
+      sprite: {fileID: -7510780546159189663, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      color: {r: 1, g: 1, b: 1, a: 1}
+    - bookName: yellow real
+      sprite: {fileID: 6885672102793965255, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      color: {r: 1, g: 1, b: 1, a: 1}
+    - bookName: green real
+      sprite: {fileID: 5047418745436979862, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      color: {r: 1, g: 1, b: 1, a: 1}
+    similarBooks:
+    - bookName: blue fake
+      sprite: {fileID: 8132980423974828169, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      color: {r: 1, g: 1, b: 1, a: 1}
+    - bookName: purple fake
+      sprite: {fileID: 5312912139055977644, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      color: {r: 1, g: 1, b: 1, a: 1}
+    - bookName: red fake
+      sprite: {fileID: -5602419011165289409, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      color: {r: 1, g: 1, b: 1, a: 1}
+    - bookName: yellow fake
+      sprite: {fileID: -496635955759009926, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      color: {r: 1, g: 1, b: 1, a: 1}
+    - bookName: green fake
+      sprite: {fileID: -8579321501892443735, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      color: {r: 1, g: 1, b: 1, a: 1}
+    normalBooks:
+    - bookName: blue normal
+      sprite: {fileID: 8132980423974828169, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      color: {r: 1, g: 1, b: 1, a: 1}
+    - bookName: purple normal
+      sprite: {fileID: 5312912139055977644, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      color: {r: 1, g: 1, b: 1, a: 1}
+    - bookName: red normal
+      sprite: {fileID: -5602419011165289409, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      color: {r: 1, g: 1, b: 1, a: 1}
+    - bookName: yellow normal
+      sprite: {fileID: -496635955759009926, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      color: {r: 1, g: 1, b: 1, a: 1}
+    - bookName: green normal
+      sprite: {fileID: -8579321501892443735, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &3992371351044713968
 GameObject:
   m_ObjectHideFlags: 0
@@ -435,7 +437,7 @@ Transform:
   m_GameObject: {fileID: 4430519755084193753}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.5, y: 0, z: 0}
+  m_LocalPosition: {x: 1.4, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -670,8 +672,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

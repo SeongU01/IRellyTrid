@@ -143,7 +143,7 @@ public void StartMiniGameFlow()
         currentMiniGame = Instantiate(data.prefab, miniGameRoot);
         currentMiniGame.OnFinished += HandleMiniGameFinished;
 
-        currentMiniGame.Init(data);
+        currentMiniGame.Init(data, 1);
         currentMiniGame.Play();
 
         return true;

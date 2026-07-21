@@ -15,28 +15,12 @@ public class BookStackGame : MiniGameBase
     [SerializeField] private Transform pileCenter;
     [SerializeField] private BookItem bookPrefab;
 
-    [Header("Pile Settings")]
-    [SerializeField] private Vector2 pileArea = new Vector2(4f, 3f);
-    [SerializeField] private float maxSpawnRotation = 60f;
-
     [Header("Drop Zone")]
     [SerializeField] private BookDropZone dropZone;
 
-    [Header("Stage Settings")]
+    [Header("Day Difficulties")]
     [SerializeField]
-    private BookStageData[] stages =
-    {
-        new BookStageData { bookCount = 4, similarBookCount =0},
-        new BookStageData { bookCount = 5, similarBookCount =2},
-        new BookStageData { bookCount = 6, similarBookCount =3},
-        new BookStageData { bookCount = 7, similarBookCount =4},
-        new BookStageData { bookCount = 8, similarBookCount =5},
-    };
-
-    [Header("Book Data")]
-    [SerializeField] private BookData[] targetBooks;
-    [SerializeField] private BookData[] similarBooks;
-    [SerializeField] private BookData[] normalBooks;
+    private BookStackDayDifficulty[] dayDifficulties;
 
     private readonly List<BookItem> activeBooks =
         new List<BookItem>();
@@ -49,11 +33,46 @@ public class BookStackGame : MiniGameBase
 
     private int currentStageIndex;
     private int nextSortingOrder;
+    private BookStackDayDifficulty currentDifficulty;
+
+    private BookStageData[] Stages =>
+        currentDifficulty != null
+            ? currentDifficulty.stages
+            : null;
+
+    private BookData[] TargetBooks =>
+        currentDifficulty != null
+            ? currentDifficulty.targetBooks
+            : null;
+
+    private BookData[] SimilarBooks =>
+        currentDifficulty != null
+            ? currentDifficulty.similarBooks
+            : null;
+
+    private BookData[] NormalBooks =>
+        currentDifficulty != null
+            ? currentDifficulty.normalBooks
+            : null;
 
     protected override void OnStart()
     {
+        currentDifficulty =
+            DayDifficultySelector.GetForDay(
+                dayDifficulties,
+                CurrentDay);
+
+        if (currentDifficulty == null)
+        {
+#if UNITY_EDITOR
+            Debug.LogError("책 게임 일차 설정이 없습니다.");
+#endif
+            Fail();
+            return;
+        }
+
         currentStageIndex = 0;
-        nextSortingOrder = 1000;
+        nextSortingOrder = 2000;
 
         ClearAllBooks();
         CreateTargetBookPool();
@@ -69,13 +88,13 @@ public class BookStackGame : MiniGameBase
             targetImage.enabled = false;
         }
 
-        if (stages != null &&
-            remainingTargetBooks.Count < stages.Length)
+        if (Stages != null &&
+            remainingTargetBooks.Count < Stages.Length)
         {
 #if UNITY_EDITOR
             Debug.LogError(
                 $"목표 책이 부족합니다. " +
-                $"필요: {stages.Length}, " +
+                $"필요: {Stages.Length}, " +
                 $"등록: {remainingTargetBooks.Count}");
 #endif
             Fail();
@@ -89,7 +108,7 @@ public class BookStackGame : MiniGameBase
 {
     remainingTargetBooks.Clear();
 
-    if (targetBooks == null)
+    if (TargetBooks == null)
     {
         return;
     }
@@ -97,9 +116,9 @@ public class BookStackGame : MiniGameBase
     HashSet<Sprite> addedSprites =
         new HashSet<Sprite>();
 
-    for (int i = 0; i < targetBooks.Length; i++)
+    for (int i = 0; i < TargetBooks.Length; i++)
     {
-        BookData targetBook = targetBooks[i];
+        BookData targetBook = TargetBooks[i];
 
         if (targetBook == null ||
             targetBook.sprite == null)
@@ -143,7 +162,7 @@ private BookData GetNextTargetBook()
             return;
         }
 
-        BookStageData stage = stages[currentStageIndex];
+        BookStageData stage = Stages[currentStageIndex];
 
         if (stage == null)
         {
@@ -201,7 +220,7 @@ private BookData GetNextTargetBook()
 
         List<BookData> selectedNormalBooks =
             GetUniqueRandomBooks(
-                normalBooks,
+                NormalBooks,
                 normalBookCount,
                 matchingSimilarBook.sprite);
 
@@ -236,7 +255,7 @@ private BookData GetNextTargetBook()
         if (progressText != null)
         {
             progressText.text =
-                $"{currentStageIndex + 1} / {stages.Length}";
+                $"{currentStageIndex + 1} / {Stages.Length}";
         }
 
 #if UNITY_EDITOR
@@ -318,7 +337,7 @@ private BookData GetNextTargetBook()
         Vector3 localPosition =
             dropZone.GetPlacedLocalPosition(placedIndex);
 
-        int sortingOrder = 2000 + placedIndex;
+        int sortingOrder = 3000 + placedIndex;
 
         book.LockAt(
             dropZone.PlacedBookRoot,
@@ -341,16 +360,16 @@ private BookData GetNextTargetBook()
         for (int i = 0; i < stageBooks.Count; i++)
         {
             float randomX = Random.Range(
-                -pileArea.x * 0.5f,
-                pileArea.x * 0.5f);
+                -currentDifficulty.pileArea.x * 0.5f,
+                currentDifficulty.pileArea.x * 0.5f);
 
             float randomY = Random.Range(
-                -pileArea.y * 0.5f,
-                pileArea.y * 0.5f);
+                -currentDifficulty.pileArea.y * 0.5f,
+                currentDifficulty.pileArea.y * 0.5f);
 
             float randomRotation = Random.Range(
-                -maxSpawnRotation,
-                maxSpawnRotation);
+                -currentDifficulty.maxSpawnRotation,
+                currentDifficulty.maxSpawnRotation);
 
             Vector3 worldPosition =
                 pileCenter.position +
@@ -372,7 +391,7 @@ private BookData GetNextTargetBook()
                 this,
                 stageBooks[i].data,
                 stageBooks[i].isTarget,
-                i);
+                1000 + i);
 
             activeBooks.Add(book);
         }
@@ -382,7 +401,7 @@ private BookData GetNextTargetBook()
     {
         currentStageIndex++;
 
-        if (currentStageIndex >= stages.Length)
+        if (currentStageIndex >= Stages.Length)
         {
             Success();
             return;
@@ -393,7 +412,7 @@ private BookData GetNextTargetBook()
 
     private bool ValidateSettings()
     {
-        if (stages == null || stages.Length == 0)
+        if (Stages == null || Stages.Length == 0)
         {
 #if UNITY_EDITOR
             Debug.LogError("스테이지 데이터가 없습니다.");
@@ -402,7 +421,7 @@ private BookData GetNextTargetBook()
         }
 
         if (currentStageIndex < 0 ||
-            currentStageIndex >= stages.Length)
+            currentStageIndex >= Stages.Length)
         {
 #if UNITY_EDITOR
             Debug.LogError("잘못된 스테이지 인덱스입니다.");
@@ -438,15 +457,15 @@ private BookData GetNextTargetBook()
         BookData targetBook)
     {
         if (targetBook == null ||
-            targetBooks == null ||
-            similarBooks == null)
+            TargetBooks == null ||
+            SimilarBooks == null)
         {
             return null;
         }
 
-        for (int i = 0; i < targetBooks.Length; i++)
+        for (int i = 0; i < TargetBooks.Length; i++)
         {
-            BookData registeredTarget = targetBooks[i];
+            BookData registeredTarget = TargetBooks[i];
 
             if (registeredTarget == null ||
                 registeredTarget.sprite != targetBook.sprite)
@@ -454,12 +473,12 @@ private BookData GetNextTargetBook()
                 continue;
             }
 
-            if (i >= similarBooks.Length)
+            if (i >= SimilarBooks.Length)
             {
                 return null;
             }
 
-            return similarBooks[i];
+            return SimilarBooks[i];
         }
 
         return null;
