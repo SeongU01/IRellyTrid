@@ -1,0 +1,94 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7050204041929986301
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7050204041929986302}
+  - component: {fileID: 7050204041929986303}
+  m_Layer: 0
+  m_Name: SortingMiniGame
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7050204041929986302
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7050204041929986301}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7050204041929986303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7050204041929986301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 272c229d187f479f81f038948023f9e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SortingMiniGame
+  categories:
+  - categoryName: Red
+    sprite: {fileID: 0}
+    fallbackColor: {r: 0.9, g: 0.2, b: 0.2, a: 1}
+  - categoryName: Blue
+    sprite: {fileID: 0}
+    fallbackColor: {r: 0.2, g: 0.55, b: 1, a: 1}
+  - categoryName: Green
+    sprite: {fileID: 0}
+    fallbackColor: {r: 0.2, g: 0.8, b: 0.35, a: 1}
+  - categoryName: Yellow
+    sprite: {fileID: 0}
+    fallbackColor: {r: 1, g: 0.78, b: 0.15, a: 1}
+  - categoryName: Purple
+    sprite: {fileID: 0}
+    fallbackColor: {r: 0.68, g: 0.32, b: 0.9, a: 1}
+  - categoryName: White
+    sprite: {fileID: 0}
+    fallbackColor: {r: 0.95, g: 0.95, b: 0.95, a: 1}
+  dayDifficulties:
+  - startDay: 1
+    categoryCount: 6
+    requiredSortCount: 20
+    allowedMistakes: 3
+  - startDay: 2
+    categoryCount: 3
+    requiredSortCount: 12
+    allowedMistakes: 3
+  - startDay: 3
+    categoryCount: 4
+    requiredSortCount: 16
+    allowedMistakes: 3
+  - startDay: 4
+    categoryCount: 5
+    requiredSortCount: 20
+    allowedMistakes: 3
+  - startDay: 5
+    categoryCount: 6
+    requiredSortCount: 24
+    allowedMistakes: 3
+  leftButtonSprite: {fileID: 0}
+  rightButtonSprite: {fileID: 0}
+  itemSize: {x: 92, y: 92}
+  guideSize: {x: 110, y: 125}
+  sortButtonSize: {x: 125, y: 95}
+  visibleQueueCount: 6
+  queueSpacing: 10
+  guideSpacing: 18
