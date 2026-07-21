@@ -437,30 +437,46 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: miniGames.Array.size
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: miniGames.Array.data[0].name
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
+      propertyPath: miniGames.Array.data[1].name
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: miniGames.Array.data[2].name
-      value: MathQuizGame
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: miniGames.Array.data[3].name
-      value: BookStackGame
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
+      propertyPath: miniGames.Array.data[4].name
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: miniGames.Array.data[0].prefab
       value: 
-      objectReference: {fileID: 6262087453267821407, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
+      objectReference: {fileID: 7050204041929986303, guid: 7cdd71a34d294ec0aa1d5777e8a78c3b, type: 3}
+    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
+      propertyPath: miniGames.Array.data[1].prefab
+      value: 
+      objectReference: {fileID: 3030303030303030303, guid: cc7fee2fe4b14ffbaeae67094defa06c, type: 3}
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: miniGames.Array.data[2].prefab
       value: 
-      objectReference: {fileID: 6262087453267821407, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
+      objectReference: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: miniGames.Array.data[3].prefab
+      value: 
+      objectReference: {fileID: 6262087453267821407, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
+    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
+      propertyPath: miniGames.Array.data[4].prefab
       value: 
       objectReference: {fileID: 6335680773905131617, guid: 617ab2d54d266f849a3ba4ccf6a37332, type: 3}
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
@@ -472,12 +488,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
+      propertyPath: miniGames.Array.data[1].commandText
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: miniGames.Array.data[2].commandText
-      value: "\uD480\uC5B4!"
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: miniGames.Array.data[3].commandText
-      value: "\uCC3E\uC544!"
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
+      propertyPath: miniGames.Array.data[4].commandText
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3128394647255388015, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: m_LocalPosition.x
