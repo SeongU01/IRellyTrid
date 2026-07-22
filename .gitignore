@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Unity .gitignore Template
 # Source: https://github.com/github/gitignore/blob/main/Unity.gitignore
 # Last synced: 2025-12-18
@@ -51,6 +52,39 @@ ExportedObj/
 *.csproj
 *.unityproj
 *.sln
+=======
+# Unity Project (IRellyTrid)
+IRellyTrid/[Ll]ibrary/
+IRellyTrid/[Tt]emp/
+IRellyTrid/[Oo]bj/
+IRellyTrid/[Bb]uild/
+IRellyTrid/[Bb]uilds/
+IRellyTrid/[Ll]ogs/
+IRellyTrid/[Uu]ser[Ss]ettings/
+IRellyTrid/[Mm]emoryCaptures/
+IRellyTrid/[Rr]ecordings/
+
+*.log
+
+# Blender
+*.blend1
+*.blend1.meta
+
+# Rider
+IRellyTrid/[Aa]ssets/Plugins/Editor/JetBrains*
+*.DotSettings.user
+
+# Visual Studio
+.vs/
+.gradle/
+ExportedObj/
+.consulo/
+
+*.csproj
+*.unityproj
+*.sln
+*.slnx
+>>>>>>> develop
 *.suo
 *.tmp
 *.user
@@ -63,11 +97,16 @@ ExportedObj/
 *.opendb
 *.VC.db
 
+<<<<<<< HEAD
 # Unity3D generated meta files
+=======
+# Unity Generated Meta
+>>>>>>> develop
 *.pidb.meta
 *.pdb.meta
 *.mdb.meta
 
+<<<<<<< HEAD
 # Unity3D generated file on crash reports
 sysinfo.txt
 
@@ -75,12 +114,21 @@ sysinfo.txt
 mono_crash.*
 
 # Builds
+=======
+# Crash Files
+sysinfo.txt
+mono_crash.*
+crashlytics-build.properties
+
+# Build Outputs
+>>>>>>> develop
 *.apk
 *.aab
 *.unitypackage
 *.unitypackage.meta
 *.app
 
+<<<<<<< HEAD
 # Crashlytics generated file
 crashlytics-build.properties
 
@@ -105,3 +153,29 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+=======
+# Test Runner
+InitTestScene*.unity*
+
+# Addressables
+IRellyTrid/ServerData/
+IRellyTrid/[Aa]ssets/StreamingAssets/aa*
+IRellyTrid/[Aa]ssets/AddressableAssetsData/link.xml*
+IRellyTrid/[Aa]ssets/Addressables_Temp*
+IRellyTrid/[Aa]ssets/AddressableAssetsData/*/*.bin*
+
+# Visual Scripting
+IRellyTrid/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db
+IRellyTrid/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db.meta
+IRellyTrid/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers
+IRellyTrid/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers.meta
+
+# Auto Generated Test Scenes
+IRellyTrid/[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# Scene Dependency Cache
+IRellyTrid/[Aa]ssets/[Ss]ceneDependencyCache*
+
+# Asset
+*.jpg
+>>>>>>> develop
