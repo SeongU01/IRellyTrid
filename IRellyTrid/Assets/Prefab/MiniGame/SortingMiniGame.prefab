@@ -45,44 +45,74 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SortingMiniGame
   categories:
-  - categoryName: Red
-    sprite: {fileID: 0}
+  - categoryName: 'Red Book '
+    sprite: {fileID: 1366527573880512774, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    side: 0
     fallbackColor: {r: 0.9, g: 0.2, b: 0.2, a: 1}
-  - categoryName: Blue
-    sprite: {fileID: 0}
+  - categoryName: Blue Book
+    sprite: {fileID: -4071971341558429721, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    side: 0
     fallbackColor: {r: 0.2, g: 0.55, b: 1, a: 1}
-  - categoryName: Green
-    sprite: {fileID: 0}
+  - categoryName: Green Book
+    sprite: {fileID: -4374148534507691916, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    side: 0
     fallbackColor: {r: 0.2, g: 0.8, b: 0.35, a: 1}
-  - categoryName: Yellow
-    sprite: {fileID: 0}
+  - categoryName: Yellow Book
+    sprite: {fileID: 7609929014179203873, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    side: 0
     fallbackColor: {r: 1, g: 0.78, b: 0.15, a: 1}
-  - categoryName: Purple
-    sprite: {fileID: 0}
+  - categoryName: Purple Book
+    sprite: {fileID: 1670887986194150747, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    side: 0
     fallbackColor: {r: 0.68, g: 0.32, b: 0.9, a: 1}
-  - categoryName: White
-    sprite: {fileID: 0}
-    fallbackColor: {r: 0.95, g: 0.95, b: 0.95, a: 1}
+  - categoryName: Sky Blue Book
+    sprite: {fileID: -4379745792269421496, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    side: 0
+    fallbackColor: {r: 0, g: 0.79861975, b: 1, a: 1}
+  - categoryName: Thoughts Gray
+    sprite: {fileID: -5583075258553400380, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    side: 1
+    fallbackColor: {r: 0.4433962, g: 0.4433962, b: 0.4433962, a: 1}
+  - categoryName: Thoughts White
+    sprite: {fileID: -6510611926890318666, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    side: 1
+    fallbackColor: {r: 1, g: 1, b: 1, a: 1}
+  - categoryName: Phone Gray
+    sprite: {fileID: 3760474259338998123, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    side: 1
+    fallbackColor: {r: 1, g: 1, b: 1, a: 1}
+  - categoryName: Phone White
+    sprite: {fileID: 6387894621835580202, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    side: 1
+    fallbackColor: {r: 1, g: 1, b: 1, a: 1}
+  - categoryName: GamePad Gray
+    sprite: {fileID: -510101428137021611, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    side: 1
+    fallbackColor: {r: 1, g: 1, b: 1, a: 1}
+  - categoryName: GamePad White
+    sprite: {fileID: -2887585721190980885, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    side: 1
+    fallbackColor: {r: 1, g: 1, b: 1, a: 1}
   dayDifficulties:
   - startDay: 1
-    categoryCount: 6
-    requiredSortCount: 20
+    categoryIndices: 00000000010000000600000007000000
+    requiredSortCount: 30
     allowedMistakes: 3
   - startDay: 2
-    categoryCount: 3
-    requiredSortCount: 12
+    categoryIndices: 0000000001000000020000000600000007000000
+    requiredSortCount: 30
     allowedMistakes: 3
   - startDay: 3
-    categoryCount: 4
-    requiredSortCount: 16
+    categoryIndices: 0000000001000000020000000300000006000000070000000800000009000000
+    requiredSortCount: 30
     allowedMistakes: 3
   - startDay: 4
-    categoryCount: 5
-    requiredSortCount: 20
+    categoryIndices: 000000000100000002000000030000000400000006000000070000000800000009000000
+    requiredSortCount: 30
     allowedMistakes: 3
   - startDay: 5
-    categoryCount: 6
-    requiredSortCount: 24
+    categoryIndices: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b000000
+    requiredSortCount: 30
     allowedMistakes: 3
   leftButtonSprite: {fileID: 30064537844054092, guid: 002b7ab7935f8524485f833e7523b0a9, type: 3}
   rightButtonSprite: {fileID: 6552060196920312030, guid: 002b7ab7935f8524485f833e7523b0a9, type: 3}

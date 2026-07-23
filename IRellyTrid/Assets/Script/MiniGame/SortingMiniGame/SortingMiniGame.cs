@@ -9,12 +9,6 @@ public class SortingMiniGame : MiniGameBase
 {
     private const float BoardCenterX = -165f;
 
-    private enum SortSide
-    {
-        Left,
-        Right
-    }
-
     [Header("Categories")]
     [SerializeField] private SortCategoryData[] categories;
 
@@ -81,7 +75,7 @@ public class SortingMiniGame : MiniGameBase
         isQueueAnimating = false;
 
         ClearRuntimeData();
-        AssignCategorySides();
+        AssignConfiguredCategorySides();
         FillItemQueue();
         BuildInterface();
         RefreshItemQueueViews();
@@ -122,30 +116,87 @@ public class SortingMiniGame : MiniGameBase
             return false;
         }
 
-        activeCategoryCount = Mathf.Max(
-            2,
-            currentDifficulty.categoryCount);
-
-        if (categories == null ||
-            categories.Length < activeCategoryCount)
+        if (categories == null || categories.Length == 0)
         {
 #if UNITY_EDITOR
-            Debug.LogError(
-                $"SortingMiniGame needs {activeCategoryCount} " +
-                $"categories, but only {categories?.Length ?? 0} are registered.");
+            Debug.LogError("SortingMiniGame has no registered categories.");
 #endif
             return false;
         }
 
+        int[] configuredCategoryIndices =
+            currentDifficulty.categoryIndices;
+
+        if (configuredCategoryIndices == null ||
+            configuredCategoryIndices.Length < 2)
+        {
+#if UNITY_EDITOR
+            Debug.LogError(
+                "SortingMiniGame needs at least two category indices " +
+                "for the current day.");
+#endif
+            return false;
+        }
+
+        activeCategoryCount = configuredCategoryIndices.Length;
+
+        int leftCategoryCount = 0;
+        int rightCategoryCount = 0;
+        HashSet<int> uniqueCategoryIndices = new HashSet<int>();
+
         for (int i = 0; i < activeCategoryCount; i++)
         {
-            if (categories[i] == null)
+            int categoryIndex = configuredCategoryIndices[i];
+
+            if (categoryIndex < 0 || categoryIndex >= categories.Length)
             {
 #if UNITY_EDITOR
-                Debug.LogError($"Sorting category {i + 1} is empty.");
+                Debug.LogError(
+                    $"Sorting category index {categoryIndex} for the current day " +
+                    $"is outside the valid range 0-{categories.Length - 1}.");
 #endif
                 return false;
             }
+
+            if (!uniqueCategoryIndices.Add(categoryIndex))
+            {
+#if UNITY_EDITOR
+                Debug.LogError(
+                    $"Sorting category index {categoryIndex} is registered " +
+                    "more than once for the current day.");
+#endif
+                return false;
+            }
+
+            SortCategoryData category = categories[categoryIndex];
+
+            if (category == null)
+            {
+#if UNITY_EDITOR
+                Debug.LogError(
+                    $"Sorting category {categoryIndex} is empty.");
+#endif
+                return false;
+            }
+
+            if (category.side == SortSide.Left)
+            {
+                leftCategoryCount++;
+            }
+            else
+            {
+                rightCategoryCount++;
+            }
+        }
+
+        if (leftCategoryCount == 0 || rightCategoryCount == 0)
+        {
+#if UNITY_EDITOR
+            Debug.LogError(
+                "SortingMiniGame needs at least one active category " +
+                "assigned to each side.");
+#endif
+            return false;
         }
 
         requiredSortCount = Mathf.Max(
@@ -167,22 +218,22 @@ public class SortingMiniGame : MiniGameBase
         guideViews.Clear();
         categorySides.Clear();
 
-        for (int i = 0; i < activeCategoryCount; i++)
+        int[] configuredCategoryIndices =
+            currentDifficulty.categoryIndices;
+
+        for (int i = 0; i < configuredCategoryIndices.Length; i++)
         {
-            activeCategoryIndices.Add(i);
+            activeCategoryIndices.Add(configuredCategoryIndices[i]);
         }
     }
 
-    private void AssignCategorySides()
+    private void AssignConfiguredCategorySides()
     {
-        Shuffle(activeCategoryIndices);
-
         for (int i = 0; i < activeCategoryIndices.Count; i++)
         {
             int categoryIndex = activeCategoryIndices[i];
-            categorySides[categoryIndex] = i % 2 == 0
-                ? SortSide.Left
-                : SortSide.Right;
+            categorySides[categoryIndex] =
+                categories[categoryIndex].side;
         }
     }
 
