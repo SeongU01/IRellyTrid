@@ -206,6 +206,7 @@ MonoBehaviour:
     commandText: "\uCC3E\uC544!"
     timeLimit: 30
     prefab: {fileID: 6335680773905131617, guid: 617ab2d54d266f849a3ba4ccf6a37332, type: 3}
+  miniGamesPerDay: 5
   readyTime: 2
   resultTime: 3
   timerText: {fileID: 1423861765855288475}
