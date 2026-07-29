@@ -20,6 +20,10 @@ MonoBehaviour:
   studyAmountPerMiniGame: 5
   fatiguePerSecond: 0.5
   normalMiniGamesPerDay: 5
+  failureHealthDamage: 1
+  timeoutHealthDamage: 1
+  miniGameReadyDuration: 1
+  miniGameResultDuration: 1
   sleepRecoveryAmount: 50
   oneBonusRecoveryAmount: 20
   twoBonusRecoveryAmount: 0

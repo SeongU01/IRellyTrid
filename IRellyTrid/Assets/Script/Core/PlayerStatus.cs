@@ -111,7 +111,11 @@ public sealed class PlayerStatus : MonoBehaviour
         if (amount <= 0 || isGameOver)
             return;
 
+        int previousStudyAmount = studyAmount;
         studyAmount += amount;
+        Debug.Log(
+            $"[PlayerStatus] Study Amount: {previousStudyAmount} -> " +
+            $"{studyAmount} (+{studyAmount - previousStudyAmount})");
         StudyAmountChanged?.Invoke(studyAmount);
     }
 
@@ -125,6 +129,10 @@ public sealed class PlayerStatus : MonoBehaviour
         studyAmount = 0;
         isGameOver = false;
 
+        Debug.Log(
+            $"[PlayerStatus] Reset - Health: {health}/{settings.MaxHealth}, " +
+            $"Fatigue: {fatigue:0.##}/{settings.MaxFatigue:0.##}, " +
+            $"Study Amount: {studyAmount}");
         HealthChanged?.Invoke(health, settings.MaxHealth);
         FatigueChanged?.Invoke(fatigue, settings.MaxFatigue);
         StudyAmountChanged?.Invoke(studyAmount);
@@ -148,7 +156,16 @@ public sealed class PlayerStatus : MonoBehaviour
 
     private void SetHealth(int value)
     {
+        int previousHealth = health;
         health = Mathf.Clamp(value, 0, settings.MaxHealth);
+
+        if (health == previousHealth)
+            return;
+
+        int change = health - previousHealth;
+        Debug.Log(
+            $"[PlayerStatus] Health: {previousHealth} -> {health} " +
+            $"({change:+#;-#;0})");
         HealthChanged?.Invoke(health, settings.MaxHealth);
 
         if (health <= 0)
@@ -157,7 +174,24 @@ public sealed class PlayerStatus : MonoBehaviour
 
     private void SetFatigue(float value)
     {
+        float previousFatigue = fatigue;
         fatigue = Mathf.Clamp(value, 0f, settings.MaxFatigue);
+
+        if (Mathf.Approximately(fatigue, previousFatigue))
+            return;
+
+        bool decreased = fatigue < previousFatigue;
+        bool crossedWholeNumber =
+            Mathf.FloorToInt(fatigue) != Mathf.FloorToInt(previousFatigue);
+
+        if (decreased || crossedWholeNumber)
+        {
+            float change = fatigue - previousFatigue;
+            Debug.Log(
+                $"[PlayerStatus] Fatigue: {previousFatigue:0.##} -> " +
+                $"{fatigue:0.##} ({change:+0.##;-0.##;0})");
+        }
+
         FatigueChanged?.Invoke(fatigue, settings.MaxFatigue);
 
         if (fatigue >= settings.MaxFatigue)

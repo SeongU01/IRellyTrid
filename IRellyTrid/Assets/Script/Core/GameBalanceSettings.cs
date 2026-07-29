@@ -26,6 +26,14 @@ public class GameBalanceSettings : ScriptableObject
     [SerializeField] private float fatiguePerSecond = 0.5f;
     [Min(1)]
     [SerializeField] private int normalMiniGamesPerDay = 5;
+    [Min(0)]
+    [SerializeField] private int failureHealthDamage = 1;
+    [Min(0)]
+    [SerializeField] private int timeoutHealthDamage = 1;
+    [Min(0f)]
+    [SerializeField] private float miniGameReadyDuration = 1f;
+    [Min(0f)]
+    [SerializeField] private float miniGameResultDuration = 1f;
 
     [Header("Recovery")]
     [Min(0f)]
@@ -47,6 +55,10 @@ public class GameBalanceSettings : ScriptableObject
     public int StudyAmountPerMiniGame => studyAmountPerMiniGame;
     public float FatiguePerSecond => fatiguePerSecond;
     public int NormalMiniGamesPerDay => normalMiniGamesPerDay;
+    public int FailureHealthDamage => failureHealthDamage;
+    public int TimeoutHealthDamage => timeoutHealthDamage;
+    public float MiniGameReadyDuration => miniGameReadyDuration;
+    public float MiniGameResultDuration => miniGameResultDuration;
     public float SleepRecoveryAmount => sleepRecoveryAmount;
     public float OneBonusRecoveryAmount => oneBonusRecoveryAmount;
     public float TwoBonusRecoveryAmount => twoBonusRecoveryAmount;
@@ -62,6 +74,10 @@ public class GameBalanceSettings : ScriptableObject
         studyAmountPerMiniGame = Mathf.Max(0, studyAmountPerMiniGame);
         fatiguePerSecond = Mathf.Max(0f, fatiguePerSecond);
         normalMiniGamesPerDay = Mathf.Max(1, normalMiniGamesPerDay);
+        failureHealthDamage = Mathf.Max(0, failureHealthDamage);
+        timeoutHealthDamage = Mathf.Max(0, timeoutHealthDamage);
+        miniGameReadyDuration = Mathf.Max(0f, miniGameReadyDuration);
+        miniGameResultDuration = Mathf.Max(0f, miniGameResultDuration);
         sleepRecoveryAmount = Mathf.Max(0f, sleepRecoveryAmount);
         oneBonusRecoveryAmount = Mathf.Max(0f, oneBonusRecoveryAmount);
         twoBonusRecoveryAmount = Mathf.Max(0f, twoBonusRecoveryAmount);
