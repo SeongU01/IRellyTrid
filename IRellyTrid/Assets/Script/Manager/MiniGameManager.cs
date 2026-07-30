@@ -16,7 +16,7 @@ public class MiniGameManager : MonoBehaviour
     private Coroutine gameRoutine;
     private PlayerStatus playerStatus;
 
-    public event Action<int> OnDayCompleted;
+    public event Action<int> OnNormalMiniGamesCompleted;
     public event Action<MiniGameResult> OnMiniGameCompleted;
 
     public int CurrentDay { get; private set; } = 1;
@@ -33,11 +33,6 @@ public class MiniGameManager : MonoBehaviour
     {
         if (playerStatus != null)
             playerStatus.GameOverTriggered -= HandleGameOver;
-    }
-
-    private void Start()
-    {
-        StartMiniGameFlow();
     }
 
     public void StartMiniGameFlow()
@@ -64,11 +59,6 @@ public class MiniGameManager : MonoBehaviour
         DestroyCurrentMiniGame();
         CurrentDay = Mathf.Max(1, day);
         gameRoutine = StartCoroutine(GameFlowRoutine());
-    }
-
-    public void StartNextDay()
-    {
-        StartMiniGameFlow(CurrentDay + 1);
     }
 
     private IEnumerator GameFlowRoutine()
@@ -157,7 +147,7 @@ public class MiniGameManager : MonoBehaviour
         gameRoutine = null;
 
         if (playerStatus == null || !playerStatus.IsGameOver)
-            OnDayCompleted?.Invoke(CurrentDay);
+            OnNormalMiniGamesCompleted?.Invoke(CurrentDay);
     }
 
     private bool HasEnoughMiniGamesForDay()
@@ -254,6 +244,11 @@ public class MiniGameManager : MonoBehaviour
         Debug.Log($"Mini game flow stopped: {reason}");
 #endif
 
+        StopMiniGameFlow();
+    }
+
+    public void StopMiniGameFlow()
+    {
         if (gameRoutine != null)
         {
             StopCoroutine(gameRoutine);
