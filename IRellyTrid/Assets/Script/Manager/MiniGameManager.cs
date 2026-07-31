@@ -15,9 +15,11 @@ public class MiniGameManager : MonoBehaviour
     private MiniGameBase currentMiniGame;
     private Coroutine gameRoutine;
     private PlayerStatus playerStatus;
+    private MiniGameResult lastMiniGameResult;
 
     public event Action<int> OnNormalMiniGamesCompleted;
     public event Action<MiniGameResult> OnMiniGameCompleted;
+    public event Action<MiniGameResult> OnBonusMiniGameCompleted;
 
     public int CurrentDay { get; private set; } = 1;
 
@@ -61,6 +63,41 @@ public class MiniGameManager : MonoBehaviour
         gameRoutine = StartCoroutine(GameFlowRoutine());
     }
 
+    public bool StartBonusMiniGame(MiniGameData data, int day)
+    {
+        if (playerStatus != null && playerStatus.IsGameOver)
+        {
+#if UNITY_EDITOR
+            Debug.LogWarning(
+                "A bonus mini game cannot start while the game is over.");
+#endif
+            return false;
+        }
+
+        if (data == null || data.prefab == null)
+        {
+#if UNITY_EDITOR
+            Debug.LogError(
+                "The bonus mini game is not configured correctly.");
+#endif
+            return false;
+        }
+
+        if (!data.isBonus)
+        {
+#if UNITY_EDITOR
+            Debug.LogError(
+                $"{data.name} is not marked as a bonus mini game.");
+#endif
+            return false;
+        }
+
+        StopMiniGameFlow();
+        CurrentDay = Mathf.Max(1, day);
+        gameRoutine = StartCoroutine(BonusGameRoutine(data));
+        return true;
+    }
+
     private IEnumerator GameFlowRoutine()
     {
         if (playerStatus != null && playerStatus.IsGameOver)
@@ -102,52 +139,87 @@ public class MiniGameManager : MonoBehaviour
             Debug.Log($"Command: {data.commandText}");
 #endif
 
-            ClearTimerText();
-            yield return new WaitForSeconds(
-                balanceSettings.MiniGameReadyDuration);
+            yield return PlayMiniGameRoutine(data, balanceSettings);
 
-            if (!SpawnMiniGame(data))
+            if (lastMiniGameResult == null)
             {
                 gameRoutine = null;
                 yield break;
             }
-
-            float timer = data.timeLimit;
-            UpdateTimerText(timer);
-
-            while (timer > 0f && currentMiniGame != null && currentMiniGame.IsPlaying)
-            {
-                float deltaTime = Time.deltaTime;
-                timer -= deltaTime;
-
-                if (playerStatus != null)
-                {
-                    playerStatus.AddFatigue(
-                        deltaTime * playerStatus.Settings.FatiguePerSecond);
-                }
-
-                UpdateTimerText(timer);
-                yield return null;
-            }
-
-            ClearTimerText();
-
-            if (currentMiniGame != null && currentMiniGame.IsPlaying)
-            {
-#if UNITY_EDITOR
-                Debug.Log("Time out");
-#endif
-                currentMiniGame.Timeout();
-            }
-
-            yield return new WaitForSeconds(
-                balanceSettings.MiniGameResultDuration);
         }
 
         gameRoutine = null;
 
         if (playerStatus == null || !playerStatus.IsGameOver)
             OnNormalMiniGamesCompleted?.Invoke(CurrentDay);
+    }
+
+    private IEnumerator BonusGameRoutine(MiniGameData data)
+    {
+        GameBalanceSettings balanceSettings = playerStatus.Settings;
+        yield return PlayMiniGameRoutine(data, balanceSettings);
+
+        MiniGameResult completedResult = lastMiniGameResult;
+        gameRoutine = null;
+
+        if (completedResult != null &&
+            playerStatus != null &&
+            !playerStatus.IsGameOver)
+        {
+            OnBonusMiniGameCompleted?.Invoke(completedResult);
+        }
+    }
+
+    private IEnumerator PlayMiniGameRoutine(
+        MiniGameData data,
+        GameBalanceSettings balanceSettings)
+    {
+        lastMiniGameResult = null;
+        ClearTimerText();
+        yield return new WaitForSeconds(
+            balanceSettings.MiniGameReadyDuration);
+
+        if (playerStatus == null || playerStatus.IsGameOver)
+            yield break;
+
+        if (!SpawnMiniGame(data))
+            yield break;
+
+        float timer = data.timeLimit;
+        UpdateTimerText(timer);
+
+        while (timer > 0f &&
+               currentMiniGame != null &&
+               currentMiniGame.IsPlaying)
+        {
+            float deltaTime = Time.deltaTime;
+            timer -= deltaTime;
+
+            if (playerStatus != null)
+            {
+                playerStatus.AddFatigue(
+                    deltaTime * playerStatus.Settings.FatiguePerSecond);
+            }
+
+            UpdateTimerText(timer);
+            yield return null;
+        }
+
+        ClearTimerText();
+
+        if (currentMiniGame != null && currentMiniGame.IsPlaying)
+        {
+#if UNITY_EDITOR
+            Debug.Log("Time out");
+#endif
+            currentMiniGame.Timeout();
+        }
+
+        if (playerStatus == null || playerStatus.IsGameOver)
+            yield break;
+
+        yield return new WaitForSeconds(
+            balanceSettings.MiniGameResultDuration);
     }
 
     private bool HasEnoughMiniGamesForDay()
@@ -208,6 +280,7 @@ public class MiniGameManager : MonoBehaviour
 #endif
 
         ApplyMiniGameResult(result);
+        lastMiniGameResult = result;
         OnMiniGameCompleted?.Invoke(result);
         DestroyCurrentMiniGame();
     }
@@ -257,6 +330,7 @@ public class MiniGameManager : MonoBehaviour
 
         ClearTimerText();
         DestroyCurrentMiniGame();
+        lastMiniGameResult = null;
     }
 
     private void DestroyCurrentMiniGame()

@@ -23,6 +23,7 @@ public sealed class DaySystem : MonoBehaviour
     public int CurrentDay { get; private set; } = 1;
     public DayPhase CurrentPhase { get; private set; } = DayPhase.NotStarted;
     public int CompletedNormalMiniGames { get; private set; }
+    public int PerformedBonusMiniGames { get; private set; }
     public int NormalMiniGamesPerDay =>
         playerStatus != null && playerStatus.Settings != null
             ? playerStatus.Settings.NormalMiniGamesPerDay
@@ -44,6 +45,7 @@ public sealed class DaySystem : MonoBehaviour
     public event Action<int> OnFinalDayCompleted;
     public event Action<DayPhase, DayPhase> OnPhaseChanged;
     public event Action<int, int> OnNormalMiniGameProgressChanged;
+    public event Action<int> OnBonusMiniGameProgressChanged;
     public event Action OnNormalMiniGamesCompleted;
     public event Action<GameOverReason> OnGameOver;
 
@@ -87,6 +89,7 @@ public sealed class DaySystem : MonoBehaviour
 
         CurrentDay = 1;
         CompletedNormalMiniGames = 0;
+        PerformedBonusMiniGames = 0;
         studyAmountAtDayStart =
             playerStatus != null ? playerStatus.StudyAmount : 0;
         lastGameOverReason = null;
@@ -98,6 +101,8 @@ public sealed class DaySystem : MonoBehaviour
         OnNormalMiniGameProgressChanged?.Invoke(
             CompletedNormalMiniGames,
             NormalMiniGamesPerDay);
+        OnBonusMiniGameProgressChanged?.Invoke(
+            PerformedBonusMiniGames);
 
         Debug.Log(
             $"[DaySystem] New game initialized. Day {CurrentDay}/{FinalDay}");
@@ -109,11 +114,14 @@ public sealed class DaySystem : MonoBehaviour
             return;
 
         CompletedNormalMiniGames = 0;
+        PerformedBonusMiniGames = 0;
         studyAmountAtDayStart = playerStatus.StudyAmount;
         ChangePhase(DayPhase.NormalMiniGames);
         OnNormalMiniGameProgressChanged?.Invoke(
             CompletedNormalMiniGames,
             NormalMiniGamesPerDay);
+        OnBonusMiniGameProgressChanged?.Invoke(
+            PerformedBonusMiniGames);
 
         Debug.Log(
             $"[DaySystem] Day {CurrentDay} started. " +
@@ -154,6 +162,30 @@ public sealed class DaySystem : MonoBehaviour
         ChangePhase(DayPhase.FirstBonusChoice);
         Debug.Log($"[DaySystem] Day {CurrentDay}: first bonus choice.");
         OnNormalMiniGamesCompleted?.Invoke();
+    }
+
+    public void RegisterBonusMiniGamePerformed()
+    {
+        if (!CanContinue())
+            return;
+
+        if (CurrentPhase != DayPhase.FirstBonusMiniGame &&
+            CurrentPhase != DayPhase.SecondBonusMiniGame)
+        {
+            Debug.LogWarning(
+                "[DaySystem] A performed bonus can only be registered " +
+                "while a bonus mini game is active.");
+            return;
+        }
+
+        PerformedBonusMiniGames = Mathf.Min(
+            PerformedBonusMiniGames + 1,
+            2);
+        Debug.Log(
+            $"[DaySystem] Performed bonus mini games: " +
+            $"{PerformedBonusMiniGames}/2");
+        OnBonusMiniGameProgressChanged?.Invoke(
+            PerformedBonusMiniGames);
     }
 
     public void BeginFirstBonusMiniGame()

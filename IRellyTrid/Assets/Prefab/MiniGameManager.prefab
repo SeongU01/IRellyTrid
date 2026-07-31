@@ -150,6 +150,7 @@ GameObject:
   - component: {fileID: 3128394647255388015}
   - component: {fileID: 1115584121351177930}
   - component: {fileID: 4968473026174459102}
+  - component: {fileID: 6739251840274613308}
   m_Layer: 0
   m_Name: MiniGameManager
   m_TagString: Untagged
@@ -222,6 +223,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameFlowController
   miniGameManager: {fileID: 1115584121351177930}
   startNewGameOnStart: 1
+--- !u!114 &6739251840274613308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6066698840990365924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73ac12b41a2e44d891bb071d67a8860e, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::BonusGameFlowController
+  miniGameManager: {fileID: 1115584121351177930}
+  bonusConfigurations:
+  - startDay: 1
+    firstBonus:
+      name:
+      commandText:
+      timeLimit: 30
+      isBonus: 1
+      prefab: {fileID: 0}
+    secondBonus:
+      name:
+      commandText:
+      timeLimit: 30
+      isBonus: 1
+      prefab: {fileID: 0}
 --- !u!1 &9025891546021401047
 GameObject:
   m_ObjectHideFlags: 0
