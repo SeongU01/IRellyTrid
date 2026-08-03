@@ -44,13 +44,4 @@ public class SceneChange : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        var button = GetComponent<Button>();
-        if (button != null)
-        {
-            button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(LoadSceneByName);
-        }
-    }
 }
