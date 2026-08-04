@@ -153,6 +153,7 @@ GameObject:
   - component: {fileID: 6739251840274613308}
   - component: {fileID: 7753807419076642136}
   - component: {fileID: 4849162783527631059}
+  - component: {fileID: 6934182057619304287}
   m_Layer: 0
   m_Name: MiniGameManager
   m_TagString: Untagged
@@ -287,6 +288,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d8541576a1a455bb0b58a2b806c31f1, type: 3}
   m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::FatigueRecoveryController
+--- !u!114 &6934182057619304287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6066698840990365924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74e80c60da734465bc18aac64653f188, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::DaySettlementView
+  fatigueRecoveryController: {fileID: 4849162783527631059}
+  panelBackgroundSprite: {fileID: 0}
+  nextDayCommonSprite: {fileID: 0}
+  nextDayHoverSprite: {fileID: 0}
+  nextDayOnClickSprite: {fileID: 0}
+  fontAsset: {fileID: 11400000, guid: 67ff194e978520846a1405404b4bc7ef, type: 2}
+  showTemporaryButtonLabel: 1
+  panelSize: {x: 860, y: 700}
+  buttonSize: {x: 300, y: 100}
 --- !u!1 &9025891546021401047
 GameObject:
   m_ObjectHideFlags: 0
