@@ -22,7 +22,9 @@ public class MathQuizGame : MiniGameBase
 
     private MathQuizDayDifficulty currentDifficulty;
     private int activeQuestionCount;
+    private int activeAllowedMistakes;
     private int currentQuestionIndex;
+    private int mistakeCount;
     private int correctAnswer;
     private string currentInput = "";
 
@@ -31,7 +33,7 @@ public class MathQuizGame : MiniGameBase
         currentDifficulty =
             DayDifficultySelector.GetForDay(
                 dayDifficulties,
-                CurrentDay);
+                DifficultyDay);
 
         if (!ValidateDifficulty())
         {
@@ -45,6 +47,10 @@ public class MathQuizGame : MiniGameBase
             currentDifficulty.totalQuestionCount);
 
         currentQuestionIndex = 0;
+        mistakeCount = 0;
+        activeAllowedMistakes = Mathf.Max(
+            1,
+            currentDifficulty.allowedMistakes);
         currentInput = "";
 
         if (resultText != null)
@@ -145,9 +151,18 @@ public class MathQuizGame : MiniGameBase
 
         if (playerAnswer != correctAnswer)
         {
+            mistakeCount++;
+
             if (resultText != null)
             {
-                resultText.text = "X";
+                resultText.text =
+                    $"X  ({mistakeCount}/{activeAllowedMistakes})";
+            }
+
+            if (mistakeCount >= activeAllowedMistakes)
+            {
+                Fail();
+                return;
             }
 
             currentInput = "";

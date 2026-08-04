@@ -64,7 +64,9 @@ public class ArrowKeyGame : MiniGameBase
     private TMP_Text resultText;
 
     private Vector2Int activeBoardSize;
+    private int activeStageCount;
     private int activeAllowedMistakes;
+    private int currentStageIndex;
     private int currentInputIndex;
     private int mistakeCount;
 
@@ -73,7 +75,7 @@ public class ArrowKeyGame : MiniGameBase
         currentDifficulty =
             DayDifficultySelector.GetForDay(
                 dayDifficulties,
-                CurrentDay);
+                DifficultyDay);
 
         if (!ValidateSettings())
         {
@@ -84,6 +86,7 @@ public class ArrowKeyGame : MiniGameBase
         BuildInterface();
         ClearPathViews();
 
+        currentStageIndex = 0;
         currentInputIndex = 0;
         mistakeCount = 0;
 
@@ -173,8 +176,16 @@ public class ArrowKeyGame : MiniGameBase
         if (currentInputIndex >= pathDirections.Count)
         {
             goalView.SetGoalReached();
-            UpdateUI("CLEAR");
-            Success();
+            currentStageIndex++;
+
+            if (currentStageIndex >= activeStageCount)
+            {
+                UpdateUI("CLEAR");
+                Success();
+                return;
+            }
+
+            BeginNextStage();
             return;
         }
 
@@ -218,8 +229,30 @@ public class ArrowKeyGame : MiniGameBase
         activeAllowedMistakes = Mathf.Max(
             1,
             currentDifficulty.allowedMistakes);
+        activeStageCount = Mathf.Max(1, currentDifficulty.stageCount);
 
         return true;
+    }
+
+    private void BeginNextStage()
+    {
+        ClearPathViews();
+        currentInputIndex = 0;
+
+        if (!CreateRandomPath())
+        {
+#if UNITY_EDITOR
+            Debug.LogError("Failed to create an arrow path.");
+#endif
+            Fail();
+            return;
+        }
+
+        CalculatePathLayout();
+        CreateRandomNotes();
+        CreatePathViews();
+        UpdateUI("");
+        RequestTimerReset();
     }
 
     private bool CreateRandomPath()
@@ -745,8 +778,8 @@ public class ArrowKeyGame : MiniGameBase
         if (mistakeText != null)
         {
             mistakeText.text =
-                $"Mistakes {mistakeCount} / " +
-                $"{activeAllowedMistakes}";
+                $"Stage {currentStageIndex + 1} / {activeStageCount}    " +
+                $"Mistakes {mistakeCount} / {activeAllowedMistakes}";
         }
 
         if (resultText != null)

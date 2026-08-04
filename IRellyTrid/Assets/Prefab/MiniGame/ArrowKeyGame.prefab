@@ -51,37 +51,42 @@ MonoBehaviour:
   dayDifficulties:
   - startDay: 1
     boardSize: {x: 8, y: 6}
-    minArrowCount: 10
-    maxArrowCount: 12
+    minArrowCount: 11
+    maxArrowCount: 14
     minTurnCount: 5
+    stageCount: 3
     allowedMistakes: 3
     cellSpacing: {x: 76, y: 76}
   - startDay: 2
-    boardSize: {x: 9, y: 7}
-    minArrowCount: 13
-    maxArrowCount: 15
-    minTurnCount: 7
+    boardSize: {x: 8, y: 6}
+    minArrowCount: 11
+    maxArrowCount: 14
+    minTurnCount: 5
+    stageCount: 3
     allowedMistakes: 3
     cellSpacing: {x: 76, y: 76}
   - startDay: 3
-    boardSize: {x: 10, y: 7}
-    minArrowCount: 16
-    maxArrowCount: 19
-    minTurnCount: 9
+    boardSize: {x: 8, y: 6}
+    minArrowCount: 11
+    maxArrowCount: 14
+    minTurnCount: 5
+    stageCount: 3
     allowedMistakes: 3
     cellSpacing: {x: 76, y: 76}
   - startDay: 4
-    boardSize: {x: 11, y: 8}
-    minArrowCount: 20
-    maxArrowCount: 23
-    minTurnCount: 11
+    boardSize: {x: 8, y: 6}
+    minArrowCount: 11
+    maxArrowCount: 14
+    minTurnCount: 5
+    stageCount: 3
     allowedMistakes: 3
     cellSpacing: {x: 76, y: 76}
   - startDay: 5
-    boardSize: {x: 12, y: 9}
-    minArrowCount: 24
-    maxArrowCount: 28
-    minTurnCount: 13
+    boardSize: {x: 8, y: 6}
+    minArrowCount: 11
+    maxArrowCount: 14
+    minTurnCount: 5
+    stageCount: 3
     allowedMistakes: 3
     cellSpacing: {x: 76, y: 76}
   cellSize: {x: 68, y: 68}

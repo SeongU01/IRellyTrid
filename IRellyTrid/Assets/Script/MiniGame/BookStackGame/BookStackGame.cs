@@ -60,7 +60,7 @@ public class BookStackGame : MiniGameBase
         currentDifficulty =
             DayDifficultySelector.GetForDay(
                 dayDifficulties,
-                CurrentDay);
+                DifficultyDay);
 
         if (currentDifficulty == null)
         {
@@ -309,6 +309,7 @@ private BookData GetNextTargetBook()
 #if UNITY_EDITOR
             Debug.Log($"잘못된 책: {book.BookName}");
 #endif
+            Fail();
             return;
         }
 

@@ -14,6 +14,7 @@ public class ArrowKeyDayDifficulty : DayDifficultyData
     [Min(0)] public int minTurnCount = 4;
 
     [Header("Rules")]
+    [Min(1)] public int stageCount = 3;
     [Min(1)] public int allowedMistakes = 3;
 
     [Header("Layout")]

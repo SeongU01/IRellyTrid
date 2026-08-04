@@ -7,6 +7,7 @@ public enum DayPhase
     SecondBonusChoice,
     SecondBonusMiniGame,
     Recovery,
+    Settlement,
     DayCompleted,
     Ending,
     GameOver

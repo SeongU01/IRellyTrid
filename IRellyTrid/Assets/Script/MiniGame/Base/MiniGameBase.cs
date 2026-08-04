@@ -4,6 +4,7 @@ using UnityEngine;
 public abstract class MiniGameBase : MonoBehaviour
 {
     public event Action<MiniGameResult> OnFinished;
+    public event Action OnTimerResetRequested;
 
     private bool isPlaying;
     private MiniGameData currentData;
@@ -12,6 +13,7 @@ public abstract class MiniGameBase : MonoBehaviour
     // getter
     public bool IsPlaying => isPlaying;
     public int CurrentDay { get; private set; } = 1;
+    public int DifficultyDay { get; private set; } = 1;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected int timeLimit;
@@ -27,10 +29,21 @@ public abstract class MiniGameBase : MonoBehaviour
 
     public void Init(MiniGameData data, int currentDay)
     {
+        Init(data, currentDay, currentDay, data.timeLimit);
+    }
+
+    public void Init(
+        MiniGameData data,
+        int currentDay,
+        int difficultyDay,
+        float effectiveTimeLimit)
+    {
         CurrentDay = Mathf.Max(1, currentDay);
+        DifficultyDay = Mathf.Max(1, difficultyDay);
 
         // 기존 Init 오버라이드가 있는 미니게임도 그대로 호출한다.
         Init(data);
+        timeLimit = Mathf.CeilToInt(Mathf.Max(0.1f, effectiveTimeLimit));
     }
     abstract protected void OnStart();
     public void Play()
@@ -63,6 +76,11 @@ public abstract class MiniGameBase : MonoBehaviour
     public void Timeout()
     {
         Finish(MiniGameEndReason.Timeout);
+    }
+    protected void RequestTimerReset()
+    {
+        if (isPlaying)
+            OnTimerResetRequested?.Invoke();
     }
 #if UNITY_EDITOR
     public void CompleteAsSuccessForEditorTest()

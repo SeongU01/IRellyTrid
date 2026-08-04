@@ -7,6 +7,7 @@ public sealed class DaySystem : MonoBehaviour
 
     private PlayerStatus playerStatus;
     private int studyAmountAtDayStart;
+    private int previousHealth;
     private GameOverReason? lastGameOverReason;
 
     public static DaySystem Instance
@@ -24,6 +25,7 @@ public sealed class DaySystem : MonoBehaviour
     public DayPhase CurrentPhase { get; private set; } = DayPhase.NotStarted;
     public int CompletedNormalMiniGames { get; private set; }
     public int PerformedBonusMiniGames { get; private set; }
+    public int TodayLostHealth { get; private set; }
     public int NormalMiniGamesPerDay =>
         playerStatus != null && playerStatus.Settings != null
             ? playerStatus.Settings.NormalMiniGamesPerDay
@@ -75,6 +77,21 @@ public sealed class DaySystem : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
         playerStatus = PlayerStatus.Instance;
+        previousHealth = playerStatus != null ? playerStatus.Health : 0;
+    }
+
+    private void OnEnable()
+    {
+        playerStatus = PlayerStatus.Instance;
+
+        if (playerStatus != null)
+            playerStatus.HealthChanged += HandleHealthChanged;
+    }
+
+    private void OnDisable()
+    {
+        if (playerStatus != null)
+            playerStatus.HealthChanged -= HandleHealthChanged;
     }
 
     private void OnDestroy()
@@ -90,8 +107,10 @@ public sealed class DaySystem : MonoBehaviour
         CurrentDay = 1;
         CompletedNormalMiniGames = 0;
         PerformedBonusMiniGames = 0;
+        TodayLostHealth = 0;
         studyAmountAtDayStart =
             playerStatus != null ? playerStatus.StudyAmount : 0;
+        previousHealth = playerStatus != null ? playerStatus.Health : 0;
         lastGameOverReason = null;
         ChangePhase(DayPhase.NotStarted);
 
@@ -115,7 +134,9 @@ public sealed class DaySystem : MonoBehaviour
 
         CompletedNormalMiniGames = 0;
         PerformedBonusMiniGames = 0;
+        TodayLostHealth = 0;
         studyAmountAtDayStart = playerStatus.StudyAmount;
+        previousHealth = playerStatus.Health;
         ChangePhase(DayPhase.NormalMiniGames);
         OnNormalMiniGameProgressChanged?.Invoke(
             CompletedNormalMiniGames,
@@ -227,12 +248,23 @@ public sealed class DaySystem : MonoBehaviour
         ChangePhase(DayPhase.Recovery);
     }
 
+    public void BeginSettlement()
+    {
+        ChangeActivePhase(
+            DayPhase.Recovery,
+            DayPhase.Settlement);
+    }
+
     public void CompleteDay()
     {
-        if (!CanContinue() ||
-            CurrentPhase == DayPhase.DayCompleted ||
-            CurrentPhase == DayPhase.Ending)
+        if (!CanContinue())
+            return;
+
+        if (CurrentPhase != DayPhase.Settlement)
         {
+            Debug.LogWarning(
+                $"[DaySystem] A day can only be completed from " +
+                $"{DayPhase.Settlement}, not {CurrentPhase}.");
             return;
         }
 
@@ -284,6 +316,17 @@ public sealed class DaySystem : MonoBehaviour
         Debug.Log(
             $"[DaySystem] Game over on day {CurrentDay}: {reason}");
         OnGameOver?.Invoke(reason);
+    }
+
+    private void HandleHealthChanged(int currentHealth, int maxHealth)
+    {
+        if (currentHealth < previousHealth &&
+            CurrentPhase != DayPhase.NotStarted)
+        {
+            TodayLostHealth += previousHealth - currentHealth;
+        }
+
+        previousHealth = currentHealth;
     }
 
     private bool CanContinue()

@@ -19,7 +19,9 @@ public class TypingWordGame : MiniGameBase
 
     private TypingWordDayDifficulty currentDifficulty;
     private int activeQuestionCount;
+    private int activeAllowedMistakes;
     private int currentQuestionIndex;
+    private int mistakeCount;
     private string currentAnswer;
 
     protected override void OnStart()
@@ -27,7 +29,7 @@ public class TypingWordGame : MiniGameBase
         currentDifficulty =
             DayDifficultySelector.GetForDay(
                 dayDifficulties,
-                CurrentDay);
+                DifficultyDay);
 
         if (!ValidateDifficulty())
         {
@@ -36,6 +38,10 @@ public class TypingWordGame : MiniGameBase
         }
 
         currentQuestionIndex = 0;
+        mistakeCount = 0;
+        activeAllowedMistakes = Mathf.Max(
+            1,
+            currentDifficulty.allowedMistakes);
 
         if (resultText != null)
         {
@@ -170,9 +176,18 @@ public class TypingWordGame : MiniGameBase
 
         if (playerInput != currentAnswer)
         {
+            mistakeCount++;
+
             if (resultText != null)
             {
-                resultText.text = "X";
+                resultText.text =
+                    $"X  ({mistakeCount}/{activeAllowedMistakes})";
+            }
+
+            if (mistakeCount >= activeAllowedMistakes)
+            {
+                Fail();
+                return;
             }
 
             inputField.text = "";

@@ -782,6 +782,7 @@ MonoBehaviour:
   dayDifficulties:
   - startDay: 1
     totalQuestionCount: 20
+    allowedMistakes: 3
     minNumber: 1
     maxNumber: 9
     useAddition: 1

@@ -4,6 +4,7 @@ using UnityEngine;
 public class MathQuizDayDifficulty : DayDifficultyData
 {
     [Min(1)] public int totalQuestionCount = 20;
+    [Min(1)] public int allowedMistakes = 3;
 
     [Header("Number Range")]
     [Min(1)] public int minNumber = 1;

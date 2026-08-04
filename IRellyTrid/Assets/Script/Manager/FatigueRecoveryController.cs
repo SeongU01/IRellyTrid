@@ -96,6 +96,7 @@ public sealed class FatigueRecoveryController : MonoBehaviour
             performedBonusGames,
             requestedRecovery,
             actualRecovery);
+        daySystem.BeginSettlement();
     }
 
     private static float GetRecoveryAmount(
