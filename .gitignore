@@ -1,14 +1,14 @@
-# Unity Project (IRellyTrid)
+# Unity Project
 
-IRellyTrid/[Ll]ibrary/
-IRellyTrid/[Tt]emp/
-IRellyTrid/[Oo]bj/
-IRellyTrid/[Bb]uild/
-IRellyTrid/[Bb]uilds/
-IRellyTrid/[Ll]ogs/
-IRellyTrid/[Uu]ser[Ss]ettings/
-IRellyTrid/[Mm]emoryCaptures/
-IRellyTrid/[Rr]ecordings/
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
 
 *.log
 
@@ -19,7 +19,7 @@ IRellyTrid/[Rr]ecordings/
 
 # Rider
 
-IRellyTrid/[Aa]ssets/Plugins/Editor/JetBrains*
+/[Aa]ssets/Plugins/Editor/JetBrains*
 *.DotSettings.user
 
 # Visual Studio Code
@@ -77,26 +77,26 @@ InitTestScene*.unity*
 
 # Addressables
 
-IRellyTrid/ServerData/
-IRellyTrid/[Aa]ssets/StreamingAssets/aa*
-IRellyTrid/[Aa]ssets/AddressableAssetsData/link.xml*
-IRellyTrid/[Aa]ssets/Addressables_Temp*
-IRellyTrid/[Aa]ssets/AddressableAssetsData/*/*.bin*
+/ServerData/
+/[Aa]ssets/StreamingAssets/aa*
+/[Aa]ssets/AddressableAssetsData/link.xml*
+/[Aa]ssets/Addressables_Temp*
+/[Aa]ssets/AddressableAssetsData/*/*.bin*
 
 # Visual Scripting
 
-IRellyTrid/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db
-IRellyTrid/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db.meta
-IRellyTrid/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers
-IRellyTrid/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers.meta
+/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db
+/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db.meta
+/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers
+/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers.meta
 
 # Auto Generated Test Scenes
 
-IRellyTrid/[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+/[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 
 # Scene Dependency Cache
 
-IRellyTrid/[Aa]ssets/[Ss]ceneDependencyCache*
+/[Aa]ssets/[Ss]ceneDependencyCache*
 
 # Asset
 
