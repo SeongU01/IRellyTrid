@@ -69,8 +69,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 67ff194e978520846a1405404b4bc7ef, type: 2}
+  m_sharedMaterial: {fileID: -2937827910852606990, guid: 67ff194e978520846a1405404b4bc7ef, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -149,6 +149,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3128394647255388015}
   - component: {fileID: 1115584121351177930}
+  - component: {fileID: 4968473026174459102}
+  - component: {fileID: 6739251840274613308}
+  - component: {fileID: 7753807419076642136}
+  - component: {fileID: 4849162783527631059}
   m_Layer: 0
   m_Name: MiniGameManager
   m_TagString: Untagged
@@ -206,9 +210,83 @@ MonoBehaviour:
     commandText: "\uCC3E\uC544!"
     timeLimit: 30
     prefab: {fileID: 6335680773905131617, guid: 617ab2d54d266f849a3ba4ccf6a37332, type: 3}
-  readyTime: 2
-  resultTime: 3
   timerText: {fileID: 1423861765855288475}
+--- !u!114 &4968473026174459102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6066698840990365924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4727bf932c449b3bc624104dcfd3989, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::GameFlowController
+  miniGameManager: {fileID: 1115584121351177930}
+  startNewGameOnStart: 1
+--- !u!114 &6739251840274613308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6066698840990365924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73ac12b41a2e44d891bb071d67a8860e, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::BonusGameFlowController
+  miniGameManager: {fileID: 1115584121351177930}
+  bonusConfigurations:
+  - startDay: 1
+    firstBonus:
+      name: SortingMiniGameBonus
+      commandText: "\uBD84\uB958!"
+      timeLimit: 30
+      isBonus: 1
+      prefab: {fileID: 7050204041929986303, guid: 7cdd71a34d294ec0aa1d5777e8a78c3b, type: 3}
+    secondBonus:
+      name: ArrowMiniGameBonus
+      commandText: "\uB530\uB77C\uD574!"
+      timeLimit: 30
+      isBonus: 1
+      prefab: {fileID: 3030303030303030303, guid: cc7fee2fe4b14ffbaeae67094defa06c, type: 3}
+--- !u!114 &7753807419076642136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6066698840990365924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f381ddf0b7d41989ad13a5abf900840, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::BonusChoiceView
+  bonusGameFlowController: {fileID: 6739251840274613308}
+  restCommonSprite: {fileID: 0}
+  restHoverSprite: {fileID: 0}
+  restOnClickSprite: {fileID: 0}
+  bonusCommonSprite: {fileID: 0}
+  bonusHoverSprite: {fileID: 0}
+  bonusOnClickSprite: {fileID: 0}
+  fontAsset: {fileID: 11400000, guid: 67ff194e978520846a1405404b4bc7ef, type: 2}
+  showTemporaryLabels: 1
+  panelSize: {x: 760, y: 360}
+  buttonSize: {x: 280, y: 110}
+--- !u!114 &4849162783527631059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6066698840990365924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d8541576a1a455bb0b58a2b806c31f1, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::FatigueRecoveryController
 --- !u!1 &9025891546021401047
 GameObject:
   m_ObjectHideFlags: 0

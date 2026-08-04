@@ -440,26 +440,6 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[0].name
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[1].name
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[2].name
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[3].name
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[4].name
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: miniGames.Array.data[0].prefab
       value: 
       objectReference: {fileID: 7050204041929986303, guid: 7cdd71a34d294ec0aa1d5777e8a78c3b, type: 3}
@@ -482,26 +462,6 @@ PrefabInstance:
     - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: miniGames.Array.data[0].timeLimit
       value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[0].commandText
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[1].commandText
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[2].commandText
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[3].commandText
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1115584121351177930, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
-      propertyPath: miniGames.Array.data[4].commandText
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3128394647255388015, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
       propertyPath: m_LocalPosition.x

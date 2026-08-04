@@ -6,6 +6,8 @@ public abstract class MiniGameBase : MonoBehaviour
     public event Action<MiniGameResult> OnFinished;
 
     private bool isPlaying;
+    private MiniGameData currentData;
+    private float playStartedAt;
 
     // getter
     public bool IsPlaying => isPlaying;
@@ -18,6 +20,7 @@ public abstract class MiniGameBase : MonoBehaviour
     public virtual void Init(MiniGameData data)
     {
         isPlaying = false;
+        currentData = data;
         timeLimit = (int)data.timeLimit;
         commandText = data.commandText;
     }
@@ -36,6 +39,7 @@ public abstract class MiniGameBase : MonoBehaviour
             return;
 
         isPlaying = true;
+        playStartedAt = Time.time;
         OnStart();
     }
 
@@ -50,24 +54,35 @@ public abstract class MiniGameBase : MonoBehaviour
 
     virtual protected void Success()
     {
-        Finish(true);
+        Finish(MiniGameEndReason.Success);
     }
     virtual protected void Fail()
     {
-        Finish(false);
+        Finish(MiniGameEndReason.Failure);
     }
     public void Timeout()
     {
-        Finish(false);
+        Finish(MiniGameEndReason.Timeout);
     }
-    private void Finish(bool success)
+#if UNITY_EDITOR
+    public void CompleteAsSuccessForEditorTest()
+    {
+        Success();
+    }
+#endif
+    private void Finish(MiniGameEndReason endReason)
     {
         if (!isPlaying)
             return;
-    
+
+        float playDuration = Mathf.Max(0f, Time.time - playStartedAt);
         isPlaying = false;
         OnEnd();
-        OnFinished?.Invoke(new MiniGameResult(success));
+        OnFinished?.Invoke(new MiniGameResult(
+            endReason,
+            currentData,
+            CurrentDay,
+            playDuration));
     }
     virtual protected void OnEnd()
     {
