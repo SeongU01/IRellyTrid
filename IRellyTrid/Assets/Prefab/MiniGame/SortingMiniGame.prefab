@@ -96,23 +96,23 @@ MonoBehaviour:
   dayDifficulties:
   - startDay: 1
     categoryIndices: 00000000010000000600000007000000
-    requiredSortCount: 30
+    requiredSortCount: 20
     allowedMistakes: 3
   - startDay: 2
     categoryIndices: 0000000001000000020000000600000007000000
-    requiredSortCount: 30
+    requiredSortCount: 20
     allowedMistakes: 3
   - startDay: 3
     categoryIndices: 0000000001000000020000000300000006000000070000000800000009000000
-    requiredSortCount: 30
+    requiredSortCount: 20
     allowedMistakes: 3
   - startDay: 4
     categoryIndices: 000000000100000002000000030000000400000006000000070000000800000009000000
-    requiredSortCount: 30
+    requiredSortCount: 20
     allowedMistakes: 3
   - startDay: 5
     categoryIndices: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b000000
-    requiredSortCount: 30
+    requiredSortCount: 20
     allowedMistakes: 3
   leftButtonSprite: {fileID: 30064537844054092, guid: 002b7ab7935f8524485f833e7523b0a9, type: 3}
   rightButtonSprite: {fileID: 6552060196920312030, guid: 002b7ab7935f8524485f833e7523b0a9, type: 3}

@@ -937,6 +937,7 @@ MonoBehaviour:
   dayDifficulties:
   - startDay: 1
     totalQuestionCount: 10
+    allowedMistakes: 3
     words:
     - apple
     - banana

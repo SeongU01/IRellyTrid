@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -19,6 +20,7 @@ public class MiniGameManager : MonoBehaviour
     private Coroutine gameRoutine;
     private PlayerStatus playerStatus;
     private MiniGameResult lastMiniGameResult;
+    private bool timerResetRequested;
 
     public event Action<int> OnNormalMiniGamesCompleted;
     public event Action<MiniGameResult> OnMiniGameCompleted;
@@ -111,6 +113,8 @@ public class MiniGameManager : MonoBehaviour
 
         GameBalanceSettings balanceSettings = playerStatus.Settings;
         int miniGamesPerDay = balanceSettings.NormalMiniGamesPerDay;
+        GameDaySettings daySettings =
+            balanceSettings.GetDaySettings(CurrentDay);
 
         if (!HasEnoughMiniGamesForDay())
         {
@@ -118,7 +122,25 @@ public class MiniGameManager : MonoBehaviour
             yield break;
         }
 
-        // Inspector registration order is the play order for each day.
+        List<MiniGameData> gamesForToday =
+            CreateGamesForToday(miniGamesPerDay, daySettings);
+
+        float effectiveTimeLimit = daySettings != null
+            ? daySettings.MiniGameTimeLimit
+            : 30f;
+
+        int difficultyDay = daySettings != null &&
+            daySettings.MiniGameDifficultyDay > 0
+                ? daySettings.MiniGameDifficultyDay
+                : CurrentDay;
+
+#if UNITY_EDITOR
+        Debug.Log(
+            $"[MiniGameManager] Day {CurrentDay}: " +
+            $"order={(daySettings != null && daySettings.RandomizeMiniGameOrder ? "random" : "fixed")}, " +
+            $"time={effectiveTimeLimit:0.##}s, difficulty day={difficultyDay}.");
+#endif
+
         for (int index = 0; index < miniGamesPerDay; index++)
         {
             if (playerStatus != null && playerStatus.IsGameOver)
@@ -127,7 +149,7 @@ public class MiniGameManager : MonoBehaviour
                 yield break;
             }
 
-            MiniGameData data = miniGames[index];
+            MiniGameData data = gamesForToday[index];
 
             if (data == null || data.prefab == null)
             {
@@ -142,7 +164,11 @@ public class MiniGameManager : MonoBehaviour
             Debug.Log($"Command: {data.commandText}");
 #endif
 
-            yield return PlayMiniGameRoutine(data, balanceSettings);
+            yield return PlayMiniGameRoutine(
+                data,
+                balanceSettings,
+                effectiveTimeLimit,
+                difficultyDay);
 
             if (lastMiniGameResult == null)
             {
@@ -160,7 +186,11 @@ public class MiniGameManager : MonoBehaviour
     private IEnumerator BonusGameRoutine(MiniGameData data)
     {
         GameBalanceSettings balanceSettings = playerStatus.Settings;
-        yield return PlayMiniGameRoutine(data, balanceSettings);
+        yield return PlayMiniGameRoutine(
+            data,
+            balanceSettings,
+            data.timeLimit,
+            CurrentDay);
 
         MiniGameResult completedResult = lastMiniGameResult;
         gameRoutine = null;
@@ -175,7 +205,9 @@ public class MiniGameManager : MonoBehaviour
 
     private IEnumerator PlayMiniGameRoutine(
         MiniGameData data,
-        GameBalanceSettings balanceSettings)
+        GameBalanceSettings balanceSettings,
+        float effectiveTimeLimit,
+        int difficultyDay)
     {
         lastMiniGameResult = null;
         ClearTimerText();
@@ -185,10 +217,14 @@ public class MiniGameManager : MonoBehaviour
         if (playerStatus == null || playerStatus.IsGameOver)
             yield break;
 
-        if (!SpawnMiniGame(data))
+        if (!SpawnMiniGame(
+                data,
+                difficultyDay,
+                effectiveTimeLimit))
             yield break;
 
-        float timer = data.timeLimit;
+        float timer = effectiveTimeLimit;
+        timerResetRequested = false;
         UpdateTimerText(timer);
 
         while (timer > 0f &&
@@ -209,6 +245,16 @@ public class MiniGameManager : MonoBehaviour
 #endif
 
             float deltaTime = Time.deltaTime;
+
+            if (timerResetRequested)
+            {
+                timer = effectiveTimeLimit;
+                timerResetRequested = false;
+                UpdateTimerText(timer);
+                yield return null;
+                continue;
+            }
+
             timer -= deltaTime;
 
             if (playerStatus != null)
@@ -236,6 +282,32 @@ public class MiniGameManager : MonoBehaviour
 
         yield return new WaitForSeconds(
             balanceSettings.MiniGameResultDuration);
+    }
+
+    private List<MiniGameData> CreateGamesForToday(
+        int miniGamesPerDay,
+        GameDaySettings daySettings)
+    {
+        List<MiniGameData> result = new List<MiniGameData>(miniGamesPerDay);
+
+        for (int i = 0; i < miniGamesPerDay; i++)
+        {
+            MiniGameData overrideData =
+                daySettings?.GetMiniGameOverride(i);
+            result.Add(overrideData ?? miniGames[i]);
+        }
+
+        if (daySettings == null || !daySettings.RandomizeMiniGameOrder)
+            return result;
+
+        for (int i = result.Count - 1; i > 0; i--)
+        {
+            int randomIndex = UnityEngine.Random.Range(0, i + 1);
+            (result[i], result[randomIndex]) =
+                (result[randomIndex], result[i]);
+        }
+
+        return result;
     }
 
     private bool HasEnoughMiniGamesForDay()
@@ -269,7 +341,10 @@ public class MiniGameManager : MonoBehaviour
         timerText.text = Mathf.CeilToInt(Mathf.Max(0f, time)).ToString();
     }
 
-    private bool SpawnMiniGame(MiniGameData data)
+    private bool SpawnMiniGame(
+        MiniGameData data,
+        int difficultyDay,
+        float effectiveTimeLimit)
     {
         if (data.prefab == null)
         {
@@ -281,10 +356,20 @@ public class MiniGameManager : MonoBehaviour
 
         currentMiniGame = Instantiate(data.prefab, miniGameRoot);
         currentMiniGame.OnFinished += HandleMiniGameFinished;
-        currentMiniGame.Init(data, CurrentDay);
+        currentMiniGame.OnTimerResetRequested += HandleTimerResetRequested;
+        currentMiniGame.Init(
+            data,
+            CurrentDay,
+            difficultyDay,
+            effectiveTimeLimit);
         currentMiniGame.Play();
 
         return true;
+    }
+
+    private void HandleTimerResetRequested()
+    {
+        timerResetRequested = true;
     }
 
     private void HandleMiniGameFinished(MiniGameResult result)
@@ -355,8 +440,10 @@ public class MiniGameManager : MonoBehaviour
             return;
 
         currentMiniGame.OnFinished -= HandleMiniGameFinished;
+        currentMiniGame.OnTimerResetRequested -= HandleTimerResetRequested;
         currentMiniGame.Stop();
         Destroy(currentMiniGame.gameObject);
         currentMiniGame = null;
+        timerResetRequested = false;
     }
 }

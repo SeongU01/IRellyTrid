@@ -61,7 +61,7 @@ public class SortingMiniGame : MiniGameBase
         currentDifficulty =
             DayDifficultySelector.GetForDay(
                 dayDifficulties,
-                CurrentDay);
+                DifficultyDay);
 
         if (!ValidateSettings())
         {
