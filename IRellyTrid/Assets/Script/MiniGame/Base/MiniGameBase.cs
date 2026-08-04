@@ -64,6 +64,12 @@ public abstract class MiniGameBase : MonoBehaviour
     {
         Finish(MiniGameEndReason.Timeout);
     }
+#if UNITY_EDITOR
+    public void CompleteAsSuccessForEditorTest()
+    {
+        Success();
+    }
+#endif
     private void Finish(MiniGameEndReason endReason)
     {
         if (!isPlaying)

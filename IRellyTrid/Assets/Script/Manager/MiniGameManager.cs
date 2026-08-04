@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEngine.InputSystem;
+#endif
 
 public class MiniGameManager : MonoBehaviour
 {
@@ -192,6 +195,19 @@ public class MiniGameManager : MonoBehaviour
                currentMiniGame != null &&
                currentMiniGame.IsPlaying)
         {
+#if UNITY_EDITOR
+            // TODO: 나중에 삭제해야 하는 Unity Editor 전용 테스트 코드.
+            if (Keyboard.current != null &&
+                Keyboard.current.f8Key.wasPressedThisFrame)
+            {
+                Debug.Log(
+                    "[MiniGameManager] F8 pressed: current mini game " +
+                    "completed as success for editor testing.");
+                currentMiniGame.CompleteAsSuccessForEditorTest();
+                continue;
+            }
+#endif
+
             float deltaTime = Time.deltaTime;
             timer -= deltaTime;
 
