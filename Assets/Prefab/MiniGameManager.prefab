@@ -244,11 +244,11 @@ MonoBehaviour:
   bonusConfigurations:
   - startDay: 1
     firstBonus:
-      name: SortingMiniGameBonus
-      commandText: "\uBD84\uB958!"
+      name: MemoryDefenseBonus
+      commandText: Keep Them In!
       timeLimit: 30
       isBonus: 1
-      prefab: {fileID: 7050204041929986303, guid: 7cdd71a34d294ec0aa1d5777e8a78c3b, type: 3}
+      prefab: {fileID: 4829015772846219013, guid: 40a7c8b862994c51be076a4ae47e7213, type: 3}
     secondBonus:
       name: ArrowMiniGameBonus
       commandText: "\uB530\uB77C\uD574!"

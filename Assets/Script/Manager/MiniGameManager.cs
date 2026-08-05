@@ -393,8 +393,10 @@ public class MiniGameManager : MonoBehaviour
 
         if (result.Success)
         {
-            playerStatus.AddStudyAmount(
-                playerStatus.Settings.StudyAmountPerMiniGame);
+            int studyReward = result.StudyRewardOverride ??
+                playerStatus.Settings.StudyAmountPerMiniGame;
+
+            playerStatus.AddStudyAmount(studyReward);
             return;
         }
 
