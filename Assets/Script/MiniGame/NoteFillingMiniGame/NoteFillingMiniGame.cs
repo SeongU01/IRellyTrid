@@ -25,25 +25,39 @@ public sealed class NoteFillingMiniGame : MiniGameBase
     [Header("Game Area")]
     [SerializeField] private Vector2 gameAreaCenter =
         new Vector2(-165f, -150f);
+    [SerializeField] private Vector2 gameAreaSize =
+        new Vector2(860f, 700f);
+    [SerializeField] private Vector2 activePagePosition =
+        new Vector2(-210f, 0f);
+    [SerializeField] private Vector2 completedPageStackPosition =
+        new Vector2(210f, 0f);
     [SerializeField] private Vector2 pageSize =
-        new Vector2(650f, 560f);
+        new Vector2(360f, 509f);
 
     [Header("Page Visual")]
     [SerializeField] private Sprite noteSprite;
     [SerializeField] private Color temporaryPageColor =
-        new Color(0.55f, 0.55f, 0.55f, 1f);
+        Color.white;
+    [SerializeField] private Color pageBorderColor =
+        new Color(0.65f, 0.65f, 0.65f, 1f);
+    [SerializeField] private Color pageShadowColor =
+        new Color(0f, 0f, 0f, 0.28f);
     [SerializeField] private TMP_FontAsset fontAsset;
     [SerializeField] private Color textColor = Color.black;
-    [SerializeField, Min(1f)] private float fontSize = 34f;
-    [SerializeField, Min(0f)] private float textPadding = 42f;
+    [SerializeField, Min(1f)] private float fontSize = 48f;
+    [SerializeField] private float lineSpacing = -12f;
+    [SerializeField, Min(0f)] private float textPadding = 24f;
 
     [Header("Writing")]
     [SerializeField, Min(1)] private int charactersPerPage = 100;
-    [SerializeField, Min(1)] private int charactersPerLine = 20;
+    [SerializeField, Min(1)] private int charactersPerLine = 10;
 
     [Header("Page Transition")]
-    [SerializeField, Min(1f)] private float pageSlideDistance = 900f;
     [SerializeField, Min(0.01f)] private float pageSlideDuration = 0.35f;
+    [SerializeField] private Vector2 completedPageStackOffset =
+        new Vector2(5f, -5f);
+    [SerializeField, Min(0)] private int maximumVisibleStackOffset = 8;
+    [SerializeField, Min(0f)] private float stackRotationStep = 1.25f;
 
     private readonly StringBuilder currentCharacters = new();
     private RectTransform pageRoot;
@@ -120,14 +134,13 @@ public sealed class NoteFillingMiniGame : MiniGameBase
     private void CompleteCurrentPage()
     {
         PageView completedPage = currentPage;
-        int completedSiblingIndex = completedPage.Root.GetSiblingIndex();
         completedPageCount++;
         currentCharacters.Clear();
 
         currentPage = CreatePage();
-        currentPage.Root.SetSiblingIndex(completedSiblingIndex);
-        completedPage.Root.SetAsLastSibling();
-        StartCoroutine(SlidePageRight(completedPage));
+        StartCoroutine(StackCompletedPage(
+            completedPage,
+            completedPageCount - 1));
 
 #if UNITY_EDITOR
         Debug.Log(
@@ -136,14 +149,20 @@ public sealed class NoteFillingMiniGame : MiniGameBase
 #endif
     }
 
-    private IEnumerator SlidePageRight(PageView completedPage)
+    private IEnumerator StackCompletedPage(
+        PageView completedPage,
+        int completedPageIndex)
     {
         if (completedPage?.Root == null)
             yield break;
 
         Vector2 startPosition = completedPage.Root.anchoredPosition;
-        Vector2 targetPosition = startPosition +
-            Vector2.right * pageSlideDistance;
+        int visibleOffsetIndex = Mathf.Min(
+            Mathf.Max(0, completedPageIndex),
+            maximumVisibleStackOffset);
+        Vector2 targetPosition = completedPageStackPosition +
+            completedPageStackOffset * visibleOffsetIndex;
+        float targetRotation = GetStackRotation(completedPageIndex);
         float elapsed = 0f;
 
         while (elapsed < pageSlideDuration &&
@@ -157,11 +176,27 @@ public sealed class NoteFillingMiniGame : MiniGameBase
                 startPosition,
                 targetPosition,
                 easedProgress);
+            completedPage.Root.localRotation = Quaternion.Euler(
+                0f,
+                0f,
+                Mathf.Lerp(0f, targetRotation, easedProgress));
             yield return null;
         }
 
         if (completedPage.Root != null)
-            Destroy(completedPage.Root.gameObject);
+        {
+            completedPage.Root.anchoredPosition = targetPosition;
+            completedPage.Root.localRotation = Quaternion.Euler(
+                0f,
+                0f,
+                targetRotation);
+        }
+    }
+
+    private float GetStackRotation(int completedPageIndex)
+    {
+        int direction = completedPageIndex % 2 == 0 ? -1 : 1;
+        return direction * stackRotationStep;
     }
 
     private void CompleteGame()
@@ -198,15 +233,16 @@ public sealed class NoteFillingMiniGame : MiniGameBase
 
         GameObject rootObject = new GameObject(
             "PageRoot",
-            typeof(RectTransform));
+            typeof(RectTransform),
+            typeof(RectMask2D));
         rootObject.transform.SetParent(canvasObject.transform, false);
 
         pageRoot = rootObject.GetComponent<RectTransform>();
         pageRoot.anchorMin = new Vector2(0.5f, 0.5f);
         pageRoot.anchorMax = new Vector2(0.5f, 0.5f);
         pageRoot.pivot = new Vector2(0.5f, 0.5f);
-        pageRoot.anchoredPosition = Vector2.zero;
-        pageRoot.sizeDelta = Vector2.zero;
+        pageRoot.anchoredPosition = gameAreaCenter;
+        pageRoot.sizeDelta = gameAreaSize;
     }
 
     private PageView CreatePage()
@@ -223,7 +259,7 @@ public sealed class NoteFillingMiniGame : MiniGameBase
         pageRect.anchorMin = new Vector2(0.5f, 0.5f);
         pageRect.anchorMax = new Vector2(0.5f, 0.5f);
         pageRect.pivot = new Vector2(0.5f, 0.5f);
-        pageRect.anchoredPosition = gameAreaCenter;
+        pageRect.anchoredPosition = activePagePosition;
         pageRect.sizeDelta = pageSize;
 
         Image pageImage = pageObject.GetComponent<Image>();
@@ -233,6 +269,16 @@ public sealed class NoteFillingMiniGame : MiniGameBase
             : temporaryPageColor;
         pageImage.preserveAspect = noteSprite != null;
         pageImage.raycastTarget = false;
+
+        Shadow pageShadow = pageObject.AddComponent<Shadow>();
+        pageShadow.effectColor = pageShadowColor;
+        pageShadow.effectDistance = new Vector2(8f, -8f);
+        pageShadow.useGraphicAlpha = true;
+
+        Outline pageOutline = pageObject.AddComponent<Outline>();
+        pageOutline.effectColor = pageBorderColor;
+        pageOutline.effectDistance = new Vector2(2f, -2f);
+        pageOutline.useGraphicAlpha = true;
 
         GameObject textObject = new GameObject(
             "Characters",
@@ -258,7 +304,8 @@ public sealed class NoteFillingMiniGame : MiniGameBase
         pageText.color = textColor;
         pageText.alignment = TextAlignmentOptions.TopLeft;
         pageText.textWrappingMode = TextWrappingModes.NoWrap;
-        pageText.overflowMode = TextOverflowModes.Overflow;
+        pageText.overflowMode = TextOverflowModes.Masking;
+        pageText.lineSpacing = lineSpacing;
         pageText.raycastTarget = false;
         pageText.text = string.Empty;
 
@@ -292,6 +339,8 @@ public sealed class NoteFillingMiniGame : MiniGameBase
 
     private void OnValidate()
     {
+        gameAreaSize.x = Mathf.Max(1f, gameAreaSize.x);
+        gameAreaSize.y = Mathf.Max(1f, gameAreaSize.y);
         pageSize.x = Mathf.Max(1f, pageSize.x);
         pageSize.y = Mathf.Max(1f, pageSize.y);
         fontSize = Mathf.Max(1f, fontSize);
@@ -301,7 +350,10 @@ public sealed class NoteFillingMiniGame : MiniGameBase
             charactersPerLine,
             1,
             charactersPerPage);
-        pageSlideDistance = Mathf.Max(1f, pageSlideDistance);
         pageSlideDuration = Mathf.Max(0.01f, pageSlideDuration);
+        maximumVisibleStackOffset = Mathf.Max(
+            0,
+            maximumVisibleStackOffset);
+        stackRotationStep = Mathf.Max(0f, stackRotationStep);
     }
 }

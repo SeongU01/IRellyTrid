@@ -415,6 +415,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MiniGameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 6739251840274613308, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
+      propertyPath: bonusConfigurations.Array.data[0].firstBonus.prefab
+      value: 
+      objectReference: {fileID: 4829015772846219013, guid: 40a7c8b862994c51be076a4ae47e7213, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
