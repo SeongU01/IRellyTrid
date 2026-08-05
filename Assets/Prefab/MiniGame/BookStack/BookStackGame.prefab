@@ -320,16 +320,16 @@ MonoBehaviour:
     pileArea: {x: 4, y: 3}
     maxSpawnRotation: 60
     stages:
-    - bookCount: 4
+    - bookCount: 10
       similarBookCount: 0
-    - bookCount: 5
+    - bookCount: 10
       similarBookCount: 2
-    - bookCount: 6
-      similarBookCount: 3
-    - bookCount: 7
+    - bookCount: 10
       similarBookCount: 4
-    - bookCount: 8
-      similarBookCount: 5
+    - bookCount: 10
+      similarBookCount: 6
+    - bookCount: 10
+      similarBookCount: 8
     targetBooks:
     - bookName: blue real
       sprite: {fileID: 6484367311293896999, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
