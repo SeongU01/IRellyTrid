@@ -250,11 +250,11 @@ MonoBehaviour:
       isBonus: 1
       prefab: {fileID: 4829015772846219013, guid: 40a7c8b862994c51be076a4ae47e7213, type: 3}
     secondBonus:
-      name: ArrowMiniGameBonus
-      commandText: "\uB530\uB77C\uD574!"
+      name: NoteFillingBonus
+      commandText: Fill the Page!
       timeLimit: 30
       isBonus: 1
-      prefab: {fileID: 3030303030303030303, guid: cc7fee2fe4b14ffbaeae67094defa06c, type: 3}
+      prefab: {fileID: 5941826407319052103, guid: 9f3b64c3a9e545aba226ef3b5cf25791, type: 3}
 --- !u!114 &7753807419076642136
 MonoBehaviour:
   m_ObjectHideFlags: 0
