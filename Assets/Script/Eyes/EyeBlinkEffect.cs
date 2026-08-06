@@ -3,10 +3,10 @@ using UnityEngine.UI;
 
 public class EyeBlinkEffect : MonoBehaviour
 {
-    // 뜬 눈 이미지 연결
-    public Image openedEyesImage;
-    // 감은 눈 이미지 연결
-    public Image closedEyesImage;
+    // 뜬 눈 이미지 배열 연결
+    public Image[] openedEyesImages;
+    // 감은 눈 이미지 배열 연결
+    public Image[] closedEyesImages;
 
     // 완전한 눈 감김 목표 시간
     private float maxCloseTime = 20f;
@@ -14,6 +14,11 @@ public class EyeBlinkEffect : MonoBehaviour
     private float currentCloseTime = 0f;
     // 스페이스 키 입력 시 회복 시간
     private float recoveryTime = 2f;
+
+    // 완전히 감긴 상태 유지 시간
+    private float fullyClosedTimer = 0f;
+    // 체력 감소 간격 시간
+    private float damageInterval = 5f;
 
     private void Update()
     {
@@ -33,23 +38,69 @@ public class EyeBlinkEffect : MonoBehaviour
         // 현재 진행도 비율 계산
         float fillRatio = currentCloseTime / maxCloseTime;
 
-        // 눈 이미지 비율 갱신 호출
+        // 눈 이미지 배열 비율 갱신 호출
         UpdateEyeRatio(fillRatio);
+
+        // 체력 감소 로직 실행
+        CheckDamageCondition();
     }
 
-    // 이미지 비율 갱신
+    // 이미지 배열 비율 갱신
     private void UpdateEyeRatio(float ratio)
     {
-        if (closedEyesImage != null)
+        // 감은 눈 배열 순회 및 비율 적용
+        if (closedEyesImages != null)
         {
-            // 감은 눈 비율 적용
-            closedEyesImage.fillAmount = ratio;
+            foreach (Image img in closedEyesImages)
+            {
+                if (img != null)
+                {
+                    img.fillAmount = ratio;
+                }
+            }
         }
         
-        if (openedEyesImage != null)
+        // 뜬 눈 배열 순회 및 반전 비율 적용
+        if (openedEyesImages != null)
         {
-            // 뜬 눈 반전 비율 적용
-            openedEyesImage.fillAmount = 1f - ratio;
+            foreach (Image img in openedEyesImages)
+            {
+                if (img != null)
+                {
+                    img.fillAmount = 1f - ratio;
+                }
+            }
+        }
+    }
+
+    // 눈 감김 상태에 따른 체력 감소 확인
+    private void CheckDamageCondition()
+    {
+        // 완전한 눈 감김 상태 확인
+        if (currentCloseTime >= maxCloseTime)
+        {
+            // 완전히 감긴 시간 누적
+            fullyClosedTimer += Time.deltaTime;
+
+            // 목표 시간 경과 확인
+            if (fullyClosedTimer >= damageInterval)
+            {
+                if (PlayerStatus.Instance != null)
+                {
+                    // 플레이어 체력 감소 호출
+                    PlayerStatus.Instance.TakeDamage(1);
+                }
+                
+                // 유지 시간 초기화
+                fullyClosedTimer = 0f;
+                // 눈 감김 누적 시간 초기화
+                currentCloseTime = 0f;
+            }
+        }
+        else
+        {
+            // 유지 시간 초기화
+            fullyClosedTimer = 0f;
         }
     }
 }
