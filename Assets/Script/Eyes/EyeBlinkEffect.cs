@@ -9,23 +9,34 @@ public class EyeBlinkEffect : MonoBehaviour
     public Image[] closedEyesImages;
 
     // 완전한 눈 감김 목표 시간
-    private float maxCloseTime = 20f;
+    private float maxCloseTime;
     // 현재 눈 감김 누적 시간
     private float currentCloseTime = 0f;
-    // 스페이스 키 입력 시 회복 시간
-    private float recoveryTime = 2f;
+    // Space 키 입력 시 회복 시간
+    private float recoveryTime;
 
     // 완전히 감긴 상태 유지 시간
     private float fullyClosedTimer = 0f;
     // 체력 감소 간격 시간
-    private float damageInterval = 5f;
+    private float damageInterval;
+
+    private void Start()
+    {
+        if (PlayerStatus.Instance != null && PlayerStatus.Instance.Settings != null)
+        {
+            // GameBalanceSettings 설정값 동기화
+            maxCloseTime = PlayerStatus.Instance.Settings.EyeCloseDuration;
+            recoveryTime = PlayerStatus.Instance.Settings.EyeRecoveryPerSpace;
+            damageInterval = PlayerStatus.Instance.Settings.ClosedEyeDamageInterval;
+        }
+    }
 
     private void Update()
     {
         // 매 프레임 시간 누적
         currentCloseTime += Time.deltaTime;
         
-        // 스페이스 키 입력 감지
+        // Space 키 입력 감지
         if (Input.GetKeyDown(KeyCode.Space))
         {
             // 누적 시간 차감 적용
@@ -36,7 +47,12 @@ public class EyeBlinkEffect : MonoBehaviour
         currentCloseTime = Mathf.Clamp(currentCloseTime, 0f, maxCloseTime);
 
         // 현재 진행도 비율 계산
-        float fillRatio = currentCloseTime / maxCloseTime;
+        float fillRatio = 0f;
+        if (maxCloseTime > 0)
+        {
+            // 0 나누기 방지 및 비율 산출
+            fillRatio = currentCloseTime / maxCloseTime;
+        }
 
         // 눈 이미지 배열 비율 갱신 호출
         UpdateEyeRatio(fillRatio);

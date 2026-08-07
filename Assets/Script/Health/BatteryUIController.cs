@@ -39,6 +39,12 @@ public class BatteryUIController : MonoBehaviour
 
     private void Update()
     {
+        // UI 이미지 참조 전 null 방어 처리
+        if (fullBatteryImage == null)
+        {
+            return;
+        }
+
         // 부드러운 비율 전환 계산
         float currentRatio = Mathf.Lerp(fullBatteryImage.fillAmount, targetBatteryRatio, Time.deltaTime * fillSpeed);
         

@@ -18,11 +18,6 @@ public class BarFillEffect : MonoBehaviour
     // UI 갱신 속도 수치
     private float fillSpeed = 5f;
 
-    // 피로도 증가 주기 (초)
-    private float fatigueInterval = 2f;
-    // 누적 시간 측정용 변수
-    private float elapsedTime = 0f;
-
     private void OnEnable()
     {
         if (PlayerStatus.Instance != null)
@@ -81,23 +76,6 @@ public class BarFillEffect : MonoBehaviour
         if (studyBarImage != null)
         {
             studyBarImage.fillAmount = Mathf.Lerp(studyBarImage.fillAmount, targetStudyRatio, Time.deltaTime * fillSpeed);
-        }
-
-        // 2초마다 피로도 증가시키는 타이머 로직 실행
-        if (PlayerStatus.Instance != null && !PlayerStatus.Instance.IsGameOver)
-        {
-            // 매 프레임 경과 시간 누적 계산
-            elapsedTime += Time.deltaTime;
-
-            // 2초 주기 경과 여부 확인
-            if (elapsedTime >= fatigueInterval)
-            {
-                // 주기 시간 차감 처리
-                elapsedTime -= fatigueInterval;
-
-                // 피로도 1 증가 함수 호출 실행
-                PlayerStatus.Instance.AddFatigue(1f);
-            }
         }
     }
 

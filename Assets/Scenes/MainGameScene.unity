@@ -256,6 +256,63 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1001 &515620334
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2243081918071215157, guid: a4ac252e0699550418824d3a593926d4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 489.6266
+      objectReference: {fileID: 0}
+    - target: {fileID: 2243081918071215157, guid: a4ac252e0699550418824d3a593926d4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 498.13086
+      objectReference: {fileID: 0}
+    - target: {fileID: 2243081918071215157, guid: a4ac252e0699550418824d3a593926d4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2243081918071215157, guid: a4ac252e0699550418824d3a593926d4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2243081918071215157, guid: a4ac252e0699550418824d3a593926d4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2243081918071215157, guid: a4ac252e0699550418824d3a593926d4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2243081918071215157, guid: a4ac252e0699550418824d3a593926d4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2243081918071215157, guid: a4ac252e0699550418824d3a593926d4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2243081918071215157, guid: a4ac252e0699550418824d3a593926d4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2243081918071215157, guid: a4ac252e0699550418824d3a593926d4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9189445481657175202, guid: a4ac252e0699550418824d3a593926d4, type: 3}
+      propertyPath: m_Name
+      value: FatigueController
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a4ac252e0699550418824d3a593926d4, type: 3}
 --- !u!1001 &1398271760
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -363,3 +420,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 497616754}
   - {fileID: 1398271760}
+  - {fileID: 515620334}
