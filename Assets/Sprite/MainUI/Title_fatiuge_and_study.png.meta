@@ -1,10 +1,19 @@
 fileFormatVersion: 2
-guid: 6ec4dc520b8cd0b448c7e7f601e2b6cf
+guid: 4f640776c1eaa4f4dbe788803ce85934
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3737897332693287829
-    second: Bar_0
+      213: 577856567109795897
+    second: 730_UI_fatiuge_and_study_0
+  - first:
+      213: -1934406633980083333
+    second: 730_UI_fatiuge_and_study_1
+  - first:
+      213: 7047262192538194134
+    second: 730_UI_fatiuge_and_study_2
+  - first:
+      213: -7352987161232598759
+    second: 730_UI_fatiuge_and_study_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +109,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Bar_0
+      name: 730_UI_fatiuge_and_study_0
       rect:
         serializedVersion: 2
-        x: 9
-        y: 7
-        width: 89
-        height: 573
+        x: 15
+        y: 35
+        width: 21
+        height: 114
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +124,74 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5934012e1ddafd330800000000000000
-      internalID: 3737897332693287829
+      spriteID: 930c4b57c75f40800800000000000000
+      internalID: 577856567109795897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 730_UI_fatiuge_and_study_1
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 35
+        width: 21
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b7345725a6b9725e0800000000000000
+      internalID: -1934406633980083333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 730_UI_fatiuge_and_study_2
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 35
+        width: 21
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d0974940a7ecc160800000000000000
+      internalID: 7047262192538194134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 730_UI_fatiuge_and_study_3
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 35
+        width: 21
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 91919b87221f4f990800000000000000
+      internalID: -7352987161232598759
       vertices: []
       indices: 
       edges: []
@@ -135,7 +210,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Bar_0: 3737897332693287829
+      730_UI_fatiuge_and_study_0: 577856567109795897
+      730_UI_fatiuge_and_study_1: -1934406633980083333
+      730_UI_fatiuge_and_study_2: 7047262192538194134
+      730_UI_fatiuge_and_study_3: -7352987161232598759
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
