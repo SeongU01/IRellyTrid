@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class EyeBlinkEffect : MonoBehaviour
 {
+    [SerializeField] private MiniGameManager miniGameManager;
+
     // 뜬 눈 이미지 배열 연결
     public Image[] openedEyesImages;
     // 감은 눈 이미지 배열 연결
@@ -29,10 +31,17 @@ public class EyeBlinkEffect : MonoBehaviour
             recoveryTime = PlayerStatus.Instance.Settings.EyeRecoveryPerSpace;
             damageInterval = PlayerStatus.Instance.Settings.ClosedEyeDamageInterval;
         }
+
+        UpdateEyeRatio(0f);
     }
 
     private void Update()
     {
+        if (!IsMiniGamePlaying())
+        {
+            return;
+        }
+
         // 매 프레임 시간 누적
         currentCloseTime += Time.deltaTime;
         
@@ -118,5 +127,16 @@ public class EyeBlinkEffect : MonoBehaviour
             // 유지 시간 초기화
             fullyClosedTimer = 0f;
         }
+    }
+
+    private bool IsMiniGamePlaying()
+    {
+        if (miniGameManager == null)
+        {
+            miniGameManager = FindAnyObjectByType<MiniGameManager>();
+        }
+
+        return miniGameManager != null &&
+            miniGameManager.IsMiniGamePlaying;
     }
 }

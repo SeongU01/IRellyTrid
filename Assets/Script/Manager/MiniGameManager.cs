@@ -27,6 +27,8 @@ public class MiniGameManager : MonoBehaviour
     public event Action<MiniGameResult> OnBonusMiniGameCompleted;
 
     public int CurrentDay { get; private set; } = 1;
+    public bool IsMiniGamePlaying =>
+        currentMiniGame != null && currentMiniGame.IsPlaying;
 
     private void OnEnable()
     {
