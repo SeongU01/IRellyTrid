@@ -6,6 +6,7 @@ public sealed class PlayerStatus : MonoBehaviour
     private const string SettingsResourceName = "GameBalanceSettings";
 
     private static PlayerStatus instance;
+    private static bool isShuttingDown;
 
     [SerializeField] private GameBalanceSettings settings;
 
@@ -18,8 +19,12 @@ public sealed class PlayerStatus : MonoBehaviour
     {
         get
         {
-            if (instance == null && Application.isPlaying)
+            if (instance == null &&
+                Application.isPlaying &&
+                !isShuttingDown)
+            {
                 CreateRuntimeInstance();
+            }
 
             return instance;
         }
@@ -38,6 +43,14 @@ public sealed class PlayerStatus : MonoBehaviour
     public event Action<int> StudyAmountChanged;
     public event Action<GameOverReason> GameOverTriggered;
 
+    [RuntimeInitializeOnLoadMethod(
+        RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetStatics()
+    {
+        instance = null;
+        isShuttingDown = false;
+    }
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void InitializeBeforeSceneLoad()
     {
@@ -46,7 +59,7 @@ public sealed class PlayerStatus : MonoBehaviour
 
     private static void CreateRuntimeInstance()
     {
-        if (instance != null)
+        if (instance != null || isShuttingDown)
             return;
 
         GameObject statusObject = new GameObject(nameof(PlayerStatus));
@@ -71,7 +84,10 @@ public sealed class PlayerStatus : MonoBehaviour
     private void OnDestroy()
     {
         if (instance == this)
+        {
             instance = null;
+            isShuttingDown = true;
+        }
     }
 
     public void TakeDamage(int amount)
