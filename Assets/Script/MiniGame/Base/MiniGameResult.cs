@@ -16,16 +16,19 @@ public class MiniGameResult
     public bool IsBonus => Data != null && Data.isBonus;
     public int Day { get; }
     public float PlayDuration { get; }
+    public int? StudyRewardOverride { get; }
 
     public MiniGameResult(
         MiniGameEndReason endReason,
         MiniGameData data,
         int day,
-        float playDuration)
+        float playDuration,
+        int? studyRewardOverride = null)
     {
         EndReason = endReason;
         Data = data;
         Day = day;
         PlayDuration = playDuration;
+        StudyRewardOverride = studyRewardOverride;
     }
 }

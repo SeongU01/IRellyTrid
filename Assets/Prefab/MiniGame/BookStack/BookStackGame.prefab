@@ -320,16 +320,16 @@ MonoBehaviour:
     pileArea: {x: 4, y: 3}
     maxSpawnRotation: 60
     stages:
-    - bookCount: 4
+    - bookCount: 10
       similarBookCount: 0
-    - bookCount: 5
+    - bookCount: 10
       similarBookCount: 2
-    - bookCount: 6
-      similarBookCount: 3
-    - bookCount: 7
+    - bookCount: 10
       similarBookCount: 4
-    - bookCount: 8
-      similarBookCount: 5
+    - bookCount: 10
+      similarBookCount: 6
+    - bookCount: 10
+      similarBookCount: 8
     targetBooks:
     - bookName: blue real
       sprite: {fileID: 6484367311293896999, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
@@ -593,7 +593,7 @@ Transform:
   m_GameObject: {fileID: 7070783778502712139}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.5, y: 0, z: 0}
+  m_LocalPosition: {x: -2.5, y: -1.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

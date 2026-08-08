@@ -27,6 +27,8 @@ public class MiniGameManager : MonoBehaviour
     public event Action<MiniGameResult> OnBonusMiniGameCompleted;
 
     public int CurrentDay { get; private set; } = 1;
+    public bool IsMiniGamePlaying =>
+        currentMiniGame != null && currentMiniGame.IsPlaying;
 
     private void OnEnable()
     {
@@ -257,12 +259,6 @@ public class MiniGameManager : MonoBehaviour
 
             timer -= deltaTime;
 
-            if (playerStatus != null)
-            {
-                playerStatus.AddFatigue(
-                    deltaTime * playerStatus.Settings.FatiguePerSecond);
-            }
-
             UpdateTimerText(timer);
             yield return null;
         }
@@ -393,8 +389,10 @@ public class MiniGameManager : MonoBehaviour
 
         if (result.Success)
         {
-            playerStatus.AddStudyAmount(
-                playerStatus.Settings.StudyAmountPerMiniGame);
+            int studyReward = result.StudyRewardOverride ??
+                playerStatus.Settings.StudyAmountPerMiniGame;
+
+            playerStatus.AddStudyAmount(studyReward);
             return;
         }
 

@@ -9,6 +9,7 @@ public abstract class MiniGameBase : MonoBehaviour
     private bool isPlaying;
     private MiniGameData currentData;
     private float playStartedAt;
+    private int? studyRewardOverride;
 
     // getter
     public bool IsPlaying => isPlaying;
@@ -23,6 +24,7 @@ public abstract class MiniGameBase : MonoBehaviour
     {
         isPlaying = false;
         currentData = data;
+        studyRewardOverride = null;
         timeLimit = (int)data.timeLimit;
         commandText = data.commandText;
     }
@@ -69,11 +71,16 @@ public abstract class MiniGameBase : MonoBehaviour
     {
         Finish(MiniGameEndReason.Success);
     }
+    protected void SuccessWithStudyReward(int studyReward)
+    {
+        studyRewardOverride = Mathf.Max(0, studyReward);
+        Finish(MiniGameEndReason.Success);
+    }
     virtual protected void Fail()
     {
         Finish(MiniGameEndReason.Failure);
     }
-    public void Timeout()
+    public virtual void Timeout()
     {
         Finish(MiniGameEndReason.Timeout);
     }
@@ -100,7 +107,8 @@ public abstract class MiniGameBase : MonoBehaviour
             endReason,
             currentData,
             CurrentDay,
-            playDuration));
+            playDuration,
+            studyRewardOverride));
     }
     virtual protected void OnEnd()
     {

@@ -219,7 +219,7 @@ private BookData GetNextTargetBook()
         }
 
         List<BookData> selectedNormalBooks =
-            GetUniqueRandomBooks(
+            GetRandomBooksAllowingRepeats(
                 NormalBooks,
                 normalBookCount,
                 matchingSimilarBook.sprite);
@@ -228,7 +228,7 @@ private BookData GetNextTargetBook()
         {
 #if UNITY_EDITOR
             Debug.LogError(
-                $"서로 다른 일반책이 부족합니다. " +
+                $"사용 가능한 일반책이 없습니다. " +
                 $"필요: {normalBookCount}, " +
                 $"사용 가능: {selectedNormalBooks.Count}");
 #endif
@@ -485,20 +485,22 @@ private BookData GetNextTargetBook()
         return null;
     }
 
-    private List<BookData> GetUniqueRandomBooks(
+    private List<BookData> GetRandomBooksAllowingRepeats(
         BookData[] books,
         int count,
         Sprite excludedSprite)
     {
         List<BookData> candidates =
             new List<BookData>();
+        List<BookData> selectedBooks =
+            new List<BookData>(Mathf.Max(0, count));
 
         HashSet<Sprite> addedSprites =
             new HashSet<Sprite>();
 
-        if (books == null)
+        if (books == null || count <= 0)
         {
-            return candidates;
+            return selectedBooks;
         }
 
         for (int i = 0; i < books.Length; i++)
@@ -516,16 +518,33 @@ private BookData GetNextTargetBook()
             candidates.Add(book);
         }
 
-        Shuffle(candidates);
-
-        if (candidates.Count > count)
+        while (candidates.Count > 0 &&
+               selectedBooks.Count < count)
         {
-            candidates.RemoveRange(
-                count,
-                candidates.Count - count);
+            Shuffle(candidates);
+
+            if (selectedBooks.Count > 0 &&
+                candidates.Count > 1 &&
+                selectedBooks[selectedBooks.Count - 1].sprite ==
+                candidates[0].sprite)
+            {
+                int swapIndex = Random.Range(1, candidates.Count);
+                (candidates[0], candidates[swapIndex]) =
+                    (candidates[swapIndex], candidates[0]);
+            }
+
+            int remainingCount = count - selectedBooks.Count;
+            int addCount = Mathf.Min(
+                remainingCount,
+                candidates.Count);
+
+            for (int i = 0; i < addCount; i++)
+            {
+                selectedBooks.Add(candidates[i]);
+            }
         }
 
-        return candidates;
+        return selectedBooks;
     }
 
     private BookData GetRandomValidBook(
