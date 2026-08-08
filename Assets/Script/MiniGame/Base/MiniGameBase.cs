@@ -89,12 +89,10 @@ public abstract class MiniGameBase : MonoBehaviour
         if (isPlaying)
             OnTimerResetRequested?.Invoke();
     }
-#if UNITY_EDITOR
-    public void CompleteAsSuccessForEditorTest()
+    public void CompleteAsSuccessForDebug()
     {
         Success();
     }
-#endif
     private void Finish(MiniGameEndReason endReason)
     {
         if (!isPlaying)

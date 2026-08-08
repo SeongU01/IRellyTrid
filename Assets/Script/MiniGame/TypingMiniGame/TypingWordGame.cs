@@ -63,6 +63,8 @@ public class TypingWordGame : MiniGameBase
 
         if (inputField != null)
         {
+            inputField.onValidateInput -= ValidateTypingInput;
+            inputField.onValidateInput += ValidateTypingInput;
             inputField.text = "";
             inputField.ActivateInputField();
         }
@@ -211,10 +213,19 @@ public class TypingWordGame : MiniGameBase
         GenerateQuestion();
     }
 
+    private char ValidateTypingInput(
+        string text,
+        int characterIndex,
+        char addedCharacter)
+    {
+        return addedCharacter == ' ' ? '\0' : addedCharacter;
+    }
+
     protected override void OnEnd()
     {
         if (inputField != null)
         {
+            inputField.onValidateInput -= ValidateTypingInput;
             inputField.DeactivateInputField();
         }
 
