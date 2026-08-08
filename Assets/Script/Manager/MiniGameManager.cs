@@ -257,12 +257,6 @@ public class MiniGameManager : MonoBehaviour
 
             timer -= deltaTime;
 
-            if (playerStatus != null)
-            {
-                playerStatus.AddFatigue(
-                    deltaTime * playerStatus.Settings.FatiguePerSecond);
-            }
-
             UpdateTimerText(timer);
             yield return null;
         }
