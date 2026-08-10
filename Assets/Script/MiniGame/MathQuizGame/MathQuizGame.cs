@@ -6,6 +6,34 @@ using UnityEngine.Serialization;
 
 public class MathQuizGame : MiniGameBase
 {
+    private static readonly Key[] NumberRowKeys =
+    {
+        Key.Digit0,
+        Key.Digit1,
+        Key.Digit2,
+        Key.Digit3,
+        Key.Digit4,
+        Key.Digit5,
+        Key.Digit6,
+        Key.Digit7,
+        Key.Digit8,
+        Key.Digit9
+    };
+
+    private static readonly Key[] NumpadKeys =
+    {
+        Key.Numpad0,
+        Key.Numpad1,
+        Key.Numpad2,
+        Key.Numpad3,
+        Key.Numpad4,
+        Key.Numpad5,
+        Key.Numpad6,
+        Key.Numpad7,
+        Key.Numpad8,
+        Key.Numpad9
+    };
+
     [Header("UI")]
     [SerializeField] private TMP_Text questionText;
     [SerializeField] private TMP_Text progressText;
@@ -92,18 +120,14 @@ public class MathQuizGame : MiniGameBase
 
         for (int i = 0; i <= 9; i++)
         {
-            Key key = (Key)((int)Key.Digit0 + i);
-
-            if (keyboard[key].wasPressedThisFrame)
+            if (keyboard[NumberRowKeys[i]].wasPressedThisFrame)
             {
                 currentInput += i.ToString();
                 UpdateInputText();
                 return;
             }
 
-            Key numpadKey = (Key)((int)Key.Numpad0 + i);
-
-            if (keyboard[numpadKey].wasPressedThisFrame)
+            if (keyboard[NumpadKeys[i]].wasPressedThisFrame)
             {
                 currentInput += i.ToString();
                 UpdateInputText();
