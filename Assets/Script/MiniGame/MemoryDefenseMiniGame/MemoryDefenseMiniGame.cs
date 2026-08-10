@@ -13,11 +13,19 @@ public sealed class MemoryDefenseMiniGame : MiniGameBase
     }
 
     [Header("Arena")]
+    [SerializeField] private Sprite arenaSprite;
     [SerializeField] private Vector2 gameAreaCenter =
-        new Vector2(-1.53f, -1.39f);
+        new Vector2(-1.552f, -1.412f);
     [SerializeField, Min(0.5f)] private float arenaRadius = 3f;
     [SerializeField] private Color arenaColor = Color.black;
     [SerializeField, Range(32, 256)] private int circleResolution = 128;
+    [SerializeField] private Vector2 arenaSpriteCircleCenterPixels =
+        new Vector2(49.093f, 80.633f);
+    [SerializeField, Min(1f)] private float arenaSpriteCircleRadiusPixels =
+        48.102f;
+    [SerializeField] private bool showArenaBoundary = true;
+    [SerializeField] private Color arenaBoundaryColor = Color.red;
+    [SerializeField, Min(0.01f)] private float arenaBoundaryWidth = 0.06f;
 
     [Header("Escaping Objects")]
     [SerializeField, Min(1)] private int objectCount = 5;
@@ -36,6 +44,7 @@ public sealed class MemoryDefenseMiniGame : MiniGameBase
     private Sprite generatedSquareSprite;
     private Texture2D generatedCircleTexture;
     private Texture2D generatedSquareTexture;
+    private Material arenaBoundaryMaterial;
     private int remainingObjectCount;
 
     protected override void OnStart()
@@ -112,6 +121,9 @@ public sealed class MemoryDefenseMiniGame : MiniGameBase
 
         if (generatedSquareTexture != null)
             Destroy(generatedSquareTexture);
+
+        if (arenaBoundaryMaterial != null)
+            Destroy(arenaBoundaryMaterial);
     }
 
     public void HandleObjectEscaped(EscapingMemoryObject escapedObject)
@@ -157,30 +169,101 @@ public sealed class MemoryDefenseMiniGame : MiniGameBase
 
     private void BuildArena()
     {
-        generatedCircleTexture = CreateCircleTexture(circleResolution);
-        generatedCircleSprite = Sprite.Create(
-            generatedCircleTexture,
-            new Rect(
-                0f,
-                0f,
-                generatedCircleTexture.width,
-                generatedCircleTexture.height),
-            new Vector2(0.5f, 0.5f),
-            generatedCircleTexture.width);
+        if (arenaSprite == null)
+        {
+            generatedCircleTexture = CreateCircleTexture(circleResolution);
+            generatedCircleSprite = Sprite.Create(
+                generatedCircleTexture,
+                new Rect(
+                    0f,
+                    0f,
+                    generatedCircleTexture.width,
+                    generatedCircleTexture.height),
+                new Vector2(0.5f, 0.5f),
+                generatedCircleTexture.width);
+        }
 
         GameObject arenaObject = new GameObject(
             "Arena",
             typeof(SpriteRenderer));
         arenaObject.transform.SetParent(transform, false);
         arenaObject.transform.localPosition = gameAreaCenter;
-        arenaObject.transform.localScale =
-            Vector3.one * (arenaRadius * 2f);
 
         SpriteRenderer arenaRenderer =
             arenaObject.GetComponent<SpriteRenderer>();
-        arenaRenderer.sprite = generatedCircleSprite;
-        arenaRenderer.color = arenaColor;
+        arenaRenderer.sprite = arenaSprite != null
+            ? arenaSprite
+            : generatedCircleSprite;
+        arenaRenderer.color = arenaSprite != null
+            ? Color.white
+            : arenaColor;
         arenaRenderer.sortingOrder = -100;
+
+        ApplyArenaSpriteTransform(arenaObject.transform);
+
+        if (showArenaBoundary)
+            BuildArenaBoundary();
+    }
+
+    private void ApplyArenaSpriteTransform(Transform arenaTransform)
+    {
+        float arenaScale = arenaRadius * 2f;
+
+        if (arenaSprite != null &&
+            arenaSprite.pixelsPerUnit > 0f &&
+            arenaSpriteCircleRadiusPixels > 0f)
+        {
+            arenaScale = arenaRadius * arenaSprite.pixelsPerUnit /
+                arenaSpriteCircleRadiusPixels;
+            Vector2 circleOffsetPixels =
+                arenaSpriteCircleCenterPixels - arenaSprite.pivot;
+            Vector2 circleOffset = circleOffsetPixels /
+                arenaSprite.pixelsPerUnit * arenaScale;
+            arenaTransform.localPosition = gameAreaCenter - circleOffset;
+        }
+
+        arenaTransform.localScale = Vector3.one * arenaScale;
+    }
+
+    private void BuildArenaBoundary()
+    {
+        GameObject boundaryObject = new GameObject(
+            "ArenaBoundary",
+            typeof(LineRenderer));
+        boundaryObject.transform.SetParent(transform, false);
+        boundaryObject.transform.localPosition = gameAreaCenter;
+
+        LineRenderer boundary = boundaryObject.GetComponent<LineRenderer>();
+        boundary.useWorldSpace = false;
+        boundary.loop = true;
+        boundary.positionCount = circleResolution;
+        boundary.startWidth = arenaBoundaryWidth;
+        boundary.endWidth = arenaBoundaryWidth;
+        boundary.startColor = arenaBoundaryColor;
+        boundary.endColor = arenaBoundaryColor;
+        boundary.sortingOrder = -90;
+
+        Shader spriteShader = Shader.Find("Sprites/Default");
+
+        if (spriteShader != null)
+        {
+            arenaBoundaryMaterial = new Material(spriteShader)
+            {
+                name = "Memory Defense Arena Boundary Material"
+            };
+            boundary.sharedMaterial = arenaBoundaryMaterial;
+        }
+
+        for (int index = 0; index < circleResolution; index++)
+        {
+            float angle = index * Mathf.PI * 2f / circleResolution;
+            boundary.SetPosition(
+                index,
+                new Vector3(
+                    Mathf.Cos(angle) * arenaRadius,
+                    Mathf.Sin(angle) * arenaRadius,
+                    0f));
+        }
     }
 
     private void SpawnObjects()
@@ -420,6 +503,10 @@ public sealed class MemoryDefenseMiniGame : MiniGameBase
         moveSpeed = Mathf.Max(0.01f, moveSpeed);
         spawnRadius = Mathf.Clamp(spawnRadius, 0f, arenaRadius);
         circleResolution = Mathf.Clamp(circleResolution, 32, 256);
+        arenaSpriteCircleRadiusPixels = Mathf.Max(
+            1f,
+            arenaSpriteCircleRadiusPixels);
+        arenaBoundaryWidth = Mathf.Max(0.01f, arenaBoundaryWidth);
         studyAmountPerRemainingObject = Mathf.Max(
             0,
             studyAmountPerRemainingObject);
