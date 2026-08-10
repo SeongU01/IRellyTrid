@@ -311,6 +311,13 @@ MonoBehaviour:
     isBonus: 0
     prefab: {fileID: 6335680773905131617, guid: 617ab2d54d266f849a3ba4ccf6a37332, type: 3}
   timerText: {fileID: 1423861765855288475}
+  dayTransitionFontSize: 120
+  dayTransitionSortingOrder: 1000
+  screenFadeDuration: 0.7
+  dayTextFadeInDuration: 1
+  dayTextDotInterval: 0.35
+  dayTextHoldDuration: 0.7
+  dayTextFadeOutDuration: 0.4
 --- !u!114 &4968473026174459102
 MonoBehaviour:
   m_ObjectHideFlags: 0

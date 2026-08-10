@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class MiniGameManager : MonoBehaviour
 {
@@ -14,11 +15,26 @@ public class MiniGameManager : MonoBehaviour
     [Header("Common UI")]
     [SerializeField] private TMP_Text timerText;
 
+    [Header("Day Transition")]
+    [SerializeField, Min(1f)] private float dayTransitionFontSize = 120f;
+    [SerializeField] private int dayTransitionSortingOrder = 1000;
+    [SerializeField, Min(0f)] private float screenFadeDuration = 0.4f;
+    [SerializeField, Min(0f)] private float dayTextFadeInDuration = 0.4f;
+    [SerializeField, Min(0f)] private float dayTextDotInterval = 0.35f;
+    [SerializeField, Min(0f)] private float dayTextHoldDuration = 0.7f;
+    [SerializeField, Min(0f)] private float dayTextFadeOutDuration = 0.4f;
+
     private MiniGameBase currentMiniGame;
     private Coroutine gameRoutine;
     private PlayerStatus playerStatus;
     private MiniGameResult lastMiniGameResult;
     private bool timerResetRequested;
+    private GameObject dayTransitionRoot;
+    private TMP_Text dayTransitionText;
+    private CanvasGroupFader screenFader;
+    private CanvasGroupFader dayTextFader;
+    private bool firstDayTransitionCompleted;
+    private bool startDayTransitionCovered;
 
     public event Action<int> OnNormalMiniGamesCompleted;
     public event Action<MiniGameResult> OnMiniGameCompleted;
@@ -65,6 +81,12 @@ public class MiniGameManager : MonoBehaviour
 
         DestroyCurrentMiniGame();
         CurrentDay = Mathf.Max(1, day);
+        startDayTransitionCovered =
+            CurrentDay == 1 && !firstDayTransitionCompleted;
+
+        if (startDayTransitionCovered)
+            PrepareDayTransitionCovered();
+
         gameRoutine = StartCoroutine(GameFlowRoutine());
     }
 
@@ -124,6 +146,14 @@ public class MiniGameManager : MonoBehaviour
 
         List<MiniGameData> gamesForToday =
             CreateGamesForToday(miniGamesPerDay, daySettings);
+
+        yield return PlayDayTransitionRoutine();
+
+        if (playerStatus == null || playerStatus.IsGameOver)
+        {
+            gameRoutine = null;
+            yield break;
+        }
 
         float effectiveTimeLimit = daySettings != null
             ? daySettings.MiniGameTimeLimit
@@ -332,6 +362,177 @@ public class MiniGameManager : MonoBehaviour
         timerText.text = Mathf.CeilToInt(Mathf.Max(0f, time)).ToString();
     }
 
+    private IEnumerator PlayDayTransitionRoutine()
+    {
+        if (!EnsureDayTransitionUI())
+            yield break;
+
+        dayTransitionRoot.SetActive(true);
+        dayTransitionRoot.transform.SetAsLastSibling();
+        dayTransitionText.text = $"DAY {CurrentDay}";
+        dayTransitionText.fontSize = dayTransitionFontSize;
+        bool startsCovered = startDayTransitionCovered;
+        startDayTransitionCovered = false;
+        screenFader.SetAlpha(startsCovered ? 1f : 0f);
+        dayTextFader.SetAlpha(0f);
+
+        float textSequenceDuration =
+            dayTextFadeInDuration +
+            dayTextDotInterval * 3f +
+            dayTextHoldDuration +
+            dayTextFadeOutDuration;
+        float fadeInDuration = startsCovered ? 0f : screenFadeDuration;
+        Coroutine screenTransition = screenFader.PlayFadeInOut(
+            fadeInDuration,
+            textSequenceDuration,
+            screenFadeDuration);
+
+        if (fadeInDuration > 0f)
+            yield return new WaitForSecondsRealtime(fadeInDuration);
+
+        Coroutine textFadeIn = dayTextFader.FadeIn(
+            dayTextFadeInDuration);
+
+        if (textFadeIn != null)
+            yield return textFadeIn;
+
+        for (int dotCount = 1; dotCount <= 3; dotCount++)
+        {
+            if (dayTextDotInterval > 0f)
+            {
+                yield return new WaitForSecondsRealtime(
+                    dayTextDotInterval);
+            }
+
+            dayTransitionText.text =
+                $"DAY {CurrentDay}{new string('.', dotCount)}";
+        }
+
+        if (dayTextHoldDuration > 0f)
+            yield return new WaitForSecondsRealtime(dayTextHoldDuration);
+
+        Coroutine textFadeOut = dayTextFader.FadeOut(
+            dayTextFadeOutDuration);
+
+        if (textFadeOut != null)
+            yield return textFadeOut;
+
+        if (screenTransition != null)
+            yield return screenTransition;
+
+        if (CurrentDay == 1)
+            firstDayTransitionCompleted = true;
+
+        HideDayTransitionImmediately();
+    }
+
+    private void PrepareDayTransitionCovered()
+    {
+        if (!EnsureDayTransitionUI())
+            return;
+
+        dayTransitionRoot.SetActive(true);
+        dayTransitionRoot.transform.SetAsLastSibling();
+        dayTransitionText.text = string.Empty;
+        screenFader.SetAlpha(1f);
+        dayTextFader.SetAlpha(0f);
+    }
+
+    private bool EnsureDayTransitionUI()
+    {
+        if (dayTransitionRoot != null)
+            return true;
+
+        if (timerText == null || timerText.transform.parent == null)
+        {
+            Debug.LogWarning(
+                "[MiniGameManager] Day transition UI requires the " +
+                "common UI canvas.");
+            return false;
+        }
+
+        Transform canvasTransform = timerText.transform.parent;
+        int uiLayer = timerText.gameObject.layer;
+
+        dayTransitionRoot = new GameObject(
+            "DayTransition",
+            typeof(RectTransform),
+            typeof(Canvas),
+            typeof(GraphicRaycaster));
+        dayTransitionRoot.layer = uiLayer;
+        RectTransform rootRect =
+            dayTransitionRoot.GetComponent<RectTransform>();
+        rootRect.SetParent(canvasTransform, false);
+        StretchToParent(rootRect);
+
+        Canvas transitionCanvas = dayTransitionRoot.GetComponent<Canvas>();
+        transitionCanvas.overrideSorting = true;
+        transitionCanvas.sortingOrder = dayTransitionSortingOrder;
+
+        GameObject screenObject = new GameObject(
+            "ScreenFade",
+            typeof(RectTransform),
+            typeof(CanvasRenderer),
+            typeof(Image),
+            typeof(CanvasGroup),
+            typeof(CanvasGroupFader));
+        screenObject.layer = uiLayer;
+        RectTransform screenRect =
+            screenObject.GetComponent<RectTransform>();
+        screenRect.SetParent(rootRect, false);
+        StretchToParent(screenRect);
+
+        Image screenImage = screenObject.GetComponent<Image>();
+        screenImage.color = Color.black;
+        screenImage.raycastTarget = true;
+        screenFader = screenObject.GetComponent<CanvasGroupFader>();
+        screenFader.Configure(true, true, true);
+
+        GameObject textObject = new GameObject(
+            "DayText",
+            typeof(RectTransform),
+            typeof(CanvasRenderer),
+            typeof(TextMeshProUGUI),
+            typeof(CanvasGroup),
+            typeof(CanvasGroupFader));
+        textObject.layer = uiLayer;
+        RectTransform textRect = textObject.GetComponent<RectTransform>();
+        textRect.SetParent(rootRect, false);
+        textRect.anchorMin = new Vector2(0.5f, 0.5f);
+        textRect.anchorMax = new Vector2(0.5f, 0.5f);
+        textRect.anchoredPosition = Vector2.zero;
+        textRect.sizeDelta = new Vector2(900f, 240f);
+
+        dayTransitionText = textObject.GetComponent<TMP_Text>();
+        dayTransitionText.font = timerText.font;
+        dayTransitionText.fontSize = dayTransitionFontSize;
+        dayTransitionText.alignment = TextAlignmentOptions.Center;
+        dayTransitionText.color = Color.white;
+        dayTransitionText.raycastTarget = false;
+        dayTextFader = textObject.GetComponent<CanvasGroupFader>();
+        dayTextFader.Configure(true, false, true);
+
+        dayTransitionRoot.SetActive(false);
+        return true;
+    }
+
+    private static void StretchToParent(RectTransform target)
+    {
+        target.anchorMin = Vector2.zero;
+        target.anchorMax = Vector2.one;
+        target.offsetMin = Vector2.zero;
+        target.offsetMax = Vector2.zero;
+    }
+
+    private void HideDayTransitionImmediately()
+    {
+        screenFader?.SetAlpha(0f);
+        dayTextFader?.SetAlpha(0f);
+
+        if (dayTransitionRoot != null)
+            dayTransitionRoot.SetActive(false);
+    }
+
     private bool SpawnMiniGame(
         MiniGameData data,
         int difficultyDay,
@@ -423,6 +624,7 @@ public class MiniGameManager : MonoBehaviour
         }
 
         ClearTimerText();
+        HideDayTransitionImmediately();
         DestroyCurrentMiniGame();
         lastMiniGameResult = null;
     }
