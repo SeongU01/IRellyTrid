@@ -290,26 +290,51 @@ MonoBehaviour:
     timeLimit: 30
     isBonus: 0
     prefab: {fileID: 7050204041929986303, guid: 7cdd71a34d294ec0aa1d5777e8a78c3b, type: 3}
+    useAssetVariants: 1
+    firstAssetVariantPrefab: {fileID: 0}
+    secondAssetVariantPrefab: {fileID: 0}
+    firstAssetVariantUnlockDay: 5
+    secondAssetVariantUnlockDay: 6
   - name: ArrowMiniGame
     commandText: "\uB530\uB77C\uD574!"
     timeLimit: 30
     isBonus: 0
     prefab: {fileID: 3030303030303030303, guid: cc7fee2fe4b14ffbaeae67094defa06c, type: 3}
+    useAssetVariants: 1
+    firstAssetVariantPrefab: {fileID: 0}
+    secondAssetVariantPrefab: {fileID: 0}
+    firstAssetVariantUnlockDay: 5
+    secondAssetVariantUnlockDay: 6
   - name: TypingWordGame
     commandText: "\uBC1B\uC544\uC368!"
     timeLimit: 30
     isBonus: 0
     prefab: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+    useAssetVariants: 1
+    firstAssetVariantPrefab: {fileID: 0}
+    secondAssetVariantPrefab: {fileID: 0}
+    firstAssetVariantUnlockDay: 3
+    secondAssetVariantUnlockDay: 6
   - name: MathQuizGame
     commandText: "\uD480\uC5B4!"
     timeLimit: 30
     isBonus: 0
     prefab: {fileID: 6262087453267821407, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
+    useAssetVariants: 1
+    firstAssetVariantPrefab: {fileID: 0}
+    secondAssetVariantPrefab: {fileID: 0}
+    firstAssetVariantUnlockDay: 4
+    secondAssetVariantUnlockDay: 6
   - name: BookStackGame
     commandText: "\uCC3E\uC544!"
     timeLimit: 30
     isBonus: 0
     prefab: {fileID: 6335680773905131617, guid: 617ab2d54d266f849a3ba4ccf6a37332, type: 3}
+    useAssetVariants: 1
+    firstAssetVariantPrefab: {fileID: 6335680773905131617, guid: b16b2e42b64f4af899726af79ad42101, type: 3}
+    secondAssetVariantPrefab: {fileID: 6335680773905131617, guid: c27c3f53c75f4bf9a0837bf80be53212, type: 3}
+    firstAssetVariantUnlockDay: 2
+    secondAssetVariantUnlockDay: 6
   timerText: {fileID: 1423861765855288475}
   dayTransitionFontSize: 120
   dayTransitionSortingOrder: 1000

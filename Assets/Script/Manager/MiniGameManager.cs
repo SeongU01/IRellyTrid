@@ -538,15 +538,26 @@ public class MiniGameManager : MonoBehaviour
         int difficultyDay,
         float effectiveTimeLimit)
     {
-        if (data.prefab == null)
+        MiniGameBase selectedPrefab = data.SelectPrefabForDay(
+            CurrentDay,
+            out MiniGameAssetVariant selectedVariant);
+
+        if (selectedPrefab == null)
         {
 #if UNITY_EDITOR
-            Debug.LogError("Mini game prefab is missing.");
+            Debug.LogError(
+                $"{data.name} has no prefab for the selected " +
+                $"{selectedVariant} asset variant.");
 #endif
             return false;
         }
 
-        currentMiniGame = Instantiate(data.prefab, miniGameRoot);
+        currentMiniGame = Instantiate(selectedPrefab, miniGameRoot);
+#if UNITY_EDITOR
+        Debug.Log(
+            $"[MiniGameManager] {data.name} asset variant: " +
+            $"{selectedVariant} (day {CurrentDay}).");
+#endif
         currentMiniGame.OnFinished += HandleMiniGameFinished;
         currentMiniGame.OnTimerResetRequested += HandleTimerResetRequested;
         currentMiniGame.Init(

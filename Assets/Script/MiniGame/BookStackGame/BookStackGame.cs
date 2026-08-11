@@ -222,6 +222,7 @@ private BookData GetNextTargetBook()
             GetRandomBooksAllowingRepeats(
                 NormalBooks,
                 normalBookCount,
+                targetBook.sprite,
                 matchingSimilarBook.sprite);
 
         if (selectedNormalBooks.Count < normalBookCount)
@@ -488,7 +489,8 @@ private BookData GetNextTargetBook()
     private List<BookData> GetRandomBooksAllowingRepeats(
         BookData[] books,
         int count,
-        Sprite excludedSprite)
+        Sprite excludedTargetSprite,
+        Sprite excludedSimilarSprite)
     {
         List<BookData> candidates =
             new List<BookData>();
@@ -509,7 +511,8 @@ private BookData GetNextTargetBook()
 
             if (book == null ||
                 book.sprite == null ||
-                book.sprite == excludedSprite ||
+                book.sprite == excludedTargetSprite ||
+                book.sprite == excludedSimilarSprite ||
                 !addedSprites.Add(book.sprite))
             {
                 continue;
