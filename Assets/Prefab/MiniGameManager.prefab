@@ -300,7 +300,7 @@ MonoBehaviour:
     timeLimit: 30
     isBonus: 0
     prefab: {fileID: 3030303030303030303, guid: cc7fee2fe4b14ffbaeae67094defa06c, type: 3}
-    useAssetVariants: 1
+    useAssetVariants: 0
     firstAssetVariantPrefab: {fileID: 0}
     secondAssetVariantPrefab: {fileID: 0}
     firstAssetVariantUnlockDay: 5
