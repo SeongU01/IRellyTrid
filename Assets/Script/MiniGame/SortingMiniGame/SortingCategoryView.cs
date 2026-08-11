@@ -9,13 +9,14 @@ public class SortingCategoryView : MonoBehaviour
     public void Initialize(
         Image icon,
         TMP_Text label,
-        SortCategoryData data)
+        SortCategoryData data,
+        Sprite resolvedSprite)
     {
         iconImage = icon;
         labelText = label;
 
-        iconImage.sprite = data.sprite;
-        iconImage.color = data.sprite != null
+        iconImage.sprite = resolvedSprite;
+        iconImage.color = resolvedSprite != null
             ? Color.white
             : data.fallbackColor;
         iconImage.preserveAspect = true;
