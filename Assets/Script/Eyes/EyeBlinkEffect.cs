@@ -29,10 +29,14 @@ public class EyeBlinkEffect : MonoBehaviour
 
     private void Update()
     {
-        if (!IsMiniGamePlaying())
+        bool isMiniGamePlaying = IsMiniGamePlaying();
+
+        if (isMiniGamePlaying || IsDayTransitionCovered())
+            RefreshDayConfiguration(false);
+
+        if (!isMiniGamePlaying)
             return;
 
-        RefreshDayConfiguration(false);
         currentCloseTime = Mathf.Clamp(
             currentCloseTime + Time.deltaTime,
             0f,
@@ -184,5 +188,11 @@ public class EyeBlinkEffect : MonoBehaviour
 
         return miniGameManager != null &&
             miniGameManager.IsMiniGamePlaying;
+    }
+
+    private bool IsDayTransitionCovered()
+    {
+        return miniGameManager != null &&
+            miniGameManager.IsDayTransitionCovered;
     }
 }

@@ -43,6 +43,11 @@ public class MiniGameManager : MonoBehaviour
     public int CurrentDay { get; private set; } = 1;
     public bool IsMiniGamePlaying =>
         currentMiniGame != null && currentMiniGame.IsPlaying;
+    public bool IsDayTransitionCovered =>
+        dayTransitionRoot != null &&
+        dayTransitionRoot.activeInHierarchy &&
+        screenFader != null &&
+        screenFader.Alpha >= 1f;
 
     private void OnEnable()
     {

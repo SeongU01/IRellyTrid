@@ -1684,7 +1684,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EyeBlinkEffect
   miniGameManager: {fileID: 0}
   animatedEyesImage: {fileID: 6224889931567074069}
-  earlyDayEyeFrames: []
+  earlyDayEyeFrames:
+  - {fileID: 720000000000000001, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000002, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000003, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000004, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000005, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000006, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000007, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000008, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000009, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000010, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000011, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000012, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000013, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000014, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000015, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000016, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000017, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000018, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000019, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
   lateDayEyeFrames:
   - {fileID: 710000000000000001, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
   - {fileID: 710000000000000002, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
