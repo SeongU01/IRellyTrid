@@ -646,8 +646,17 @@ public class MiniGameManager : MonoBehaviour
 
         if (result.Success)
         {
+            if (result.NextDayStudyMultiplier > 1f)
+            {
+                DaySystem.Instance.ScheduleNextDayStudyMultiplier(
+                    result.NextDayStudyMultiplier);
+            }
+
             int studyReward = result.StudyRewardOverride ??
                 playerStatus.Settings.StudyAmountPerMiniGame;
+
+            if (!result.IsBonus)
+                studyReward = DaySystem.Instance.ApplyStudyMultiplier(studyReward);
 
             playerStatus.AddStudyAmount(studyReward);
             return;

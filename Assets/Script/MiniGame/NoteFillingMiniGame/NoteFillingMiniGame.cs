@@ -201,16 +201,30 @@ public sealed class NoteFillingMiniGame : MiniGameBase
 
     private void CompleteGame()
     {
+        float nextDayStudyMultiplier = GetNextDayStudyMultiplier();
+
 #if UNITY_EDITOR
         Debug.Log(
             $"[NoteFillingMiniGame] Completed pages: " +
             $"{completedPageCount}, current page: " +
             $"{currentCharacters.Length}/{charactersPerPage}, " +
             $"total characters: {totalCharacterCount}. " +
-            "The next-day study multiplier is not applied yet.");
+            $"Next-day study multiplier: " +
+            $"x{nextDayStudyMultiplier:0.##}.");
 #endif
 
-        SuccessWithStudyReward(0);
+        SuccessWithNextDayStudyMultiplier(nextDayStudyMultiplier);
+    }
+
+    private float GetNextDayStudyMultiplier()
+    {
+        if (completedPageCount >= 3)
+            return 2f;
+
+        if (completedPageCount == 2)
+            return 1.5f;
+
+        return 1f;
     }
 
     private void CreateRuntimeView()
