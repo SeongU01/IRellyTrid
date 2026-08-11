@@ -35,14 +35,18 @@ public class MiniGameManager : MonoBehaviour
     private CanvasGroupFader dayTextFader;
     private bool firstDayTransitionCompleted;
     private bool startDayTransitionCovered;
+    private bool isPaused;
+    private bool currentMiniGameWasEnabledBeforePause;
+    private float timeScaleBeforePause = 1f;
 
     public event Action<int> OnNormalMiniGamesCompleted;
     public event Action<MiniGameResult> OnMiniGameCompleted;
     public event Action<MiniGameResult> OnBonusMiniGameCompleted;
 
     public int CurrentDay { get; private set; } = 1;
+    public bool IsPaused => isPaused;
     public bool IsMiniGamePlaying =>
-        currentMiniGame != null && currentMiniGame.IsPlaying;
+        !isPaused && currentMiniGame != null && currentMiniGame.IsPlaying;
     public bool IsDayTransitionCovered =>
         dayTransitionRoot != null &&
         dayTransitionRoot.activeInHierarchy &&
@@ -61,6 +65,40 @@ public class MiniGameManager : MonoBehaviour
     {
         if (playerStatus != null)
             playerStatus.GameOverTriggered -= HandleGameOver;
+
+        if (isPaused)
+            SetPaused(false);
+    }
+
+    public void SetPaused(bool paused)
+    {
+        if (isPaused == paused)
+            return;
+
+        isPaused = paused;
+
+        if (paused)
+        {
+            timeScaleBeforePause = Time.timeScale;
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            Time.timeScale = timeScaleBeforePause;
+        }
+
+        if (currentMiniGame == null)
+            return;
+
+        if (paused)
+        {
+            currentMiniGameWasEnabledBeforePause =
+                currentMiniGame.enabled;
+            currentMiniGame.enabled = false;
+            return;
+        }
+
+        currentMiniGame.enabled = currentMiniGameWasEnabledBeforePause;
     }
 
     public void StartMiniGameFlow()
@@ -571,6 +609,9 @@ public class MiniGameManager : MonoBehaviour
             difficultyDay,
             effectiveTimeLimit);
         currentMiniGame.Play();
+
+        if (isPaused)
+            currentMiniGame.enabled = false;
 
         return true;
     }

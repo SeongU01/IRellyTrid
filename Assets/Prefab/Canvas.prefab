@@ -1197,7 +1197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fdf67bc6ac02f04eb5479233a3ea5e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OptionWindowManager
-  optionPanel: {fileID: 8343109506232987093}
+  optionPanel: {fileID: 2700384284718453786}
 --- !u!1 &2700384284718453786
 GameObject:
   m_ObjectHideFlags: 0
@@ -2254,7 +2254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fdf67bc6ac02f04eb5479233a3ea5e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OptionWindowManager
-  optionPanel: {fileID: 8343109506232987093}
+  optionPanel: {fileID: 2700384284718453786}
 --- !u!1 &7919711887212232854
 GameObject:
   m_ObjectHideFlags: 0
