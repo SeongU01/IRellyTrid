@@ -31,6 +31,9 @@ public class BookStackGame : MiniGameBase
     private readonly List<BookData> remainingTargetBooks =
         new List<BookData>();
 
+    private readonly List<BookAssetVariant> availableAssetVariants =
+        new List<BookAssetVariant>();
+
     private int currentStageIndex;
     private int nextSortingOrder;
     private BookStackDayDifficulty currentDifficulty;
@@ -145,11 +148,21 @@ private BookData GetNextTargetBook()
         return null;
     }
 
-    int lastIndex = remainingTargetBooks.Count - 1;
-    BookData targetBook =
-        remainingTargetBooks[lastIndex];
+    CollectAvailableAssetVariants(
+        remainingTargetBooks,
+        availableAssetVariants);
 
-    remainingTargetBooks.RemoveAt(lastIndex);
+    BookAssetVariant selectedVariant =
+        availableAssetVariants[
+            Random.Range(0, availableAssetVariants.Count)];
+
+    int selectedIndex = GetRandomBookIndexForVariant(
+        remainingTargetBooks,
+        selectedVariant,
+        null);
+    BookData targetBook = remainingTargetBooks[selectedIndex];
+
+    remainingTargetBooks.RemoveAt(selectedIndex);
     return targetBook;
 }
     private void CreateStage()
@@ -215,7 +228,18 @@ private BookData GetNextTargetBook()
 
         for (int i = 0; i < similarBookCount; i++)
         {
-            stageBooks.Add((matchingSimilarBook, false));
+            CollectAvailableAssetVariants(
+                SimilarBooks,
+                availableAssetVariants);
+            BookAssetVariant selectedVariant =
+                availableAssetVariants[
+                    Random.Range(0, availableAssetVariants.Count)];
+            BookData selectedSimilarBook =
+                GetMatchingSimilarBook(
+                    targetBook,
+                    selectedVariant);
+
+            stageBooks.Add((selectedSimilarBook, false));
         }
 
         List<BookData> selectedNormalBooks =
@@ -458,6 +482,17 @@ private BookData GetNextTargetBook()
     private BookData GetMatchingSimilarBook(
         BookData targetBook)
     {
+        return GetMatchingSimilarBook(
+            targetBook,
+            targetBook != null
+                ? targetBook.assetVariant
+                : BookAssetVariant.Base);
+    }
+
+    private BookData GetMatchingSimilarBook(
+        BookData targetBook,
+        BookAssetVariant desiredVariant)
+    {
         if (targetBook == null ||
             TargetBooks == null ||
             SimilarBooks == null)
@@ -465,22 +500,58 @@ private BookData GetNextTargetBook()
             return null;
         }
 
+        int targetVariantIndex = 0;
+
         for (int i = 0; i < TargetBooks.Length; i++)
         {
             BookData registeredTarget = TargetBooks[i];
 
             if (registeredTarget == null ||
-                registeredTarget.sprite != targetBook.sprite)
+                registeredTarget.assetVariant !=
+                targetBook.assetVariant)
             {
                 continue;
             }
 
-            if (i >= SimilarBooks.Length)
+            if (registeredTarget.sprite == targetBook.sprite)
+                break;
+
+            targetVariantIndex++;
+        }
+
+        int desiredVariantCount = 0;
+
+        for (int i = 0; i < SimilarBooks.Length; i++)
+        {
+            BookData similarBook = SimilarBooks[i];
+
+            if (similarBook != null &&
+                similarBook.assetVariant == desiredVariant)
             {
-                return null;
+                desiredVariantCount++;
+            }
+        }
+
+        if (desiredVariantCount == 0)
+            return null;
+
+        int desiredVariantIndex =
+            targetVariantIndex % desiredVariantCount;
+
+        for (int i = 0; i < SimilarBooks.Length; i++)
+        {
+            BookData similarBook = SimilarBooks[i];
+
+            if (similarBook == null ||
+                similarBook.assetVariant != desiredVariant)
+            {
+                continue;
             }
 
-            return SimilarBooks[i];
+            if (desiredVariantIndex == 0)
+                return similarBook;
+
+            desiredVariantIndex--;
         }
 
         return null;
@@ -524,30 +595,120 @@ private BookData GetNextTargetBook()
         while (candidates.Count > 0 &&
                selectedBooks.Count < count)
         {
-            Shuffle(candidates);
+            CollectAvailableAssetVariants(
+                candidates,
+                availableAssetVariants);
 
-            if (selectedBooks.Count > 0 &&
-                candidates.Count > 1 &&
-                selectedBooks[selectedBooks.Count - 1].sprite ==
-                candidates[0].sprite)
-            {
-                int swapIndex = Random.Range(1, candidates.Count);
-                (candidates[0], candidates[swapIndex]) =
-                    (candidates[swapIndex], candidates[0]);
-            }
+            BookAssetVariant selectedVariant =
+                availableAssetVariants[
+                    Random.Range(0, availableAssetVariants.Count)];
+            Sprite previousSprite = selectedBooks.Count > 0
+                ? selectedBooks[selectedBooks.Count - 1].sprite
+                : null;
+            int selectedIndex = GetRandomBookIndexForVariant(
+                candidates,
+                selectedVariant,
+                previousSprite);
 
-            int remainingCount = count - selectedBooks.Count;
-            int addCount = Mathf.Min(
-                remainingCount,
-                candidates.Count);
-
-            for (int i = 0; i < addCount; i++)
-            {
-                selectedBooks.Add(candidates[i]);
-            }
+            selectedBooks.Add(candidates[selectedIndex]);
         }
 
         return selectedBooks;
+    }
+
+    private static void CollectAvailableAssetVariants(
+        List<BookData> books,
+        List<BookAssetVariant> variants)
+    {
+        variants.Clear();
+
+        for (int i = 0; i < books.Count; i++)
+        {
+            BookData book = books[i];
+
+            if (book != null &&
+                !variants.Contains(book.assetVariant))
+            {
+                variants.Add(book.assetVariant);
+            }
+        }
+    }
+
+    private static void CollectAvailableAssetVariants(
+        BookData[] books,
+        List<BookAssetVariant> variants)
+    {
+        variants.Clear();
+
+        if (books == null)
+            return;
+
+        for (int i = 0; i < books.Length; i++)
+        {
+            BookData book = books[i];
+
+            if (book != null &&
+                !variants.Contains(book.assetVariant))
+            {
+                variants.Add(book.assetVariant);
+            }
+        }
+    }
+
+    private static int GetRandomBookIndexForVariant(
+        List<BookData> books,
+        BookAssetVariant variant,
+        Sprite excludedPreviousSprite)
+    {
+        bool hasAlternative = HasAlternativeSprite(
+            books,
+            variant,
+            excludedPreviousSprite);
+        int selectedIndex = -1;
+        int matchingCount = 0;
+
+        for (int i = 0; i < books.Count; i++)
+        {
+            BookData book = books[i];
+
+            if (book == null ||
+                book.assetVariant != variant ||
+                (hasAlternative &&
+                 book.sprite == excludedPreviousSprite))
+            {
+                continue;
+            }
+
+            matchingCount++;
+
+            if (Random.Range(0, matchingCount) == 0)
+                selectedIndex = i;
+        }
+
+        return selectedIndex;
+    }
+
+    private static bool HasAlternativeSprite(
+        List<BookData> books,
+        BookAssetVariant variant,
+        Sprite excludedSprite)
+    {
+        if (excludedSprite == null)
+            return false;
+
+        for (int i = 0; i < books.Count; i++)
+        {
+            BookData book = books[i];
+
+            if (book != null &&
+                book.assetVariant == variant &&
+                book.sprite != excludedSprite)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private BookData GetRandomValidBook(

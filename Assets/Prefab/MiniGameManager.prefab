@@ -331,6 +331,7 @@ MonoBehaviour:
     isBonus: 0
     prefab: {fileID: 6335680773905131617, guid: 617ab2d54d266f849a3ba4ccf6a37332, type: 3}
     useAssetVariants: 1
+    assetVariantPrefabsContainMixedAssets: 1
     firstAssetVariantPrefab: {fileID: 6335680773905131617, guid: b16b2e42b64f4af899726af79ad42101, type: 3}
     secondAssetVariantPrefab: {fileID: 6335680773905131617, guid: c27c3f53c75f4bf9a0837bf80be53212, type: 3}
     firstAssetVariantUnlockDay: 2

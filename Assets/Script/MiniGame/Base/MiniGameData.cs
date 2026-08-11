@@ -18,6 +18,7 @@ public class MiniGameData
 
     [Header("Asset Variants")]
     public bool useAssetVariants;
+    public bool assetVariantPrefabsContainMixedAssets;
     public MiniGameBase firstAssetVariantPrefab;
     public MiniGameBase secondAssetVariantPrefab;
     [Min(1)] public int firstAssetVariantUnlockDay = 1;
@@ -39,6 +40,33 @@ public class MiniGameData
         int secondUnlockDay = Mathf.Max(
             firstUnlockDay,
             secondAssetVariantUnlockDay);
+
+        if (assetVariantPrefabsContainMixedAssets)
+        {
+            if (day >= secondUnlockDay)
+            {
+                if (secondAssetVariantPrefab == null)
+                {
+                    LogMissingVariantWarning(day, true);
+                    return prefab;
+                }
+
+                selectedVariant = MiniGameAssetVariant.Second;
+                return secondAssetVariantPrefab;
+            }
+
+            if (day < firstUnlockDay)
+                return prefab;
+
+            if (firstAssetVariantPrefab == null)
+            {
+                LogMissingVariantWarning(day, false);
+                return prefab;
+            }
+
+            selectedVariant = MiniGameAssetVariant.First;
+            return firstAssetVariantPrefab;
+        }
 
         if (day >= secondUnlockDay)
         {
