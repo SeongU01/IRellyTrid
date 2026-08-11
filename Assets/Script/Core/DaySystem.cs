@@ -306,6 +306,30 @@ public sealed class DaySystem : MonoBehaviour
         StartCurrentDay();
     }
 
+    public bool AdvanceDayForDebug()
+    {
+        if (!CanContinue())
+            return false;
+
+        if (IsFinalDay)
+        {
+            Debug.LogWarning(
+                "[DaySystem] F7 debug shortcut cannot advance past " +
+                $"the final day ({FinalDay}).");
+            return false;
+        }
+
+        int previousDay = CurrentDay;
+        CurrentDay++;
+
+        Debug.Log(
+            $"[DaySystem] F7 debug shortcut: Day {previousDay} -> " +
+            $"Day {CurrentDay}.");
+        OnDayChanged?.Invoke(previousDay, CurrentDay);
+        StartCurrentDay();
+        return true;
+    }
+
     public void SetGameOver(GameOverReason reason)
     {
         if (CurrentPhase == DayPhase.GameOver)

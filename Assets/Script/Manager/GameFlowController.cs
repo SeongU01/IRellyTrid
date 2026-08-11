@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(MiniGameManager))]
@@ -64,6 +65,18 @@ public sealed class GameFlowController : MonoBehaviour
 
         daySystem.StartNewGame();
         daySystem.StartCurrentDay();
+    }
+
+    private void Update()
+    {
+        if (Keyboard.current == null ||
+            !Keyboard.current.f7Key.wasPressedThisFrame ||
+            daySystem == null)
+        {
+            return;
+        }
+
+        daySystem.AdvanceDayForDebug();
     }
 
     private void OnDisable()
