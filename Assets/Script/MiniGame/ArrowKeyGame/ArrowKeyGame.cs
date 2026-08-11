@@ -6,11 +6,23 @@ using UnityEngine.UI;
 
 public class ArrowKeyGame : MiniGameBase
 {
-    [Header("Arrow Sprites")]
+    [Header("Base Arrow Sprites")]
     [SerializeField] private Sprite rightArrow;
     [SerializeField] private Sprite leftArrow;
     [SerializeField] private Sprite downArrow;
     [SerializeField] private Sprite upArrow;
+
+    [Header("First Variant Arrow Sprites")]
+    [SerializeField] private Sprite firstRightArrow;
+    [SerializeField] private Sprite firstLeftArrow;
+    [SerializeField] private Sprite firstDownArrow;
+    [SerializeField] private Sprite firstUpArrow;
+
+    [Header("Second Variant Arrow Sprites")]
+    [SerializeField] private Sprite secondRightArrow;
+    [SerializeField] private Sprite secondLeftArrow;
+    [SerializeField] private Sprite secondDownArrow;
+    [SerializeField] private Sprite secondUpArrow;
 
     [Header("Day Difficulties")]
     [SerializeField]
@@ -206,7 +218,15 @@ public class ArrowKeyGame : MiniGameBase
         if (rightArrow == null ||
             leftArrow == null ||
             downArrow == null ||
-            upArrow == null)
+            upArrow == null ||
+            firstRightArrow == null ||
+            firstLeftArrow == null ||
+            firstDownArrow == null ||
+            firstUpArrow == null ||
+            secondRightArrow == null ||
+            secondLeftArrow == null ||
+            secondDownArrow == null ||
+            secondUpArrow == null)
         {
 #if UNITY_EDITOR
             Debug.LogError("방향키 스프라이트가 모두 연결되지 않았습니다.");
@@ -470,19 +490,60 @@ public class ArrowKeyGame : MiniGameBase
         switch (direction)
         {
             case ArrowDirection.Up:
-                return upArrow;
+                return SelectVariantSprite(
+                    upArrow,
+                    firstUpArrow,
+                    secondUpArrow);
 
             case ArrowDirection.Down:
-                return downArrow;
+                return SelectVariantSprite(
+                    downArrow,
+                    firstDownArrow,
+                    secondDownArrow);
 
             case ArrowDirection.Left:
-                return leftArrow;
+                return SelectVariantSprite(
+                    leftArrow,
+                    firstLeftArrow,
+                    secondLeftArrow);
 
             case ArrowDirection.Right:
-                return rightArrow;
+                return SelectVariantSprite(
+                    rightArrow,
+                    firstRightArrow,
+                    secondRightArrow);
 
             default:
                 return null;
+        }
+    }
+
+    private Sprite SelectVariantSprite(
+        Sprite baseSprite,
+        Sprite firstVariantSprite,
+        Sprite secondVariantSprite)
+    {
+        int variantCount = 1;
+
+        if (DifficultyDay >= 6)
+        {
+            variantCount = 3;
+        }
+        else if (DifficultyDay >= 5)
+        {
+            variantCount = 2;
+        }
+
+        switch (Random.Range(0, variantCount))
+        {
+            case 1:
+                return firstVariantSprite;
+
+            case 2:
+                return secondVariantSprite;
+
+            default:
+                return baseSprite;
         }
     }
 
