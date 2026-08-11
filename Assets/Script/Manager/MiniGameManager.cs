@@ -37,6 +37,7 @@ public class MiniGameManager : MonoBehaviour
     private bool startDayTransitionCovered;
     private bool isPaused;
     private bool currentMiniGameWasEnabledBeforePause;
+    private bool currentMiniGameIsBonus;
     private float timeScaleBeforePause = 1f;
 
     public event Action<int> OnNormalMiniGamesCompleted;
@@ -47,6 +48,8 @@ public class MiniGameManager : MonoBehaviour
     public bool IsPaused => isPaused;
     public bool IsMiniGamePlaying =>
         !isPaused && currentMiniGame != null && currentMiniGame.IsPlaying;
+    public bool IsBonusMiniGamePlaying =>
+        IsMiniGamePlaying && currentMiniGameIsBonus;
     public bool IsDayTransitionCovered =>
         dayTransitionRoot != null &&
         dayTransitionRoot.activeInHierarchy &&
@@ -596,6 +599,7 @@ public class MiniGameManager : MonoBehaviour
         }
 
         currentMiniGame = Instantiate(selectedPrefab, miniGameRoot);
+        currentMiniGameIsBonus = data.isBonus;
 #if UNITY_EDITOR
         Debug.Log(
             $"[MiniGameManager] {data.name} asset variant: " +
@@ -689,13 +693,17 @@ public class MiniGameManager : MonoBehaviour
     private void DestroyCurrentMiniGame()
     {
         if (currentMiniGame == null)
+        {
+            currentMiniGameIsBonus = false;
             return;
+        }
 
         currentMiniGame.OnFinished -= HandleMiniGameFinished;
         currentMiniGame.OnTimerResetRequested -= HandleTimerResetRequested;
         currentMiniGame.Stop();
         Destroy(currentMiniGame.gameObject);
         currentMiniGame = null;
+        currentMiniGameIsBonus = false;
         timerResetRequested = false;
     }
 }

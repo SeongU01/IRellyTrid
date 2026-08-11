@@ -34,6 +34,9 @@ public class FatigueController : MonoBehaviour
             // 게임 밸런스 설정의 초당 피로도 증가값 참조
             float fatiguePerSec = PlayerStatus.Instance.Settings.FatiguePerSecond;
 
+            if (miniGameManager.IsBonusMiniGamePlaying)
+                fatiguePerSec *= 0.5f;
+
             // 플레이어 피로도 증가 함수 호출
             PlayerStatus.Instance.AddFatigue(fatiguePerSec);
         }

@@ -191,7 +191,22 @@ public sealed class PlayerStatus : MonoBehaviour
     private void SetFatigue(float value)
     {
         float previousFatigue = fatigue;
-        fatigue = Mathf.Clamp(value, 0f, settings.MaxFatigue);
+        float nextFatigue = Mathf.Clamp(value, 0f, settings.MaxFatigue);
+
+        if (nextFatigue >= settings.MaxFatigue &&
+            previousFatigue < settings.MaxFatigue)
+        {
+            fatigue = settings.MaxFatigue * 0.5f;
+            Debug.Log(
+                $"[PlayerStatus] Fatigue reached maximum. " +
+                $"Health -1, fatigue reset to {fatigue:0.##}/" +
+                $"{settings.MaxFatigue:0.##}.");
+            FatigueChanged?.Invoke(fatigue, settings.MaxFatigue);
+            TakeDamage(1);
+            return;
+        }
+
+        fatigue = nextFatigue;
 
         if (Mathf.Approximately(fatigue, previousFatigue))
             return;
@@ -209,9 +224,6 @@ public sealed class PlayerStatus : MonoBehaviour
         }
 
         FatigueChanged?.Invoke(fatigue, settings.MaxFatigue);
-
-        if (fatigue >= settings.MaxFatigue)
-            TriggerGameOver(GameOverReason.FatigueMaxed);
     }
 
     private void TriggerGameOver(GameOverReason reason)
