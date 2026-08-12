@@ -18,12 +18,45 @@ public class EndingManager : MonoBehaviour
     [Header("다중 씬 엔딩 설정")]
     public SceneSequence[] endingScenes; // 다중 씬 연출용 배열
 
+    // 파괴 방지 적용을 위한 초기화 작업
+    private void Awake()
+    {
+        // 최상위 객체로의 위치 변경 (DontDestroyOnLoad 조건 충족)
+        transform.SetParent(null);
+        
+        // 씬 전환 시 객체 파괴 방지
+        DontDestroyOnLoad(gameObject);
+    }
+
     // 시작 시 초기 UI 비활성화
     private void Start()
     {
         if (endingUIPanel != null)
         {
             endingUIPanel.SetActive(false);
+        }
+    }
+
+    // 씬 로드 이벤트 구독 등록
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    // 씬 로드 이벤트 구독 해제
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    // 씬 로드 시 실행되는 콜백 함수
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // 로드된 씬의 이름 확인 및 엔딩 매니저 객체 파괴
+        // "Title" 문자열은 실제 타이틀 씬의 이름으로 변경 필요
+        if (scene.name == "Title") 
+        {
+            Destroy(gameObject);
         }
     }
 
