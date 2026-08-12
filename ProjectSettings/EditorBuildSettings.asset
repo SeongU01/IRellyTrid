@@ -21,7 +21,7 @@ EditorBuildSettings:
     path: Assets/Scenes/TestMainUI.unity
     guid: 3c5271335a1d0e84887f9c7ed5eb542b
   - enabled: 1
-    path: Assets/Scenes/Endings/BadEnd_Fatigue/BadEnding_FatigueFull.unity
+    path: Assets/Scenes/Endings/BadEnd_OutOfHp/BadEnding_OutOfHp.unity
     guid: e72c233d20fa46a4d95439dff04df0f2
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
