@@ -12,40 +12,23 @@ public struct SceneSequence
 
 public class EndingManager : MonoBehaviour
 {
-    [Header("시각 효과 설정")]
-    public BlinkEffect blinkEffect;
-    public bool useBlinkEffect = true; // 깜빡임 효과 사용 여부
-
     [Header("단일 UI 엔딩 설정")]
     public GameObject endingUIPanel; // 단일 연출용 UI 패널
 
     [Header("다중 씬 엔딩 설정")]
     public SceneSequence[] endingScenes; // 다중 씬 연출용 배열
 
-    // 시작 시 연출 흐름 지시
+    // 시작 시 초기 UI 비활성화
     private void Start()
     {
-        // 초기 UI 비활성화
         if (endingUIPanel != null)
         {
             endingUIPanel.SetActive(false);
         }
-        
-        // 깜빡임 사용 여부에 따른 분기 처리
-        if (useBlinkEffect && blinkEffect != null)
-        {
-            // 깜빡임 실행 및 완료 시 콜백 연결
-            blinkEffect.StartBlinkEffect(OnBlinkCompleted);
-        }
-        else
-        {
-            // 깜빡임 생략 시 즉시 다음 단계 실행
-            OnBlinkCompleted();
-        }
     }
 
-    // 초기 연출 완료 후 실행
-    private void OnBlinkCompleted()
+    // 외부(BlinkEffect 등)에서 호출할 수 있는 엔딩 흐름 시작 함수
+    public void StartEndingFlow()
     {
         StartCoroutine(HandleEndingFlow());
     }
@@ -65,12 +48,6 @@ public class EndingManager : MonoBehaviour
 
         if (isMultiScene)
         {
-            // 화면을 덮은 깜빡임 객체 비활성화 (씬 렌더링을 위함)
-            if (blinkEffect != null)
-            {
-                blinkEffect.gameObject.SetActive(false);
-            }
-
             // 배열을 순회하며 다중 씬 재생
             for (int i = 0; i < endingScenes.Length; i++)
             {
