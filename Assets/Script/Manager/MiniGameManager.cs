@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.TextCore.LowLevel;
 using UnityEngine.UI;
 
 public class MiniGameManager : MonoBehaviour
@@ -15,6 +16,11 @@ public class MiniGameManager : MonoBehaviour
     [Header("Common UI")]
     [SerializeField] private TMP_Text timerText;
 
+    [Header("Day Background")]
+    [SerializeField] private SpriteRenderer worldBackgroundRenderer;
+    [SerializeField] private Sprite dayOneToFiveBackground;
+    [SerializeField] private Sprite daySixPlusBackground;
+
     [Header("Day Transition")]
     [SerializeField, Min(1f)] private float dayTransitionFontSize = 120f;
     [SerializeField] private int dayTransitionSortingOrder = 1000;
@@ -23,6 +29,15 @@ public class MiniGameManager : MonoBehaviour
     [SerializeField, Min(0f)] private float dayTextDotInterval = 0.35f;
     [SerializeField, Min(0f)] private float dayTextHoldDuration = 0.7f;
     [SerializeField, Min(0f)] private float dayTextFadeOutDuration = 0.4f;
+
+    [Header("Mini Game Instruction")]
+    [SerializeField, Min(1f)] private float instructionFontSize = 72f;
+    [SerializeField] private Vector2 instructionPosition =
+        new Vector2(-165f, -150f);
+    [SerializeField] private int instructionSortingOrder = 900;
+    [SerializeField, Min(0f)] private float instructionFadeInDuration = 0.3f;
+    [SerializeField, Min(0f)] private float instructionHoldDuration = 0.6f;
+    [SerializeField, Min(0f)] private float instructionFadeOutDuration = 0.3f;
 
     private MiniGameBase currentMiniGame;
     private Coroutine gameRoutine;
@@ -33,12 +48,17 @@ public class MiniGameManager : MonoBehaviour
     private TMP_Text dayTransitionText;
     private CanvasGroupFader screenFader;
     private CanvasGroupFader dayTextFader;
+    private GameObject instructionRoot;
+    private TMP_Text instructionText;
+    private CanvasGroupFader instructionFader;
     private bool firstDayTransitionCompleted;
     private bool startDayTransitionCovered;
     private bool isPaused;
     private bool currentMiniGameWasEnabledBeforePause;
     private bool currentMiniGameIsBonus;
     private float timeScaleBeforePause = 1f;
+    private readonly HashSet<string> shownInstructions =
+        new HashSet<string>(StringComparer.Ordinal);
 
     public event Action<int> OnNormalMiniGamesCompleted;
     public event Action<MiniGameResult> OnMiniGameCompleted;
@@ -107,6 +127,11 @@ public class MiniGameManager : MonoBehaviour
     public void StartMiniGameFlow()
     {
         StartMiniGameFlow(CurrentDay);
+    }
+
+    public void ResetInstructionHistory()
+    {
+        shownInstructions.Clear();
     }
 
     public void StartMiniGameFlow(int day)
@@ -293,6 +318,11 @@ public class MiniGameManager : MonoBehaviour
         if (playerStatus == null || playerStatus.IsGameOver)
             yield break;
 
+        yield return PlayInstructionRoutine(data);
+
+        if (playerStatus == null || playerStatus.IsGameOver)
+            yield break;
+
         if (!SpawnMiniGame(
                 data,
                 difficultyDay,
@@ -408,6 +438,115 @@ public class MiniGameManager : MonoBehaviour
         timerText.text = Mathf.CeilToInt(Mathf.Max(0f, time)).ToString();
     }
 
+    private IEnumerator PlayInstructionRoutine(MiniGameData data)
+    {
+        if (data == null ||
+            string.IsNullOrWhiteSpace(data.name) ||
+            string.IsNullOrWhiteSpace(data.commandText) ||
+            shownInstructions.Contains(data.name) ||
+            !EnsureInstructionUI())
+        {
+            yield break;
+        }
+
+        shownInstructions.Add(data.name);
+        instructionRoot.SetActive(true);
+        instructionRoot.transform.SetAsLastSibling();
+        instructionText.text = data.commandText;
+        instructionFader.SetAlpha(0f);
+
+        Coroutine instructionSequence = instructionFader.PlayFadeInOut(
+            instructionFadeInDuration,
+            instructionHoldDuration,
+            instructionFadeOutDuration);
+
+        if (instructionSequence != null)
+            yield return instructionSequence;
+
+        HideInstructionImmediately();
+    }
+
+    private bool EnsureInstructionUI()
+    {
+        if (instructionRoot != null)
+            return true;
+
+        if (timerText == null || timerText.transform.parent == null)
+        {
+            Debug.LogWarning(
+                "[MiniGameManager] Instruction UI requires the common UI canvas.");
+            return false;
+        }
+
+        Transform canvasTransform = timerText.transform.parent;
+        int uiLayer = timerText.gameObject.layer;
+
+        instructionRoot = new GameObject(
+            "MiniGameInstruction",
+            typeof(RectTransform),
+            typeof(Canvas),
+            typeof(GraphicRaycaster),
+            typeof(CanvasGroup),
+            typeof(CanvasGroupFader));
+        instructionRoot.layer = uiLayer;
+        RectTransform rootRect =
+            instructionRoot.GetComponent<RectTransform>();
+        rootRect.SetParent(canvasTransform, false);
+        StretchToParent(rootRect);
+
+        Canvas instructionCanvas = instructionRoot.GetComponent<Canvas>();
+        instructionCanvas.overrideSorting = true;
+        instructionCanvas.sortingOrder = instructionSortingOrder;
+
+        GameObject blockerObject = new GameObject(
+            "InputBlocker",
+            typeof(RectTransform),
+            typeof(CanvasRenderer),
+            typeof(Image));
+        blockerObject.layer = uiLayer;
+        RectTransform blockerRect =
+            blockerObject.GetComponent<RectTransform>();
+        blockerRect.SetParent(rootRect, false);
+        StretchToParent(blockerRect);
+        Image blockerImage = blockerObject.GetComponent<Image>();
+        blockerImage.color = Color.clear;
+        blockerImage.raycastTarget = true;
+
+        GameObject textObject = new GameObject(
+            "InstructionText",
+            typeof(RectTransform),
+            typeof(CanvasRenderer),
+            typeof(TextMeshProUGUI));
+        textObject.layer = uiLayer;
+        RectTransform textRect = textObject.GetComponent<RectTransform>();
+        textRect.SetParent(rootRect, false);
+        textRect.anchorMin = new Vector2(0.5f, 0.5f);
+        textRect.anchorMax = new Vector2(0.5f, 0.5f);
+        textRect.anchoredPosition = instructionPosition;
+        textRect.sizeDelta = new Vector2(1500f, 240f);
+
+        instructionText = textObject.GetComponent<TMP_Text>();
+        instructionText.font = KoreanFontBootstrap.FontAsset ?? timerText.font;
+        instructionText.fontSize = instructionFontSize;
+        instructionText.alignment = TextAlignmentOptions.Center;
+        instructionText.color = Color.black;
+        instructionText.raycastTarget = false;
+
+        instructionFader =
+            instructionRoot.GetComponent<CanvasGroupFader>();
+        instructionFader.Configure(true, true, true);
+        instructionRoot.SetActive(false);
+        return true;
+    }
+
+    private void HideInstructionImmediately()
+    {
+        instructionFader?.SetAlpha(0f);
+
+        if (instructionRoot != null)
+            instructionRoot.SetActive(false);
+    }
+
     private IEnumerator PlayDayTransitionRoutine()
     {
         if (!EnsureDayTransitionUI())
@@ -435,6 +574,8 @@ public class MiniGameManager : MonoBehaviour
 
         if (fadeInDuration > 0f)
             yield return new WaitForSecondsRealtime(fadeInDuration);
+
+        ApplyDayBackground();
 
         Coroutine textFadeIn = dayTextFader.FadeIn(
             dayTextFadeInDuration);
@@ -482,6 +623,20 @@ public class MiniGameManager : MonoBehaviour
         dayTransitionText.text = string.Empty;
         screenFader.SetAlpha(1f);
         dayTextFader.SetAlpha(0f);
+    }
+
+    private void ApplyDayBackground()
+    {
+        if (worldBackgroundRenderer == null)
+            return;
+
+        Sprite selectedBackground =
+            CurrentDay >= 6 && CurrentDay != 10
+            ? daySixPlusBackground
+            : dayOneToFiveBackground;
+
+        if (selectedBackground != null)
+            worldBackgroundRenderer.sprite = selectedBackground;
     }
 
     private bool EnsureDayTransitionUI()
@@ -585,7 +740,7 @@ public class MiniGameManager : MonoBehaviour
         float effectiveTimeLimit)
     {
         MiniGameBase selectedPrefab = data.SelectPrefabForDay(
-            CurrentDay,
+            difficultyDay,
             out MiniGameAssetVariant selectedVariant);
 
         if (selectedPrefab == null)
@@ -600,6 +755,7 @@ public class MiniGameManager : MonoBehaviour
 
         currentMiniGame = Instantiate(selectedPrefab, miniGameRoot);
         currentMiniGameIsBonus = data.isBonus;
+        currentMiniGame.SetAssetVariant(selectedVariant);
 #if UNITY_EDITOR
         Debug.Log(
             $"[MiniGameManager] {data.name} asset variant: " +
@@ -694,6 +850,7 @@ public class MiniGameManager : MonoBehaviour
         }
 
         ClearTimerText();
+        HideInstructionImmediately();
         HideDayTransitionImmediately();
         DestroyCurrentMiniGame();
         lastMiniGameResult = null;
@@ -714,5 +871,53 @@ public class MiniGameManager : MonoBehaviour
         currentMiniGame = null;
         currentMiniGameIsBonus = false;
         timerResetRequested = false;
+    }
+}
+
+public static class KoreanFontBootstrap
+{
+    private const string FontResourcePath = "Fonts/Galmuri9";
+
+    public static TMP_FontAsset FontAsset { get; private set; }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void Initialize()
+    {
+        if (FontAsset != null)
+            return;
+
+        Font sourceFont = Resources.Load<Font>(FontResourcePath);
+
+        if (sourceFont == null)
+        {
+            Debug.LogError(
+                $"[KoreanFontBootstrap] Font resource '{FontResourcePath}' " +
+                "could not be loaded.");
+            return;
+        }
+
+        FontAsset = TMP_FontAsset.CreateFontAsset(
+            sourceFont,
+            90,
+            4,
+            GlyphRenderMode.SDFAA_HINTED,
+            2048,
+            2048,
+            AtlasPopulationMode.Dynamic,
+            true);
+
+        if (FontAsset == null)
+        {
+            Debug.LogError(
+                "[KoreanFontBootstrap] Failed to create the Galmuri9 " +
+                "TMP font asset.");
+            return;
+        }
+
+        FontAsset.name = "Galmuri9 Dynamic SDF";
+        List<TMP_FontAsset> fallbacks = TMP_Settings.fallbackFontAssets;
+
+        if (fallbacks != null && !fallbacks.Contains(FontAsset))
+            fallbacks.Add(FontAsset);
     }
 }

@@ -17,6 +17,7 @@ public class EyeBlinkEffect : MonoBehaviour
     private float fullyClosedTimer;
     private float damageInterval = 5f;
     private int configuredDay = -1;
+    private int eyeFrameDay = 1;
     private int spaceTapCount;
     private int spaceTapsPerStep = 1;
 
@@ -80,6 +81,7 @@ public class EyeBlinkEffect : MonoBehaviour
             return;
 
         configuredDay = currentDay;
+        eyeFrameDay = currentDay == 10 ? 1 : currentDay;
         spaceTapCount = 0;
         spaceTapsPerStep = 1;
 
@@ -142,7 +144,7 @@ public class EyeBlinkEffect : MonoBehaviour
 
     private Sprite[] GetActiveEyeFrames()
     {
-        bool useLateDayFrames = configuredDay >= lateDayStartDay;
+        bool useLateDayFrames = eyeFrameDay >= lateDayStartDay;
 
         if (!useLateDayFrames &&
             earlyDayEyeFrames != null &&

@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -32768
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 4984212003625794178, guid: 4e3bea43d73618146bdfcd464ef824aa, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8585b3a53cbf4d688900b29d7fcc38ea, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -286,7 +286,7 @@ MonoBehaviour:
   miniGameRoot: {fileID: 3128394647255388015}
   miniGames:
   - name: SortingMiniGame
-    commandText: "\uBD84\uB958!"
+    commandText: "\uBD84\uB958\uD574\uB77C!"
     timeLimit: 30
     isBonus: 0
     prefab: {fileID: 7050204041929986303, guid: 7cdd71a34d294ec0aa1d5777e8a78c3b, type: 3}
@@ -296,7 +296,7 @@ MonoBehaviour:
     firstAssetVariantUnlockDay: 5
     secondAssetVariantUnlockDay: 6
   - name: ArrowMiniGame
-    commandText: "\uB530\uB77C\uD574!"
+    commandText: "\uB530\uB77C \uB20C\uB7EC\uB77C!"
     timeLimit: 30
     isBonus: 0
     prefab: {fileID: 3030303030303030303, guid: cc7fee2fe4b14ffbaeae67094defa06c, type: 3}
@@ -306,27 +306,29 @@ MonoBehaviour:
     firstAssetVariantUnlockDay: 5
     secondAssetVariantUnlockDay: 6
   - name: TypingWordGame
-    commandText: "\uBC1B\uC544\uC368!"
+    commandText: "\uBC1B\uC544\uC368\uB77C!"
     timeLimit: 30
     isBonus: 0
     prefab: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
     useAssetVariants: 1
-    firstAssetVariantPrefab: {fileID: 0}
-    secondAssetVariantPrefab: {fileID: 0}
+    assetVariantPrefabsContainMixedAssets: 1
+    firstAssetVariantPrefab: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
+    secondAssetVariantPrefab: {fileID: 6028467465656508710, guid: ab50e517ddc2f514284b91f82f4bdbf7, type: 3}
     firstAssetVariantUnlockDay: 3
     secondAssetVariantUnlockDay: 6
   - name: MathQuizGame
-    commandText: "\uD480\uC5B4!"
+    commandText: "\uD480\uC5B4\uB77C!"
     timeLimit: 30
     isBonus: 0
     prefab: {fileID: 6262087453267821407, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
     useAssetVariants: 1
-    firstAssetVariantPrefab: {fileID: 0}
-    secondAssetVariantPrefab: {fileID: 0}
+    assetVariantPrefabsContainMixedAssets: 1
+    firstAssetVariantPrefab: {fileID: 6262087453267821407, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
+    secondAssetVariantPrefab: {fileID: 6262087453267821407, guid: 85008a74b730e6a4cab66b4eac13746f, type: 3}
     firstAssetVariantUnlockDay: 4
     secondAssetVariantUnlockDay: 6
   - name: BookStackGame
-    commandText: "\uCC3E\uC544!"
+    commandText: "\uCC3E\uC544\uB77C!"
     timeLimit: 30
     isBonus: 0
     prefab: {fileID: 6335680773905131617, guid: 617ab2d54d266f849a3ba4ccf6a37332, type: 3}
@@ -337,6 +339,15 @@ MonoBehaviour:
     firstAssetVariantUnlockDay: 2
     secondAssetVariantUnlockDay: 6
   timerText: {fileID: 1423861765855288475}
+  worldBackgroundRenderer: {fileID: 714829004162738103}
+  dayOneToFiveBackground: {fileID: 21300000, guid: 8585b3a53cbf4d688900b29d7fcc38ea, type: 3}
+  daySixPlusBackground: {fileID: 21300000, guid: 33f8d3cb845f491199fc7b800af1865e, type: 3}
+  instructionFontSize: 72
+  instructionPosition: {x: -165, y: -150}
+  instructionSortingOrder: 900
+  instructionFadeInDuration: 0.3
+  instructionHoldDuration: 0.6
+  instructionFadeOutDuration: 0.3
   dayTransitionFontSize: 120
   dayTransitionSortingOrder: 1000
   screenFadeDuration: 0.7
@@ -375,13 +386,13 @@ MonoBehaviour:
   - startDay: 1
     firstBonus:
       name: MemoryDefenseBonus
-      commandText: Keep Them In!
+      commandText: "\uB9C8\uC6B0\uC2A4\uB85C \uB04C\uC5B4 \uC6D0 \uC548\uC5D0 \uAC00\uB46C\uB77C!"
       timeLimit: 30
       isBonus: 1
       prefab: {fileID: 4829015772846219013, guid: 40a7c8b862994c51be076a4ae47e7213, type: 3}
     secondBonus:
       name: NoteFillingBonus
-      commandText: Fill the Page!
+      commandText: "\uD074\uB9AD\uD574\uC11C \uAE5C\uC9C0\uB97C \uCC44\uC6CC\uB77C!"
       timeLimit: 30
       isBonus: 1
       prefab: {fileID: 5941826407319052103, guid: 9f3b64c3a9e545aba226ef3b5cf25791, type: 3}

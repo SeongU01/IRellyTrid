@@ -297,10 +297,10 @@ public class SortingMiniGame : MiniGameBase
 
     private int SelectVariantTier()
     {
-        if (CurrentDay < 5)
+        if (DifficultyDay < 5)
             return 0;
 
-        return CurrentDay >= 6
+        return DifficultyDay >= 6
             ? Random.Range(0, 3)
             : Random.Range(0, 2);
     }

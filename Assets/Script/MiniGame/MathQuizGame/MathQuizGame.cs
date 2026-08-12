@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class MathQuizGame : MiniGameBase
 {
@@ -35,6 +36,16 @@ public class MathQuizGame : MiniGameBase
     };
 
     [Header("UI")]
+    [SerializeField] private Image noteImage;
+    [SerializeField] private Sprite baseNoteSprite;
+    [SerializeField] private Sprite firstVariantNoteSprite;
+    [SerializeField] private Sprite secondVariantNoteSprite;
+    [SerializeField] private Vector2 baseAnswerPosition =
+        new Vector2(-273.05054f, -260.1f);
+    [SerializeField] private Vector2 firstVariantAnswerPosition =
+        new Vector2(-257.45053f, -221.1f);
+    [SerializeField] private Vector2 secondVariantAnswerPosition =
+        new Vector2(-245.75053f, -225f);
     [SerializeField] private TMP_Text questionText;
     [SerializeField] private TMP_Text progressText;
     [FormerlySerializedAs("inputText")]
@@ -58,6 +69,8 @@ public class MathQuizGame : MiniGameBase
 
     protected override void OnStart()
     {
+        ApplyNoteSprite();
+
         currentDifficulty =
             DayDifficultySelector.GetForDay(
                 dayDifficulties,
@@ -92,6 +105,27 @@ public class MathQuizGame : MiniGameBase
         Debug.Log(
             $"간단 연산 게임 시작 / {CurrentDay}일차");
 #endif
+    }
+
+    private void ApplyNoteSprite()
+    {
+        if (noteImage == null)
+            return;
+
+        (Sprite selectedSprite, Vector2 answerPosition) = AssetVariant switch
+        {
+            MiniGameAssetVariant.First =>
+                (firstVariantNoteSprite, firstVariantAnswerPosition),
+            MiniGameAssetVariant.Second =>
+                (secondVariantNoteSprite, secondVariantAnswerPosition),
+            _ => (baseNoteSprite, baseAnswerPosition)
+        };
+
+        if (selectedSprite != null)
+            noteImage.sprite = selectedSprite;
+
+        if (answerText != null)
+            answerText.rectTransform.anchoredPosition = answerPosition;
     }
 
     private void Update()

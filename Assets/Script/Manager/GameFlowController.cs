@@ -63,6 +63,7 @@ public sealed class GameFlowController : MonoBehaviour
         if (!startNewGameOnStart || daySystem == null)
             return;
 
+        miniGameManager.ResetInstructionHistory();
         daySystem.StartNewGame();
         daySystem.StartCurrentDay();
     }
@@ -102,6 +103,7 @@ public sealed class GameFlowController : MonoBehaviour
             return;
 
         playerStatus.ResetStatus();
+        miniGameManager.ResetInstructionHistory();
         daySystem.StartNewGame();
         daySystem.StartCurrentDay();
     }

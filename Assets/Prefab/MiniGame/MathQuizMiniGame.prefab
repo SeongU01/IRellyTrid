@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -13.1}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -157.78, y: -60.8}
+  m_AnchoredPosition: {x: -175.55054, y: -60.8}
   m_SizeDelta: {x: 315.55, y: 106.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7730467782170810096
@@ -202,7 +202,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 101424775832312372, guid: a837df7ed6dd1f84f9e21a01ce86736c, type: 3}
+  m_Sprite: {fileID: -3634773207438758175, guid: edd58dc8e73f4ca4f8b18ad97d701f14, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -627,7 +627,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -12.1}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -235, y: -298.94}
+  m_AnchoredPosition: {x: -175.55054, y: -298.94}
   m_SizeDelta: {x: 195.4527, y: 94.0812}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3765463549647422890
@@ -775,6 +775,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad73284b437fdc04c9978334c13daa59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MathQuizGame
+  noteImage: {fileID: 662004004004004004}
+  baseNoteSprite: {fileID: -3634773207438758175, guid: edd58dc8e73f4ca4f8b18ad97d701f14, type: 3}
+  firstVariantNoteSprite: {fileID: 1370701040488404427, guid: edd58dc8e73f4ca4f8b18ad97d701f14, type: 3}
+  secondVariantNoteSprite: {fileID: 3954791638045190505, guid: edd58dc8e73f4ca4f8b18ad97d701f14, type: 3}
+  baseAnswerPosition: {x: -273.05054, y: -260.1}
+  firstVariantAnswerPosition: {x: -257.45053, y: -221.1}
+  secondVariantAnswerPosition: {x: -245.75053, y: -225}
   questionText: {fileID: 8497622261118149460}
   progressText: {fileID: 3827771196279198085}
   answerText: {fileID: 8091300543611531352}

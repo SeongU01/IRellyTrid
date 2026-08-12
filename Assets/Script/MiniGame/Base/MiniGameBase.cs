@@ -16,6 +16,8 @@ public abstract class MiniGameBase : MonoBehaviour
     public bool IsPlaying => isPlaying;
     public int CurrentDay { get; private set; } = 1;
     public int DifficultyDay { get; private set; } = 1;
+    public MiniGameAssetVariant AssetVariant { get; private set; } =
+        MiniGameAssetVariant.Base;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected int timeLimit;
@@ -72,6 +74,11 @@ public abstract class MiniGameBase : MonoBehaviour
     virtual protected void Success()
     {
         Finish(MiniGameEndReason.Success);
+    }
+
+    public void SetAssetVariant(MiniGameAssetVariant assetVariant)
+    {
+        AssetVariant = assetVariant;
     }
     protected void SuccessWithStudyReward(int studyReward)
     {
