@@ -153,6 +153,7 @@ public class MiniGameManager : MonoBehaviour
 
         DestroyCurrentMiniGame();
         CurrentDay = Mathf.Max(1, day);
+        GameAudioManager.SetDay(CurrentDay);
         startDayTransitionCovered =
             CurrentDay == 1 && !firstDayTransitionCompleted;
 
@@ -606,6 +607,7 @@ public class MiniGameManager : MonoBehaviour
         dayTransitionRoot.SetActive(true);
         dayTransitionRoot.transform.SetAsLastSibling();
         dayTransitionText.text = $"DAY {CurrentDay}";
+        GameAudioManager.PlayDayStart();
         dayTransitionText.fontSize = dayTransitionFontSize;
         bool startsCovered = startDayTransitionCovered;
         startDayTransitionCovered = false;

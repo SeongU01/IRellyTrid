@@ -360,6 +360,7 @@ public class SortingMiniGame : MiniGameBase
             return;
         }
 
+        GameAudioManager.PlaySortingCorrect();
         ShowCorrectFeedback();
         sortedCount++;
         itemQueue.RemoveAt(0);

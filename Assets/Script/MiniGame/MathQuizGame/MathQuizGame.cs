@@ -157,6 +157,7 @@ public class MathQuizGame : MiniGameBase
             if (keyboard[NumberRowKeys[i]].wasPressedThisFrame)
             {
                 currentInput += i.ToString();
+                GameAudioManager.PlayTyping();
                 UpdateInputText();
                 return;
             }
@@ -164,6 +165,7 @@ public class MathQuizGame : MiniGameBase
             if (keyboard[NumpadKeys[i]].wasPressedThisFrame)
             {
                 currentInput += i.ToString();
+                GameAudioManager.PlayTyping();
                 UpdateInputText();
                 return;
             }
@@ -185,6 +187,7 @@ public class MathQuizGame : MiniGameBase
             0,
             currentInput.Length - 1);
 
+        GameAudioManager.PlayTyping();
         UpdateInputText();
     }
 

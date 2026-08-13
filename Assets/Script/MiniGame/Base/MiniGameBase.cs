@@ -120,6 +120,7 @@ public abstract class MiniGameBase : MonoBehaviour
     }
     protected void ShowWrongFeedback()
     {
+        GameAudioManager.PlayMistake();
         float duration = GetFeedbackEffect().PlayWrong();
         finishFeedbackEndsAt = duration > 0f
             ? Time.time + duration
@@ -149,6 +150,7 @@ public abstract class MiniGameBase : MonoBehaviour
         if (endReason == MiniGameEndReason.Failure ||
             endReason == MiniGameEndReason.Timeout)
         {
+            GameAudioManager.PlayFailure();
             GetFeedbackEffect().PlayFailure(
                 endReason == MiniGameEndReason.Timeout,
                 () => CompleteFinish(result));

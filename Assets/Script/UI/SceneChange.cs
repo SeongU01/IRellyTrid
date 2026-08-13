@@ -11,6 +11,11 @@ public class SceneChange : MonoBehaviour
     // Or set a scene index and assign `LoadSceneByIndex` to the Button's OnClick.
     public int sceneIndex = -1;
 
+    private void Awake()
+    {
+        ButtonInteractionEffect.Attach(GetComponent<Button>());
+    }
+
     // Call this from a UI Button (no parameter) to load the `sceneName` set on this component.
     public void LoadSceneByName()
     {

@@ -103,7 +103,10 @@ public sealed class ButtonInteractionEffect : MonoBehaviour,
     public void OnPointerDown(PointerEventData eventData)
     {
         if (button.interactable)
+        {
+            GameAudioManager.PlayUiButton();
             pressed = true;
+        }
     }
 
     public void OnPointerUp(PointerEventData eventData)

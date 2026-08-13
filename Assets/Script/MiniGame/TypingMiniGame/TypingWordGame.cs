@@ -274,7 +274,11 @@ public class TypingWordGame : MiniGameBase
         int characterIndex,
         char addedCharacter)
     {
-        return addedCharacter == ' ' ? '\0' : addedCharacter;
+        if (addedCharacter == ' ')
+            return '\0';
+
+        GameAudioManager.PlayTyping();
+        return addedCharacter;
     }
 
     protected override void OnEnd()

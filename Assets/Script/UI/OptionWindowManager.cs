@@ -22,10 +22,13 @@ public class OptionWindowManager : MonoBehaviour
     private int previousSortingOrder;
     private bool isOpen;
     private bool returningToTitle;
+    private Slider bgmSlider;
+    private Slider sfxSlider;
 
     private void Awake()
     {
         AttachButtonEffects();
+        ConnectVolumeSliders();
     }
 
     public void OpenOptionWindow()
@@ -214,6 +217,37 @@ public class OptionWindowManager : MonoBehaviour
 
             if (belongsToPanel || invokesThisManager)
                 ButtonInteractionEffect.Attach(button);
+        }
+    }
+
+    private void ConnectVolumeSliders()
+    {
+        EnsureReferences();
+        Slider[] sliders = rootCanvas != null
+            ? rootCanvas.GetComponentsInChildren<Slider>(true)
+            : GetComponentsInChildren<Slider>(true);
+
+        for (int i = 0; i < sliders.Length; i++)
+        {
+            Slider slider = sliders[i];
+            if (slider.name == "BGMSlider")
+                bgmSlider = slider;
+            else if (slider.name == "SFXSlider")
+                sfxSlider = slider;
+        }
+
+        if (bgmSlider != null)
+        {
+            bgmSlider.SetValueWithoutNotify(GameAudioManager.BgmVolume);
+            bgmSlider.onValueChanged.AddListener(
+                GameAudioManager.SetBgmVolume);
+        }
+
+        if (sfxSlider != null)
+        {
+            sfxSlider.SetValueWithoutNotify(GameAudioManager.SfxVolume);
+            sfxSlider.onValueChanged.AddListener(
+                GameAudioManager.SetSfxVolume);
         }
     }
 

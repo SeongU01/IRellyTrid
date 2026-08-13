@@ -61,6 +61,7 @@ public class BookItem : MonoBehaviour
             return;
         }
 
+        GameAudioManager.PlayMouseClick();
         owner.BeginBookDrag(this);
 
         Vector3 mouseWorldPosition = GetMouseWorldPosition();

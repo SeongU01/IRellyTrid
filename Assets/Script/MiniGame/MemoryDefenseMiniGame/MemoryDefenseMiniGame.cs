@@ -329,6 +329,8 @@ public sealed class MemoryDefenseMiniGame : MiniGameBase
         if (mouse.leftButton.wasPressedThisFrame)
         {
             draggedObject = FindObjectAt(worldPosition);
+            if (draggedObject != null)
+                GameAudioManager.PlayMouseClick();
             draggedObject?.BeginDrag();
         }
 

@@ -250,6 +250,7 @@ public sealed class BonusChoiceView : MonoBehaviour
         {
             mode = Navigation.Mode.None
         };
+        ButtonInteractionEffect.Attach(button);
 
         TMP_Text labelText = CreateText(
             buttonObject.transform,

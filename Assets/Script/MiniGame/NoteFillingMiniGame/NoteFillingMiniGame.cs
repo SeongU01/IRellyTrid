@@ -124,6 +124,7 @@ public sealed class NoteFillingMiniGame : MiniGameBase
         int randomIndex = UnityEngine.Random.Range(0, Alphabet.Length);
         currentCharacters.Append(Alphabet[randomIndex]);
         totalCharacterCount++;
+        GameAudioManager.PlayTyping();
         RefreshCurrentPageText();
 
         if (currentCharacters.Length < charactersPerPage)
