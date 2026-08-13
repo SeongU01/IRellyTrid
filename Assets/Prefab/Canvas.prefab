@@ -1063,7 +1063,6 @@ GameObject:
   - component: {fileID: 1409608231516684808}
   - component: {fileID: 9191632174087891137}
   - component: {fileID: 3578536565127847650}
-  - component: {fileID: 4999573347259950627}
   m_Layer: 5
   m_Name: OptionCloseButton
   m_TagString: Untagged
@@ -1185,19 +1184,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &4999573347259950627
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2604069225485395100}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fdf67bc6ac02f04eb5479233a3ea5e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::OptionWindowManager
-  optionPanel: {fileID: 2700384284718453786}
 --- !u!1 &2700384284718453786
 GameObject:
   m_ObjectHideFlags: 0

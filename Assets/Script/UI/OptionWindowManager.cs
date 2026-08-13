@@ -21,6 +21,12 @@ public class OptionWindowManager : MonoBehaviour
     private bool previousOverrideSorting;
     private int previousSortingOrder;
     private bool isOpen;
+    private bool returningToTitle;
+
+    private void Awake()
+    {
+        AttachButtonEffects();
+    }
 
     public void OpenOptionWindow()
     {
@@ -30,16 +36,14 @@ public class OptionWindowManager : MonoBehaviour
         EnsureReferences();
         EnsureBackdrop();
         EnsureTitleButton();
+        AttachButtonEffects();
         RaiseCanvas();
 
         if (backdrop != null)
-        {
             backdrop.SetActive(true);
-            backdrop.transform.SetAsLastSibling();
-        }
 
         optionPanel.SetActive(true);
-        optionPanel.transform.SetAsLastSibling();
+        PlaceBackdropBelowPanel();
         miniGameManager?.SetPaused(true);
         isOpen = true;
     }
@@ -60,8 +64,6 @@ public class OptionWindowManager : MonoBehaviour
 
     public void ReturnToTitle()
     {
-        CloseOptionWindow();
-
         if (!Application.CanStreamedLevelBeLoaded(titleSceneName))
         {
             Debug.LogWarning(
@@ -69,6 +71,28 @@ public class OptionWindowManager : MonoBehaviour
             return;
         }
 
+        if (returningToTitle)
+            return;
+
+        returningToTitle = true;
+        Button button = titleButton != null
+            ? titleButton.GetComponent<Button>()
+            : null;
+        ButtonInteractionEffect effect =
+            ButtonInteractionEffect.Attach(button);
+
+        if (effect != null)
+        {
+            effect.PlayExit(LoadTitleScene);
+            return;
+        }
+
+        LoadTitleScene();
+    }
+
+    private void LoadTitleScene()
+    {
+        CloseOptionWindow();
         SceneManager.LoadScene(titleSceneName);
     }
 
@@ -119,6 +143,21 @@ public class OptionWindowManager : MonoBehaviour
         backdrop.SetActive(false);
     }
 
+    private void PlaceBackdropBelowPanel()
+    {
+        if (backdrop == null || optionPanel == null)
+            return;
+
+        Transform panelTransform = optionPanel.transform;
+        Transform panelParent = panelTransform.parent;
+
+        if (panelParent != null && backdrop.transform.parent != panelParent)
+            backdrop.transform.SetParent(panelParent, false);
+
+        backdrop.transform.SetSiblingIndex(panelTransform.GetSiblingIndex());
+        panelTransform.SetAsLastSibling();
+    }
+
     private void EnsureTitleButton()
     {
         if (titleButton != null || optionPanel == null)
@@ -143,7 +182,39 @@ public class OptionWindowManager : MonoBehaviour
             label.text = titleButtonLabel;
 
         Button button = titleButton.GetComponent<Button>();
+        button.onClick = new Button.ButtonClickedEvent();
         button.onClick.AddListener(ReturnToTitle);
+        ButtonInteractionEffect.Attach(button);
+    }
+
+    private void AttachButtonEffects()
+    {
+        EnsureReferences();
+        Button[] buttons = rootCanvas != null
+            ? rootCanvas.GetComponentsInChildren<Button>(true)
+            : GetComponentsInChildren<Button>(true);
+
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            Button button = buttons[i];
+            bool belongsToPanel = optionPanel != null &&
+                button.transform.IsChildOf(optionPanel.transform);
+            bool invokesThisManager = false;
+
+            for (int callIndex = 0;
+                 callIndex < button.onClick.GetPersistentEventCount();
+                 callIndex++)
+            {
+                if (button.onClick.GetPersistentTarget(callIndex) == this)
+                {
+                    invokesThisManager = true;
+                    break;
+                }
+            }
+
+            if (belongsToPanel || invokesThisManager)
+                ButtonInteractionEffect.Attach(button);
+        }
     }
 
     private void RaiseCanvas()
