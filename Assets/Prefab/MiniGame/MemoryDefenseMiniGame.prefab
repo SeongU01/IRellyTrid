@@ -51,7 +51,7 @@ MonoBehaviour:
   circleResolution: 128
   arenaSpriteCircleCenterPixels: {x: 49.093, y: 80.633}
   arenaSpriteCircleRadiusPixels: 48.102
-  showArenaBoundary: 1
+  showArenaBoundary: 0
   arenaBoundaryColor: {r: 1, g: 0, b: 0, a: 1}
   arenaBoundaryWidth: 0.06
   objectCount: 5

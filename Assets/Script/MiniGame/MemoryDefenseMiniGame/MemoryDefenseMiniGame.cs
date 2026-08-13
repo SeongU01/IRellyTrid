@@ -23,7 +23,7 @@ public sealed class MemoryDefenseMiniGame : MiniGameBase
         new Vector2(49.093f, 80.633f);
     [SerializeField, Min(1f)] private float arenaSpriteCircleRadiusPixels =
         48.102f;
-    [SerializeField] private bool showArenaBoundary = true;
+    [SerializeField] private bool showArenaBoundary;
     [SerializeField] private Color arenaBoundaryColor = Color.red;
     [SerializeField, Min(0.01f)] private float arenaBoundaryWidth = 0.06f;
 
