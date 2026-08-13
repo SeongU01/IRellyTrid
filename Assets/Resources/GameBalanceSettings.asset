@@ -34,7 +34,7 @@ MonoBehaviour:
     miniGameTimeLimit: 30
     miniGameDifficultyDay: 0
     miniGameOverrides: []
-    eyeSpaceTapsPerStep: 3
+    eyeSpaceTapsPerStep: 2
     popupChancePerSecond: 0
     minimumPopupCount: 0
     maximumPopupCount: 0
@@ -43,7 +43,7 @@ MonoBehaviour:
     miniGameTimeLimit: 30
     miniGameDifficultyDay: 0
     miniGameOverrides: []
-    eyeSpaceTapsPerStep: 3
+    eyeSpaceTapsPerStep: 2
     popupChancePerSecond: 0
     minimumPopupCount: 0
     maximumPopupCount: 0
@@ -79,7 +79,7 @@ MonoBehaviour:
     miniGameTimeLimit: 20
     miniGameDifficultyDay: 0
     miniGameOverrides: []
-    eyeSpaceTapsPerStep: 5
+    eyeSpaceTapsPerStep: 4
     popupChancePerSecond: 0.04
     minimumPopupCount: 1
     maximumPopupCount: 3
@@ -88,7 +88,7 @@ MonoBehaviour:
     miniGameTimeLimit: 20
     miniGameDifficultyDay: 0
     miniGameOverrides: []
-    eyeSpaceTapsPerStep: 5
+    eyeSpaceTapsPerStep: 4
     popupChancePerSecond: 0.04
     minimumPopupCount: 1
     maximumPopupCount: 3
@@ -106,7 +106,7 @@ MonoBehaviour:
     miniGameTimeLimit: 15
     miniGameDifficultyDay: 0
     miniGameOverrides: []
-    eyeSpaceTapsPerStep: 6
+    eyeSpaceTapsPerStep: 5
     popupChancePerSecond: 0.05
     minimumPopupCount: 1
     maximumPopupCount: 3
@@ -115,7 +115,7 @@ MonoBehaviour:
     miniGameTimeLimit: 30
     miniGameDifficultyDay: 1
     miniGameOverrides: []
-    eyeSpaceTapsPerStep: 3
+    eyeSpaceTapsPerStep: 2
     popupChancePerSecond: 0
     minimumPopupCount: 0
     maximumPopupCount: 0
