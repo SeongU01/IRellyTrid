@@ -341,7 +341,7 @@ MonoBehaviour:
   timerText: {fileID: 1423861765855288475}
   worldBackgroundRenderer: {fileID: 714829004162738103}
   dayOneToFiveBackground: {fileID: 21300000, guid: 8585b3a53cbf4d688900b29d7fcc38ea, type: 3}
-  daySixPlusBackground: {fileID: 21300000, guid: 33f8d3cb845f491199fc7b800af1865e, type: 3}
+  daySixPlusBackground: {fileID: 21300000, guid: b317dd55ea1845b2a857c34d28589d41, type: 3}
   instructionFontSize: 72
   instructionPosition: {x: -165, y: -150}
   instructionSortingOrder: 900
