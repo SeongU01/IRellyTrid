@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement; // 씬 관리를 위한 네임스페이스 추가
 
 // 페이드 연출 단계를 정의하는 구조체
 [System.Serializable]
@@ -17,6 +18,9 @@ public class EndingSequenceController : MonoBehaviour
 {
     [Header("시퀀스 순서 설정")]
     public List<FadeStep> fadeSteps; // 시퀀스 단계 리스트
+
+    [Header("크레딧 씬 설정")]
+    public string nextSceneName; // 연출 종료 후 호출할 씬 이름 (예: "EndingCredit")
 
     // 객체 활성화 시 자동 호출되는 콜백 함수
     private void OnEnable()
@@ -54,6 +58,13 @@ public class EndingSequenceController : MonoBehaviour
                 // 타임 스케일 무시 대기 적용
                 yield return new WaitForSecondsRealtime(step.waitTimeAfter);
             }
+        }
+
+        // 시퀀스 연출이 모두 끝난 후의 추가 로직
+        if (!string.IsNullOrEmpty(nextSceneName))
+        {
+            // 설정된 다음 씬 비동기 로드
+            SceneManager.LoadSceneAsync(nextSceneName);
         }
     }
 }

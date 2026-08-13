@@ -829,7 +829,7 @@ MonoBehaviour:
   fadeSteps:
   - targetFadeUtility: {fileID: 994294657}
     isFadeIn: 1
-    fadeDuration: 1
+    fadeDuration: 3
     waitTimeAfter: 0
 --- !u!1 &1323610890
 GameObject:
