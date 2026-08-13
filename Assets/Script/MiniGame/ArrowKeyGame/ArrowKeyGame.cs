@@ -170,6 +170,7 @@ public class ArrowKeyGame : MiniGameBase
 
         if (inputDirection != answer)
         {
+            ShowWrongFeedback();
             mistakeCount++;
             pathViews[currentInputIndex].SetWrong();
             UpdateUI("X");
@@ -182,6 +183,7 @@ public class ArrowKeyGame : MiniGameBase
             return;
         }
 
+        ShowCorrectFeedback();
         pathViews[currentInputIndex].SetCompleted();
         currentInputIndex++;
 

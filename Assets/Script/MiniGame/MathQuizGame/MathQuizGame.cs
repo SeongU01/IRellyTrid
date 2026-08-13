@@ -209,6 +209,7 @@ public class MathQuizGame : MiniGameBase
 
         if (playerAnswer != correctAnswer)
         {
+            ShowWrongFeedback();
             mistakeCount++;
 
             if (resultText != null)
@@ -227,6 +228,8 @@ public class MathQuizGame : MiniGameBase
             UpdateInputText();
             return;
         }
+
+        ShowCorrectFeedback();
 
         if (resultText != null)
         {

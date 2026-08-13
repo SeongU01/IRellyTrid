@@ -11,6 +11,8 @@ public abstract class MiniGameBase : MonoBehaviour
     private float playStartedAt;
     private int? studyRewardOverride;
     private float nextDayStudyMultiplier = 1f;
+    private MiniGameFeedbackEffect feedbackEffect;
+    private float finishFeedbackEndsAt;
 
     // getter
     public bool IsPlaying => isPlaying;
@@ -29,6 +31,7 @@ public abstract class MiniGameBase : MonoBehaviour
         currentData = data;
         studyRewardOverride = null;
         nextDayStudyMultiplier = 1f;
+        finishFeedbackEndsAt = 0f;
         timeLimit = (int)data.timeLimit;
         commandText = data.commandText;
     }
@@ -108,6 +111,20 @@ public abstract class MiniGameBase : MonoBehaviour
     {
         Success();
     }
+    protected void ShowCorrectFeedback()
+    {
+        float duration = GetFeedbackEffect().PlayCorrect();
+        finishFeedbackEndsAt = duration > 0f
+            ? Time.time + duration
+            : 0f;
+    }
+    protected void ShowWrongFeedback()
+    {
+        float duration = GetFeedbackEffect().PlayWrong();
+        finishFeedbackEndsAt = duration > 0f
+            ? Time.time + duration
+            : 0f;
+    }
     private void Finish(MiniGameEndReason endReason)
     {
         if (!isPlaying)
@@ -115,16 +132,47 @@ public abstract class MiniGameBase : MonoBehaviour
 
         float playDuration = Mathf.Max(0f, Time.time - playStartedAt);
         isPlaying = false;
-        OnEnd();
-        OnFinished?.Invoke(new MiniGameResult(
+        MiniGameResult result = new MiniGameResult(
             endReason,
             currentData,
             CurrentDay,
             playDuration,
             studyRewardOverride,
-            nextDayStudyMultiplier));
+            nextDayStudyMultiplier);
+
+        float remainingFeedbackTime = Mathf.Max(
+            0f,
+            finishFeedbackEndsAt - Time.time);
+
+        if (remainingFeedbackTime > 0f)
+        {
+            GetFeedbackEffect().InvokeAfter(
+                remainingFeedbackTime,
+                () => CompleteFinish(result));
+            return;
+        }
+
+        CompleteFinish(result);
     }
     virtual protected void OnEnd()
     {
+    }
+    private void CompleteFinish(MiniGameResult result)
+    {
+        OnEnd();
+        OnFinished?.Invoke(result);
+    }
+    private MiniGameFeedbackEffect GetFeedbackEffect()
+    {
+        if (feedbackEffect == null)
+        {
+            feedbackEffect = GetComponent<MiniGameFeedbackEffect>();
+            if (feedbackEffect == null)
+                feedbackEffect = gameObject.AddComponent<MiniGameFeedbackEffect>();
+        }
+
+        feedbackEffect.SetDay(CurrentDay);
+
+        return feedbackEffect;
     }
 }

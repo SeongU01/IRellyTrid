@@ -189,6 +189,7 @@ public class TypingWordGame : MiniGameBase
 
         if (playerInput != currentAnswer)
         {
+            ShowWrongFeedback();
             mistakeCount++;
 
             if (resultText != null)
@@ -207,6 +208,8 @@ public class TypingWordGame : MiniGameBase
             inputField.ActivateInputField();
             return;
         }
+
+        ShowCorrectFeedback();
 
         if (resultText != null)
         {

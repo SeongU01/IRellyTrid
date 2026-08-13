@@ -348,6 +348,7 @@ public class SortingMiniGame : MiniGameBase
 
         if (selectedSide != answer)
         {
+            ShowWrongFeedback();
             mistakeCount++;
             UpdateStatus("X");
 
@@ -359,6 +360,7 @@ public class SortingMiniGame : MiniGameBase
             return;
         }
 
+        ShowCorrectFeedback();
         sortedCount++;
         itemQueue.RemoveAt(0);
 

@@ -326,6 +326,8 @@ private BookData GetNextTargetBook()
 
         if (!book.IsTarget)
         {
+            ShowWrongFeedback();
+
             if (resultText != null)
             {
                 resultText.text = "X";
@@ -338,6 +340,7 @@ private BookData GetNextTargetBook()
             return;
         }
 
+        ShowCorrectFeedback();
         PlaceTargetBook(book);
         NextStage();
     }
