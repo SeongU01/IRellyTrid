@@ -779,9 +779,9 @@ MonoBehaviour:
   baseNoteSprite: {fileID: -3634773207438758175, guid: edd58dc8e73f4ca4f8b18ad97d701f14, type: 3}
   firstVariantNoteSprite: {fileID: 1370701040488404427, guid: edd58dc8e73f4ca4f8b18ad97d701f14, type: 3}
   secondVariantNoteSprite: {fileID: 3954791638045190505, guid: edd58dc8e73f4ca4f8b18ad97d701f14, type: 3}
-  baseAnswerPosition: {x: -263.05054, y: -274.1}
-  firstVariantAnswerPosition: {x: -247.45053, y: -235.1}
-  secondVariantAnswerPosition: {x: -235.75053, y: -239}
+  baseAnswerPosition: {x: -272.58, y: -279.58}
+  firstVariantAnswerPosition: {x: -262.21, y: -260.06}
+  secondVariantAnswerPosition: {x: -261.74, y: -260.78}
   questionText: {fileID: 8497622261118149460}
   progressText: {fileID: 3827771196279198085}
   answerText: {fileID: 8091300543611531352}
