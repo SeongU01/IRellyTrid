@@ -40,6 +40,7 @@ public sealed class PlayerStatus : MonoBehaviour
 
     public event Action<int, int> HealthChanged;
     public event Action<float, float> FatigueChanged;
+    public event Action FatigueMaximumReached;
     public event Action<int> StudyAmountChanged;
     public event Action<GameOverReason> GameOverTriggered;
 
@@ -197,6 +198,7 @@ public sealed class PlayerStatus : MonoBehaviour
             previousFatigue < settings.MaxFatigue)
         {
             fatigue = settings.MaxFatigue * 0.5f;
+            FatigueMaximumReached?.Invoke();
             Debug.Log(
                 $"[PlayerStatus] Fatigue reached maximum. " +
                 $"Health -1, fatigue reset to {fatigue:0.##}/" +
