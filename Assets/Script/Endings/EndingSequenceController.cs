@@ -28,6 +28,9 @@ public class EndingSequenceController : MonoBehaviour
     // 실제 연출 순서 제어 코루틴
     private IEnumerator PlaySequence()
     {
+        // 첫 프레임 스파이크 현상 방지를 위한 1프레임 대기
+        yield return null;
+
         // 리스트 내장 요소 순회 반복문
         foreach (FadeStep step in fadeSteps)
         {
