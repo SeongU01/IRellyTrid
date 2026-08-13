@@ -180,6 +180,20 @@ public sealed class DaySettlementView : MonoBehaviour
             return;
         }
 
+        ButtonInteractionEffect effect =
+            ButtonInteractionEffect.Attach(nextDayButton);
+
+        if (effect != null)
+        {
+            effect.PlayExit(CompleteDayTransition);
+            return;
+        }
+
+        CompleteDayTransition();
+    }
+
+    private void CompleteDayTransition()
+    {
         nextDayButton.interactable = false;
         bool completedFinalDay = daySystem.IsFinalDay;
         daySystem.CompleteDay();
@@ -287,6 +301,7 @@ public sealed class DaySettlementView : MonoBehaviour
         {
             mode = Navigation.Mode.None
         };
+        ButtonInteractionEffect.Attach(button);
 
         nextDayButtonLabel = CreateText(
             buttonObject.transform,

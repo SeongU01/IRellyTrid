@@ -51,6 +51,7 @@ public class MiniGameManager : MonoBehaviour
     private GameObject instructionRoot;
     private TMP_Text instructionText;
     private CanvasGroupFader instructionFader;
+    private MiniGameTimerUrgencyEffect timerUrgencyEffect;
     private bool firstDayTransitionCompleted;
     private bool startDayTransitionCovered;
     private bool isPaused;
@@ -364,15 +365,18 @@ public class MiniGameManager : MonoBehaviour
             yield return null;
         }
 
-        ClearTimerText();
-
         if (currentMiniGame != null && currentMiniGame.IsPlaying)
         {
 #if UNITY_EDITOR
             Debug.Log("Time out");
 #endif
+            if (!currentMiniGameIsBonus)
+                yield return PlayTimeoutFreeze();
+
             currentMiniGame.Timeout();
         }
+
+        ClearTimerText();
 
         if (playerStatus == null || playerStatus.IsGameOver)
             yield break;
@@ -426,6 +430,8 @@ public class MiniGameManager : MonoBehaviour
 
     private void ClearTimerText()
     {
+        timerUrgencyEffect?.Clear();
+
         if (timerText != null)
             timerText.text = string.Empty;
     }
@@ -436,6 +442,51 @@ public class MiniGameManager : MonoBehaviour
             return;
 
         timerText.text = Mathf.CeilToInt(Mathf.Max(0f, time)).ToString();
+
+        if (currentMiniGameIsBonus)
+        {
+            timerUrgencyEffect?.Clear();
+            return;
+        }
+
+        GetTimerUrgencyEffect().SetRemainingTime(time);
+    }
+
+    private MiniGameTimerUrgencyEffect GetTimerUrgencyEffect()
+    {
+        if (timerUrgencyEffect == null)
+        {
+            timerUrgencyEffect =
+                GetComponent<MiniGameTimerUrgencyEffect>();
+
+            if (timerUrgencyEffect == null)
+            {
+                timerUrgencyEffect =
+                    gameObject.AddComponent<MiniGameTimerUrgencyEffect>();
+            }
+        }
+
+        timerUrgencyEffect.Configure(timerText);
+        return timerUrgencyEffect;
+    }
+
+    private IEnumerator PlayTimeoutFreeze()
+    {
+        if (currentMiniGame == null)
+            yield break;
+
+        bool wasEnabled = currentMiniGame.enabled;
+        currentMiniGame.enabled = false;
+        float elapsed = 0f;
+
+        while (elapsed < 0.12f && currentMiniGame != null)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        if (currentMiniGame != null && !isPaused)
+            currentMiniGame.enabled = wasEnabled;
     }
 
     private IEnumerator PlayInstructionRoutine(MiniGameData data)
