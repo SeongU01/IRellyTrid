@@ -92,8 +92,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 80
+  m_fontSizeBase: 80
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -627,7 +627,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -12.1}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -175.55054, y: -298.94}
+  m_AnchoredPosition: {x: -175.55054, y: -315.9}
   m_SizeDelta: {x: 195.4527, y: 94.0812}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3765463549647422890
@@ -685,8 +685,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48
-  m_fontSizeBase: 48
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -779,9 +779,9 @@ MonoBehaviour:
   baseNoteSprite: {fileID: -3634773207438758175, guid: edd58dc8e73f4ca4f8b18ad97d701f14, type: 3}
   firstVariantNoteSprite: {fileID: 1370701040488404427, guid: edd58dc8e73f4ca4f8b18ad97d701f14, type: 3}
   secondVariantNoteSprite: {fileID: 3954791638045190505, guid: edd58dc8e73f4ca4f8b18ad97d701f14, type: 3}
-  baseAnswerPosition: {x: -273.05054, y: -260.1}
-  firstVariantAnswerPosition: {x: -257.45053, y: -221.1}
-  secondVariantAnswerPosition: {x: -245.75053, y: -225}
+  baseAnswerPosition: {x: -263.05054, y: -274.1}
+  firstVariantAnswerPosition: {x: -247.45053, y: -235.1}
+  secondVariantAnswerPosition: {x: -235.75053, y: -239}
   questionText: {fileID: 8497622261118149460}
   progressText: {fileID: 3827771196279198085}
   answerText: {fileID: 8091300543611531352}

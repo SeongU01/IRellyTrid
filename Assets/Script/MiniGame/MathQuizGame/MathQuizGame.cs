@@ -41,11 +41,11 @@ public class MathQuizGame : MiniGameBase
     [SerializeField] private Sprite firstVariantNoteSprite;
     [SerializeField] private Sprite secondVariantNoteSprite;
     [SerializeField] private Vector2 baseAnswerPosition =
-        new Vector2(-273.05054f, -260.1f);
+        new Vector2(-263.05054f, -274.1f);
     [SerializeField] private Vector2 firstVariantAnswerPosition =
-        new Vector2(-257.45053f, -221.1f);
+        new Vector2(-247.45053f, -235.1f);
     [SerializeField] private Vector2 secondVariantAnswerPosition =
-        new Vector2(-245.75053f, -225f);
+        new Vector2(-235.75053f, -239f);
     [SerializeField] private TMP_Text questionText;
     [SerializeField] private TMP_Text progressText;
     [FormerlySerializedAs("inputText")]
