@@ -63,9 +63,7 @@ public sealed class GameFlowController : MonoBehaviour
         if (!startNewGameOnStart || daySystem == null)
             return;
 
-        miniGameManager.ResetInstructionHistory();
-        daySystem.StartNewGame();
-        daySystem.StartCurrentDay();
+        StartNewGame();
     }
 
     private void Update()
