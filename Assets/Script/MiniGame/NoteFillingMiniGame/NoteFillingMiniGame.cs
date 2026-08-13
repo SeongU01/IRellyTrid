@@ -62,6 +62,7 @@ public sealed class NoteFillingMiniGame : MiniGameBase
     private readonly StringBuilder currentCharacters = new();
     private RectTransform pageRoot;
     private PageView currentPage;
+    private BonusRewardPopup rewardPopup;
     private int completedPageCount;
     private int totalCharacterCount;
 
@@ -141,6 +142,11 @@ public sealed class NoteFillingMiniGame : MiniGameBase
         StartCoroutine(StackCompletedPage(
             completedPage,
             completedPageCount - 1));
+
+        if (completedPageCount == 2)
+            rewardPopup?.Show(1.5f);
+        else if (completedPageCount == 3)
+            rewardPopup?.Show(2f);
 
 #if UNITY_EDITOR
         Debug.Log(
@@ -244,6 +250,10 @@ public sealed class NoteFillingMiniGame : MiniGameBase
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1920f, 1080f);
         scaler.matchWidthOrHeight = 0.5f;
+
+        rewardPopup = BonusRewardPopup.Create(
+            canvasObject.transform,
+            KoreanFontBootstrap.FontAsset ?? fontAsset);
 
         GameObject rootObject = new GameObject(
             "PageRoot",
