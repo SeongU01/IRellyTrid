@@ -12,13 +12,21 @@ public sealed class MiniGameFeedbackEffect : MonoBehaviour
     private const float FlashPeakAlpha = 0.22f;
     private const float CorrectScale = 1.03f;
     private const float WrongShakeDistance = 14f;
+    private const float ClearFadeInDuration = 0.25f;
+    private const float ClearHoldDuration = 0.3f;
+    private const float ClearFadeOutDuration = 0.3f;
+    private const float ClearPeakScale = 1.15f;
+    private const float ClearFlashAlpha = 0.18f;
+    private const float FailureFlashAlpha = 0.2f;
 
     private RectTransform feedbackTarget;
+    private CanvasGroup feedbackCanvasGroup;
     private Vector3 initialScale;
     private Vector2 initialPosition;
     private Image flashImage;
     private TMP_Text comboText;
     private TMP_Text comboGhostText;
+    private TMP_Text clearText;
     private Coroutine feedbackRoutine;
     private Coroutine comboRoutine;
     private int comboCount;
@@ -43,6 +51,7 @@ public sealed class MiniGameFeedbackEffect : MonoBehaviour
         }
 
         feedbackTarget = CreateMotionRoot(canvasRoot);
+        feedbackCanvasGroup = feedbackTarget.gameObject.AddComponent<CanvasGroup>();
         initialScale = feedbackTarget.localScale;
         initialPosition = feedbackTarget.anchoredPosition;
         CreateVisuals(canvasRoot);
@@ -99,6 +108,44 @@ public sealed class MiniGameFeedbackEffect : MonoBehaviour
     public void InvokeAfter(float delay, Action callback)
     {
         StartCoroutine(InvokeAfterRoutine(delay, callback));
+    }
+
+    public void PlayClear(Action callback)
+    {
+        PlayResult(
+            "CLEAR",
+            new Color(0.45f, 1f, 0.35f),
+            ClearFlashAlpha,
+            callback);
+    }
+
+    public void PlayFailure(bool timedOut, Action callback)
+    {
+        PlayResult(
+            timedOut ? "TIME OVER" : "FAIL",
+            new Color(1f, 0.08f, 0.08f),
+            FailureFlashAlpha,
+            callback);
+    }
+
+    private void PlayResult(
+        string message,
+        Color flashColor,
+        float flashAlpha,
+        Action callback)
+    {
+        if (!enabled)
+        {
+            callback?.Invoke();
+            return;
+        }
+
+        ResetFeedback();
+        StartCoroutine(ResultFeedback(
+            message,
+            flashColor,
+            flashAlpha,
+            callback));
     }
 
     private void OnDisable()
@@ -177,20 +224,83 @@ public sealed class MiniGameFeedbackEffect : MonoBehaviour
         comboGhostText.color = Color.clear;
         comboGhostText.raycastTarget = false;
 
+        GameObject clearObject = Instantiate(comboObject, canvasRoot);
+        clearObject.name = "ClearText";
+        clearText = clearObject.GetComponent<TMP_Text>();
+        clearText.text = "CLEAR";
+        clearText.color = Color.clear;
+        clearText.fontSize = 72f;
+        clearText.raycastTarget = false;
+        clearText.rectTransform.anchoredPosition = Vector2.zero;
+        clearText.rectTransform.sizeDelta = new Vector2(600f, 140f);
+
         TMP_Text[] sourceTexts = GetComponentsInChildren<TMP_Text>(true);
         for (int i = 0; i < sourceTexts.Length; i++)
         {
-            if (sourceTexts[i] == comboText)
+            if (sourceTexts[i] == comboText ||
+                sourceTexts[i] == comboGhostText ||
+                sourceTexts[i] == clearText)
                 continue;
 
             comboText.font = sourceTexts[i].font;
             comboGhostText.font = sourceTexts[i].font;
+            clearText.font = sourceTexts[i].font;
             break;
         }
 
         flashObject.transform.SetAsLastSibling();
         ghostObject.transform.SetAsLastSibling();
         comboObject.transform.SetAsLastSibling();
+        clearObject.transform.SetAsLastSibling();
+    }
+
+    private IEnumerator ResultFeedback(
+        string message,
+        Color flashColor,
+        float flashAlpha,
+        Action callback)
+    {
+        feedbackCanvasGroup.blocksRaycasts = false;
+        feedbackCanvasGroup.interactable = false;
+        clearText.text = message;
+
+        float elapsed = 0f;
+        while (elapsed < ClearFadeInDuration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = Mathf.Clamp01(elapsed / ClearFadeInDuration);
+            float eased = 1f - Mathf.Pow(1f - progress, 3f);
+            clearText.color = new Color(0f, 0f, 0f, eased);
+            clearText.rectTransform.localScale = Vector3.one *
+                Mathf.Lerp(0.75f, ClearPeakScale, eased);
+            flashImage.color = new Color(
+                flashColor.r,
+                flashColor.g,
+                flashColor.b,
+                Mathf.Sin(progress * Mathf.PI) * flashAlpha);
+            yield return null;
+        }
+
+        clearText.color = Color.black;
+        clearText.rectTransform.localScale = Vector3.one * ClearPeakScale;
+        flashImage.color = Color.clear;
+        yield return new WaitForSeconds(ClearHoldDuration);
+
+        elapsed = 0f;
+        while (elapsed < ClearFadeOutDuration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = Mathf.Clamp01(elapsed / ClearFadeOutDuration);
+            float alpha = 1f - progress;
+            clearText.color = new Color(0f, 0f, 0f, alpha);
+            feedbackCanvasGroup.alpha = alpha;
+            yield return null;
+        }
+
+        clearText.color = Color.clear;
+        flashImage.color = Color.clear;
+        feedbackCanvasGroup.alpha = 0f;
+        callback?.Invoke();
     }
 
     private void RestartFeedback(IEnumerator routine)
@@ -392,6 +502,12 @@ public sealed class MiniGameFeedbackEffect : MonoBehaviour
         comboText.rectTransform.anchoredPosition = new Vector2(0f, -120f);
         comboText.rectTransform.localRotation = Quaternion.identity;
         comboText.characterSpacing = 0f;
+
+        if (clearText != null)
+        {
+            clearText.color = Color.clear;
+            clearText.rectTransform.localScale = Vector3.one;
+        }
 
         if (comboGhostText == null)
             return;

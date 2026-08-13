@@ -140,6 +140,21 @@ public abstract class MiniGameBase : MonoBehaviour
             studyRewardOverride,
             nextDayStudyMultiplier);
 
+        if (endReason == MiniGameEndReason.Success)
+        {
+            GetFeedbackEffect().PlayClear(() => CompleteFinish(result));
+            return;
+        }
+
+        if (endReason == MiniGameEndReason.Failure ||
+            endReason == MiniGameEndReason.Timeout)
+        {
+            GetFeedbackEffect().PlayFailure(
+                endReason == MiniGameEndReason.Timeout,
+                () => CompleteFinish(result));
+            return;
+        }
+
         float remainingFeedbackTime = Mathf.Max(
             0f,
             finishFeedbackEndsAt - Time.time);
