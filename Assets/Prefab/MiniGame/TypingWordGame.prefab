@@ -1020,7 +1020,7 @@ MonoBehaviour:
   inputField: {fileID: 2464396731706336991}
   dayDifficulties:
   - startDay: 1
-    totalQuestionCount: 10
+    totalQuestionCount: 5
     allowedMistakes: 3
     words:
     - apple

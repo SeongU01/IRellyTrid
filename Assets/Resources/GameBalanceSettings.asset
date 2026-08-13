@@ -18,7 +18,7 @@ MonoBehaviour:
   eyeRecoveryPerSpace: 2
   closedEyeDamageInterval: 5
   studyAmountPerMiniGame: 5
-  fatiguePerSecond: 0.5
+  fatiguePerSecond: 0.3
   normalMiniGamesPerDay: 5
   failureHealthDamage: 1
   timeoutHealthDamage: 1
