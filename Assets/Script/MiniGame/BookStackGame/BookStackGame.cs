@@ -10,6 +10,14 @@ public class BookStackGame : MiniGameBase
     [SerializeField] private TMP_Text progressText;
     [SerializeField] private TMP_Text resultText;
 
+    private const int TargetRingTextureSize = 128;
+    private const float TargetRingScale = 1.35f;
+    private const float TargetRingThickness = 7f;
+
+    private Image targetRingImage;
+    private Sprite targetRingSprite;
+    private Texture2D targetRingTexture;
+
     [Header("Book Spawn")]
     [SerializeField] private Transform bookRoot;
     [SerializeField] private Transform pileCenter;
@@ -87,8 +95,10 @@ public class BookStackGame : MiniGameBase
 
         if (targetImage != null)
         {
+            EnsureTargetRing();
             targetImage.sprite = null;
             targetImage.enabled = false;
+            targetRingImage.enabled = false;
         }
 
         if (Stages != null &&
@@ -310,6 +320,10 @@ private BookData GetNextTargetBook()
             targetImage.color = Color.white;
             targetImage.preserveAspect = true;
             targetImage.enabled = true;
+
+            EnsureTargetRing();
+            UpdateTargetRingSize(targetBook.sprite);
+            targetRingImage.enabled = true;
         }
 
         if (progressText != null)
@@ -907,9 +921,137 @@ private BookData GetNextTargetBook()
         placedBooks.Clear();
     }
 
+    private void EnsureTargetRing()
+    {
+        if (targetRingImage != null || targetImage == null)
+            return;
+
+        GameObject ringObject = new GameObject(
+            "TargetBookRing",
+            typeof(RectTransform),
+            typeof(CanvasRenderer),
+            typeof(Image));
+        ringObject.layer = targetImage.gameObject.layer;
+
+        RectTransform ringRect =
+            ringObject.GetComponent<RectTransform>();
+        ringRect.SetParent(targetImage.rectTransform, false);
+        ringRect.anchorMin = new Vector2(0.5f, 0.5f);
+        ringRect.anchorMax = new Vector2(0.5f, 0.5f);
+        ringRect.anchoredPosition = Vector2.zero;
+        ringRect.pivot = new Vector2(0.5f, 0.5f);
+
+        targetRingImage = ringObject.GetComponent<Image>();
+        targetRingImage.sprite = CreateTargetRingSprite();
+        targetRingImage.color = Color.white;
+        targetRingImage.preserveAspect = true;
+        targetRingImage.raycastTarget = false;
+        targetRingImage.enabled = false;
+    }
+
+    private void UpdateTargetRingSize(Sprite targetSprite)
+    {
+        if (targetRingImage == null || targetSprite == null)
+            return;
+
+        RectTransform targetRect = targetImage.rectTransform;
+        Vector2 availableSize = targetRect.rect.size;
+
+        if (availableSize.x <= 0f || availableSize.y <= 0f)
+            availableSize = targetRect.sizeDelta;
+
+        float spriteAspect =
+            targetSprite.rect.width / targetSprite.rect.height;
+        float availableAspect = availableSize.x / availableSize.y;
+        Vector2 displayedSize;
+
+        if (spriteAspect > availableAspect)
+        {
+            displayedSize = new Vector2(
+                availableSize.x,
+                availableSize.x / spriteAspect);
+        }
+        else
+        {
+            displayedSize = new Vector2(
+                availableSize.y * spriteAspect,
+                availableSize.y);
+        }
+
+        float diameter =
+            Mathf.Max(displayedSize.x, displayedSize.y) * TargetRingScale;
+        targetRingImage.rectTransform.sizeDelta =
+            new Vector2(diameter, diameter);
+    }
+
+    private Sprite CreateTargetRingSprite()
+    {
+        targetRingTexture = new Texture2D(
+            TargetRingTextureSize,
+            TargetRingTextureSize,
+            TextureFormat.RGBA32,
+            false);
+        targetRingTexture.name = "TargetBookRingTexture";
+        targetRingTexture.filterMode = FilterMode.Bilinear;
+        targetRingTexture.wrapMode = TextureWrapMode.Clamp;
+
+        Color32[] pixels =
+            new Color32[TargetRingTextureSize * TargetRingTextureSize];
+        float center = (TargetRingTextureSize - 1) * 0.5f;
+        float outerRadius = center;
+        float innerRadius = outerRadius - TargetRingThickness;
+        float outerSquared = outerRadius * outerRadius;
+        float innerSquared = innerRadius * innerRadius;
+        Color32 ringColor = new Color32(255, 0, 0, 255);
+
+        for (int y = 0; y < TargetRingTextureSize; y++)
+        {
+            for (int x = 0; x < TargetRingTextureSize; x++)
+            {
+                float offsetX = x - center;
+                float offsetY = y - center;
+                float distanceSquared =
+                    offsetX * offsetX + offsetY * offsetY;
+
+                if (distanceSquared <= outerSquared &&
+                    distanceSquared >= innerSquared)
+                {
+                    pixels[y * TargetRingTextureSize + x] = ringColor;
+                }
+            }
+        }
+
+        targetRingTexture.SetPixels32(pixels);
+        targetRingTexture.Apply(false, true);
+
+        targetRingSprite = Sprite.Create(
+            targetRingTexture,
+            new Rect(
+                0f,
+                0f,
+                TargetRingTextureSize,
+                TargetRingTextureSize),
+            new Vector2(0.5f, 0.5f),
+            100f);
+        targetRingSprite.name = "TargetBookRingSprite";
+        return targetRingSprite;
+    }
+
+    private void OnDestroy()
+    {
+        if (targetRingSprite != null)
+            Destroy(targetRingSprite);
+
+        if (targetRingTexture != null)
+            Destroy(targetRingTexture);
+    }
+
     protected override void OnEnd()
     {
         ClearAllBooks();
+
+        if (targetRingImage != null)
+            targetRingImage.enabled = false;
 
 #if UNITY_EDITOR
         Debug.Log("책 찾기 미니게임 종료");
