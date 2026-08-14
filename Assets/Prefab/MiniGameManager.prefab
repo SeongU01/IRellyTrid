@@ -369,6 +369,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameFlowController
   miniGameManager: {fileID: 1115584121351177930}
   startNewGameOnStart: 1
+  outOfHealthEndingScene: BadEnding_OutOfHp
+  lowStudyEndingScene: BadEnding_LackOfStudy
+  goodEndingScene: GoodEnding
 --- !u!114 &6739251840274613308
 MonoBehaviour:
   m_ObjectHideFlags: 0

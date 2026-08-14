@@ -27,6 +27,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Endings/BadEnd_LackOfStudy/BadEnding_LackOfStudy.unity
     guid: 564a749560206b847865a3ec9a3580c7
   - enabled: 1
+    path: Assets/Scenes/Endings/GoodEnd&EndingScroll/GoodEnding.unity
+    guid: a1e5cb9f106d72a4cbff04a228a4f766
+  - enabled: 1
     path: Assets/Scenes/Endings/GoodEnd&EndingScroll/EndingCreditScene.unity
     guid: 80e4ba38ac599da438f1faa02b93823d
   m_configObjects:
