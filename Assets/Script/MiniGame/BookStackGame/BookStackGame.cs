@@ -226,44 +226,79 @@ private BookData GetNextTargetBook()
 
         stageBooks.Add((targetBook, true));
 
-        for (int i = 0; i < similarBookCount; i++)
-        {
-            CollectAvailableAssetVariants(
-                SimilarBooks,
-                availableAssetVariants);
-            BookAssetVariant selectedVariant =
-                availableAssetVariants[
-                    Random.Range(0, availableAssetVariants.Count)];
-            BookData selectedSimilarBook =
-                GetMatchingSimilarBook(
-                    targetBook,
-                    selectedVariant);
+        bool requiresUniqueBooks =
+            CurrentDay >= 6 &&
+            CurrentDay <= 9 &&
+            AssetVariant == MiniGameAssetVariant.Second;
 
-            stageBooks.Add((selectedSimilarBook, false));
+        if (requiresUniqueBooks)
+        {
+            HashSet<Sprite> usedSprites =
+                new HashSet<Sprite> { targetBook.sprite };
+            List<BookData> uniqueSimilarBooks =
+                GetUniqueMatchingSimilarBooks(
+                    targetBook,
+                    similarBookCount,
+                    usedSprites);
+
+            for (int i = 0; i < uniqueSimilarBooks.Count; i++)
+            {
+                stageBooks.Add((uniqueSimilarBooks[i], false));
+            }
+
+            normalBookCount = bookCount - stageBooks.Count;
+            List<BookData> uniqueNormalBooks =
+                GetRandomUniqueBooks(
+                    NormalBooks,
+                    normalBookCount,
+                    usedSprites);
+
+            for (int i = 0; i < uniqueNormalBooks.Count; i++)
+            {
+                stageBooks.Add((uniqueNormalBooks[i], false));
+            }
+        }
+        else
+        {
+            for (int i = 0; i < similarBookCount; i++)
+            {
+                CollectAvailableAssetVariants(
+                    SimilarBooks,
+                    availableAssetVariants);
+                BookAssetVariant selectedVariant =
+                    availableAssetVariants[
+                        Random.Range(0, availableAssetVariants.Count)];
+                BookData selectedSimilarBook =
+                    GetMatchingSimilarBook(
+                        targetBook,
+                        selectedVariant);
+
+                stageBooks.Add((selectedSimilarBook, false));
+            }
+
+            List<BookData> selectedNormalBooks =
+                GetRandomBooksAllowingRepeats(
+                    NormalBooks,
+                    normalBookCount,
+                    targetBook.sprite,
+                    matchingSimilarBook.sprite);
+
+            for (int i = 0; i < selectedNormalBooks.Count; i++)
+            {
+                stageBooks.Add((selectedNormalBooks[i], false));
+            }
         }
 
-        List<BookData> selectedNormalBooks =
-            GetRandomBooksAllowingRepeats(
-                NormalBooks,
-                normalBookCount,
-                targetBook.sprite,
-                matchingSimilarBook.sprite);
-
-        if (selectedNormalBooks.Count < normalBookCount)
+        if (stageBooks.Count < bookCount)
         {
 #if UNITY_EDITOR
             Debug.LogError(
-                $"사용 가능한 일반책이 없습니다. " +
-                $"필요: {normalBookCount}, " +
-                $"사용 가능: {selectedNormalBooks.Count}");
+                $"사용 가능한 서로 다른 책이 부족합니다. " +
+                $"필요: {bookCount}, " +
+                $"사용 가능: {stageBooks.Count}");
 #endif
             Fail();
             return;
-        }
-
-        for (int i = 0; i < selectedNormalBooks.Count; i++)
-        {
-            stageBooks.Add((selectedNormalBooks[i], false));
         }
 
         Shuffle(stageBooks);
@@ -614,6 +649,101 @@ private BookData GetNextTargetBook()
                 previousSprite);
 
             selectedBooks.Add(candidates[selectedIndex]);
+        }
+
+        return selectedBooks;
+    }
+
+    private List<BookData> GetUniqueMatchingSimilarBooks(
+        BookData targetBook,
+        int count,
+        HashSet<Sprite> usedSprites)
+    {
+        List<BookData> candidates = new List<BookData>();
+        HashSet<Sprite> candidateSprites =
+            new HashSet<Sprite>();
+
+        CollectAvailableAssetVariants(
+            SimilarBooks,
+            availableAssetVariants);
+
+        for (int i = 0; i < availableAssetVariants.Count; i++)
+        {
+            BookData book = GetMatchingSimilarBook(
+                targetBook,
+                availableAssetVariants[i]);
+
+            if (book != null &&
+                book.sprite != null &&
+                !usedSprites.Contains(book.sprite) &&
+                candidateSprites.Add(book.sprite))
+            {
+                candidates.Add(book);
+            }
+        }
+
+        Shuffle(candidates);
+
+        if (candidates.Count > count)
+        {
+            candidates.RemoveRange(
+                count,
+                candidates.Count - count);
+        }
+
+        for (int i = 0; i < candidates.Count; i++)
+        {
+            usedSprites.Add(candidates[i].sprite);
+        }
+
+        return candidates;
+    }
+
+    private List<BookData> GetRandomUniqueBooks(
+        BookData[] books,
+        int count,
+        HashSet<Sprite> usedSprites)
+    {
+        List<BookData> candidates = new List<BookData>();
+        List<BookData> selectedBooks =
+            new List<BookData>(Mathf.Max(0, count));
+        HashSet<Sprite> candidateSprites =
+            new HashSet<Sprite>();
+
+        if (books == null || count <= 0)
+            return selectedBooks;
+
+        for (int i = 0; i < books.Length; i++)
+        {
+            BookData book = books[i];
+
+            if (book != null &&
+                book.sprite != null &&
+                !usedSprites.Contains(book.sprite) &&
+                candidateSprites.Add(book.sprite))
+            {
+                candidates.Add(book);
+            }
+        }
+
+        while (candidates.Count > 0 &&
+               selectedBooks.Count < count)
+        {
+            CollectAvailableAssetVariants(
+                candidates,
+                availableAssetVariants);
+            BookAssetVariant selectedVariant =
+                availableAssetVariants[
+                    Random.Range(0, availableAssetVariants.Count)];
+            int selectedIndex = GetRandomBookIndexForVariant(
+                candidates,
+                selectedVariant,
+                null);
+            BookData selectedBook = candidates[selectedIndex];
+
+            selectedBooks.Add(selectedBook);
+            usedSprites.Add(selectedBook.sprite);
+            candidates.RemoveAt(selectedIndex);
         }
 
         return selectedBooks;

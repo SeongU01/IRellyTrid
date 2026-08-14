@@ -332,158 +332,158 @@ MonoBehaviour:
       similarBookCount: 8
     targetBooks:
     - bookName: base red target
-      sprite: {fileID: 641515894465698295, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 1435828783557995741, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: base green target
-      sprite: {fileID: -2939801824191070668, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 4108817079192242787, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: base blue target
-      sprite: {fileID: -520590931183156557, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 9095600655167281062, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: base yellow target
-      sprite: {fileID: -5403917745769237638, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 7390394593757130286, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: base purple target
-      sprite: {fileID: 2559111868862132359, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: -7605340300789077153, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: tri red green purple target
-      sprite: {fileID: -738103391432083122, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 3050070070491024629, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 1
     - bookName: tri purple blue yellow target
-      sprite: {fileID: 106134801540683738, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: -3598981935892353705, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 1
     - bookName: tri green red purple target
-      sprite: {fileID: -8854379742309560046, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: -4072464428706740975, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 1
     - bookName: tri blue purple red target
-      sprite: {fileID: -3267578286498063631, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 699115866262992936, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 1
     - bookName: tri red blue green target
-      sprite: {fileID: 1064577221664577468, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: -1713566221008592177, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 1
     - bookName: tri green yellow blue target
-      sprite: {fileID: 6290938016758610477, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 5949446546451060993, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 1
     - bookName: broken red green target
-      sprite: {fileID: 4670647353985871314, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: -1012338745404058201, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 2
     - bookName: broken yellow red target
-      sprite: {fileID: -736281945102334871, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: -2094532649854506530, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 2
     - bookName: broken purple green target
-      sprite: {fileID: 8257821236834786648, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 3779692761724416548, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 2
     similarBooks:
     - bookName: base red similar
-      sprite: {fileID: -6540123201979456734, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 7615230558541289926, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: base green similar
-      sprite: {fileID: 1071377053553539095, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 1107623319465200580, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: base blue similar
-      sprite: {fileID: -4980295634984467156, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 3546790759260716857, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: base yellow similar
-      sprite: {fileID: -8656567730949352908, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 5839436183001105858, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: base purple similar
-      sprite: {fileID: -2827988951304207363, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: -5900377294999953479, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: tri red green purple similar
-      sprite: {fileID: 1423615415337032557, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: -6372509333861244043, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 1
     - bookName: tri purple blue yellow similar
-      sprite: {fileID: -2972096663633545671, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: -3208682158158114013, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 1
     - bookName: tri green red purple similar
-      sprite: {fileID: -6440653908834531886, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 5825523024495078503, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 1
     - bookName: tri blue purple red similar
-      sprite: {fileID: -2219827665139283972, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 7524093528142399950, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 1
     - bookName: tri red blue green similar
-      sprite: {fileID: -2222134433696023130, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: -4421088311622901431, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 1
     - bookName: tri green yellow blue similar
-      sprite: {fileID: 2348301873828039288, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 7773478191996699306, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 1
     - bookName: broken red green similar
-      sprite: {fileID: 4670647353985871314, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: -1012338745404058201, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 2
     - bookName: broken yellow red similar
-      sprite: {fileID: -736281945102334871, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: -2094532649854506530, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 2
     - bookName: broken purple green similar
-      sprite: {fileID: 8257821236834786648, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 3779692761724416548, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 2
     normalBooks:
     - bookName: base red normal
-      sprite: {fileID: -6540123201979456734, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 7615230558541289926, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: base green normal
-      sprite: {fileID: 1071377053553539095, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 1107623319465200580, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: base blue normal
-      sprite: {fileID: -4980295634984467156, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 3546790759260716857, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: base yellow normal
-      sprite: {fileID: -8656567730949352908, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 5839436183001105858, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: base purple normal
-      sprite: {fileID: -2827988951304207363, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: -5900377294999953479, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: tri red green purple normal
-      sprite: {fileID: 1423615415337032557, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: -6372509333861244043, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 1
     - bookName: tri purple blue yellow normal
-      sprite: {fileID: -2972096663633545671, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: -3208682158158114013, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 1
     - bookName: tri green red purple normal
-      sprite: {fileID: -6440653908834531886, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 5825523024495078503, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 1
     - bookName: tri blue purple red normal
-      sprite: {fileID: -2219827665139283972, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 7524093528142399950, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 1
     - bookName: tri red blue green normal
-      sprite: {fileID: -2222134433696023130, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: -4421088311622901431, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 1
     - bookName: tri green yellow blue normal
-      sprite: {fileID: 2348301873828039288, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 7773478191996699306, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 1
     - bookName: broken yellow red normal
-      sprite: {fileID: -736281945102334871, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: -2094532649854506530, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 2
     - bookName: broken purple green normal
-      sprite: {fileID: 8257821236834786648, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: 3779692761724416548, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 2
     - bookName: broken red green normal
-      sprite: {fileID: 4670647353985871314, guid: 05d30de09fd46b54080c88e7b3ac226e, type: 3}
+      sprite: {fileID: -1012338745404058201, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
       assetVariant: 2
 --- !u!1 &3992371351044713968
