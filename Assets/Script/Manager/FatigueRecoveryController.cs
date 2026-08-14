@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -96,7 +97,18 @@ public sealed class FatigueRecoveryController : MonoBehaviour
             performedBonusGames,
             requestedRecovery,
             actualRecovery);
-        daySystem.BeginSettlement();
+        StartCoroutine(BeginSettlementNextFrame());
+    }
+
+    private IEnumerator BeginSettlementNextFrame()
+    {
+        yield return null;
+
+        if (daySystem != null &&
+            daySystem.CurrentPhase == DayPhase.Recovery)
+        {
+            daySystem.BeginSettlement();
+        }
     }
 
     private static float GetRecoveryAmount(

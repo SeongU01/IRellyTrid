@@ -44,23 +44,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0de4318ce623464091764e750cb08d71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MemoryDefenseMiniGame
-  gameAreaCenter: {x: -1.53, y: -1.39}
+  arenaSprite: {fileID: 5428447144756058908, guid: d55a742c0f523d345b3a78a5b7f024b9, type: 3}
+  gameAreaCenter: {x: -1.552, y: -1.412}
   arenaRadius: 3
   arenaColor: {r: 0, g: 0, b: 0, a: 1}
   circleResolution: 128
+  arenaSpriteCircleCenterPixels: {x: 49.093, y: 80.633}
+  arenaSpriteCircleRadiusPixels: 48.102
+  showArenaBoundary: 0
+  arenaBoundaryColor: {r: 1, g: 0, b: 0, a: 1}
+  arenaBoundaryWidth: 0.06
   objectCount: 5
   objectSize: 0.55
   moveSpeed: 0.5
   spawnRadius: 1.6
   objectVisuals:
-  - sprite: {fileID: 0}
-    color: {r: 0.95, g: 0.2, b: 0.2, a: 1}
-  - sprite: {fileID: 0}
-    color: {r: 1, g: 0.75, b: 0.15, a: 1}
-  - sprite: {fileID: 0}
-    color: {r: 0.25, g: 0.85, b: 0.35, a: 1}
-  - sprite: {fileID: 0}
-    color: {r: 0.15, g: 0.7, b: 1, a: 1}
-  - sprite: {fileID: 0}
-    color: {r: 0.85, g: 0.25, b: 0.9, a: 1}
+  - sprite: {fileID: -4872909381894923442, guid: d55a742c0f523d345b3a78a5b7f024b9, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - sprite: {fileID: 2367850298349266750, guid: d55a742c0f523d345b3a78a5b7f024b9, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - sprite: {fileID: -1517840448282344176, guid: d55a742c0f523d345b3a78a5b7f024b9, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - sprite: {fileID: 6538683782596783461, guid: d55a742c0f523d345b3a78a5b7f024b9, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - sprite: {fileID: -2202476171171633374, guid: d55a742c0f523d345b3a78a5b7f024b9, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 1}
   studyAmountPerRemainingObject: 3

@@ -46,53 +46,76 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SortingMiniGame
   categories:
   - categoryName: 'Red Book '
-    sprite: {fileID: 1366527573880512774, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    sprite: {fileID: 4100000000, guid: 62ab6a8e91bee0d4f888bfe8033b8721, type: 3}
     side: 0
     fallbackColor: {r: 0.9, g: 0.2, b: 0.2, a: 1}
   - categoryName: Blue Book
-    sprite: {fileID: -4071971341558429721, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    sprite: {fileID: 4100000001, guid: 62ab6a8e91bee0d4f888bfe8033b8721, type: 3}
     side: 0
     fallbackColor: {r: 0.2, g: 0.55, b: 1, a: 1}
   - categoryName: Green Book
-    sprite: {fileID: -4374148534507691916, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    sprite: {fileID: 4100000002, guid: 62ab6a8e91bee0d4f888bfe8033b8721, type: 3}
     side: 0
     fallbackColor: {r: 0.2, g: 0.8, b: 0.35, a: 1}
   - categoryName: Yellow Book
-    sprite: {fileID: 7609929014179203873, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    sprite: {fileID: 4100000006, guid: 62ab6a8e91bee0d4f888bfe8033b8721, type: 3}
     side: 0
     fallbackColor: {r: 1, g: 0.78, b: 0.15, a: 1}
   - categoryName: Purple Book
-    sprite: {fileID: 1670887986194150747, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    sprite: {fileID: 4100000007, guid: 62ab6a8e91bee0d4f888bfe8033b8721, type: 3}
     side: 0
     fallbackColor: {r: 0.68, g: 0.32, b: 0.9, a: 1}
   - categoryName: Sky Blue Book
-    sprite: {fileID: -4379745792269421496, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    sprite: {fileID: 4100000008, guid: 62ab6a8e91bee0d4f888bfe8033b8721, type: 3}
     side: 0
     fallbackColor: {r: 0, g: 0.79861975, b: 1, a: 1}
   - categoryName: Thoughts Gray
-    sprite: {fileID: -5583075258553400380, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    sprite: {fileID: 4200000000, guid: a48562547e3ae324084d8504e0c744c5, type: 3}
     side: 1
     fallbackColor: {r: 0.4433962, g: 0.4433962, b: 0.4433962, a: 1}
   - categoryName: Thoughts White
-    sprite: {fileID: -6510611926890318666, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    sprite: {fileID: 4200000001, guid: a48562547e3ae324084d8504e0c744c5, type: 3}
     side: 1
     fallbackColor: {r: 1, g: 1, b: 1, a: 1}
   - categoryName: Phone Gray
-    sprite: {fileID: 3760474259338998123, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    sprite: {fileID: 4200000002, guid: a48562547e3ae324084d8504e0c744c5, type: 3}
     side: 1
     fallbackColor: {r: 1, g: 1, b: 1, a: 1}
   - categoryName: Phone White
-    sprite: {fileID: 6387894621835580202, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    sprite: {fileID: 4200000003, guid: a48562547e3ae324084d8504e0c744c5, type: 3}
     side: 1
     fallbackColor: {r: 1, g: 1, b: 1, a: 1}
   - categoryName: GamePad Gray
-    sprite: {fileID: -510101428137021611, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    sprite: {fileID: 4200000007, guid: a48562547e3ae324084d8504e0c744c5, type: 3}
     side: 1
     fallbackColor: {r: 1, g: 1, b: 1, a: 1}
   - categoryName: GamePad White
-    sprite: {fileID: -2887585721190980885, guid: f0693d65d3408ef4fac1b0c4c7db3de1, type: 3}
+    sprite: {fileID: 4200000008, guid: a48562547e3ae324084d8504e0c744c5, type: 3}
     side: 1
     fallbackColor: {r: 1, g: 1, b: 1, a: 1}
+  firstBookSprites:
+  - {fileID: 4100000003, guid: 62ab6a8e91bee0d4f888bfe8033b8721, type: 3}
+  - {fileID: 4100000004, guid: 62ab6a8e91bee0d4f888bfe8033b8721, type: 3}
+  - {fileID: 4100000005, guid: 62ab6a8e91bee0d4f888bfe8033b8721, type: 3}
+  - {fileID: 4100000009, guid: 62ab6a8e91bee0d4f888bfe8033b8721, type: 3}
+  - {fileID: 4100000010, guid: 62ab6a8e91bee0d4f888bfe8033b8721, type: 3}
+  - {fileID: 4100000011, guid: 62ab6a8e91bee0d4f888bfe8033b8721, type: 3}
+  secondBookSprites:
+  - {fileID: 4100000012, guid: 62ab6a8e91bee0d4f888bfe8033b8721, type: 3}
+  - {fileID: 4100000013, guid: 62ab6a8e91bee0d4f888bfe8033b8721, type: 3}
+  - {fileID: 4100000014, guid: 62ab6a8e91bee0d4f888bfe8033b8721, type: 3}
+  firstObjectSprites:
+  - {fileID: 4200000004, guid: a48562547e3ae324084d8504e0c744c5, type: 3}
+  - {fileID: 4200000005, guid: a48562547e3ae324084d8504e0c744c5, type: 3}
+  - {fileID: 4200000006, guid: a48562547e3ae324084d8504e0c744c5, type: 3}
+  - {fileID: 4200000009, guid: a48562547e3ae324084d8504e0c744c5, type: 3}
+  - {fileID: 4200000010, guid: a48562547e3ae324084d8504e0c744c5, type: 3}
+  - {fileID: 4200000011, guid: a48562547e3ae324084d8504e0c744c5, type: 3}
+  - {fileID: 4200000012, guid: a48562547e3ae324084d8504e0c744c5, type: 3}
+  secondObjectSprites:
+  - {fileID: 4200000013, guid: a48562547e3ae324084d8504e0c744c5, type: 3}
+  - {fileID: 4200000014, guid: a48562547e3ae324084d8504e0c744c5, type: 3}
+  - {fileID: 4200000015, guid: a48562547e3ae324084d8504e0c744c5, type: 3}
   dayDifficulties:
   - startDay: 1
     categoryIndices: 00000000010000000600000007000000

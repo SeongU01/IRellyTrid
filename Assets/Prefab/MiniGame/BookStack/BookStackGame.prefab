@@ -332,51 +332,51 @@ MonoBehaviour:
       similarBookCount: 8
     targetBooks:
     - bookName: blue real
-      sprite: {fileID: 6484367311293896999, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      sprite: {fileID: 9095600655167281062, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: purple real
-      sprite: {fileID: -4663605349952217464, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      sprite: {fileID: -7605340300789077153, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: red real
-      sprite: {fileID: -7510780546159189663, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      sprite: {fileID: 1435828783557995741, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: yellow real
-      sprite: {fileID: 6885672102793965255, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      sprite: {fileID: 7390394593757130286, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: green real
-      sprite: {fileID: 5047418745436979862, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      sprite: {fileID: 4108817079192242787, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     similarBooks:
     - bookName: blue fake
-      sprite: {fileID: 8132980423974828169, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      sprite: {fileID: 3546790759260716857, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: purple fake
-      sprite: {fileID: 5312912139055977644, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      sprite: {fileID: -5900377294999953479, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: red fake
-      sprite: {fileID: -5602419011165289409, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      sprite: {fileID: 7615230558541289926, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: yellow fake
-      sprite: {fileID: -496635955759009926, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      sprite: {fileID: 5839436183001105858, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: green fake
-      sprite: {fileID: -8579321501892443735, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      sprite: {fileID: 1107623319465200580, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     normalBooks:
     - bookName: blue normal
-      sprite: {fileID: 8132980423974828169, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      sprite: {fileID: 3546790759260716857, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: purple normal
-      sprite: {fileID: 5312912139055977644, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      sprite: {fileID: -5900377294999953479, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: red normal
-      sprite: {fileID: -5602419011165289409, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      sprite: {fileID: 7615230558541289926, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: yellow normal
-      sprite: {fileID: -496635955759009926, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      sprite: {fileID: 5839436183001105858, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
     - bookName: green normal
-      sprite: {fileID: -8579321501892443735, guid: a8662ffcc72cf1b4888d40cc6c6d84a7, type: 3}
+      sprite: {fileID: 1107623319465200580, guid: 58d7aef6b8a94024d88601671cfad4d8, type: 3}
       color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &3992371351044713968
 GameObject:
@@ -813,12 +813,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96

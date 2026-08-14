@@ -3,10 +3,49 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class MathQuizGame : MiniGameBase
 {
+    private static readonly Key[] NumberRowKeys =
+    {
+        Key.Digit0,
+        Key.Digit1,
+        Key.Digit2,
+        Key.Digit3,
+        Key.Digit4,
+        Key.Digit5,
+        Key.Digit6,
+        Key.Digit7,
+        Key.Digit8,
+        Key.Digit9
+    };
+
+    private static readonly Key[] NumpadKeys =
+    {
+        Key.Numpad0,
+        Key.Numpad1,
+        Key.Numpad2,
+        Key.Numpad3,
+        Key.Numpad4,
+        Key.Numpad5,
+        Key.Numpad6,
+        Key.Numpad7,
+        Key.Numpad8,
+        Key.Numpad9
+    };
+
     [Header("UI")]
+    [SerializeField] private Image noteImage;
+    [SerializeField] private Sprite baseNoteSprite;
+    [SerializeField] private Sprite firstVariantNoteSprite;
+    [SerializeField] private Sprite secondVariantNoteSprite;
+    [SerializeField] private Vector2 baseAnswerPosition =
+        new Vector2(-272.58f, -279.58f);
+    [SerializeField] private Vector2 firstVariantAnswerPosition =
+        new Vector2(-262.21f, -260.06f);
+    [SerializeField] private Vector2 secondVariantAnswerPosition =
+        new Vector2(-261.74f, -260.78f);
     [SerializeField] private TMP_Text questionText;
     [SerializeField] private TMP_Text progressText;
     [FormerlySerializedAs("inputText")]
@@ -30,6 +69,8 @@ public class MathQuizGame : MiniGameBase
 
     protected override void OnStart()
     {
+        ApplyNoteSprite();
+
         currentDifficulty =
             DayDifficultySelector.GetForDay(
                 dayDifficulties,
@@ -66,6 +107,27 @@ public class MathQuizGame : MiniGameBase
 #endif
     }
 
+    private void ApplyNoteSprite()
+    {
+        if (noteImage == null)
+            return;
+
+        (Sprite selectedSprite, Vector2 answerPosition) = AssetVariant switch
+        {
+            MiniGameAssetVariant.First =>
+                (firstVariantNoteSprite, firstVariantAnswerPosition),
+            MiniGameAssetVariant.Second =>
+                (secondVariantNoteSprite, secondVariantAnswerPosition),
+            _ => (baseNoteSprite, baseAnswerPosition)
+        };
+
+        if (selectedSprite != null)
+            noteImage.sprite = selectedSprite;
+
+        if (answerText != null)
+            answerText.rectTransform.anchoredPosition = answerPosition;
+    }
+
     private void Update()
     {
         if (!IsPlaying)
@@ -92,20 +154,18 @@ public class MathQuizGame : MiniGameBase
 
         for (int i = 0; i <= 9; i++)
         {
-            Key key = (Key)((int)Key.Digit0 + i);
-
-            if (keyboard[key].wasPressedThisFrame)
+            if (keyboard[NumberRowKeys[i]].wasPressedThisFrame)
             {
                 currentInput += i.ToString();
+                GameAudioManager.PlayTyping();
                 UpdateInputText();
                 return;
             }
 
-            Key numpadKey = (Key)((int)Key.Numpad0 + i);
-
-            if (keyboard[numpadKey].wasPressedThisFrame)
+            if (keyboard[NumpadKeys[i]].wasPressedThisFrame)
             {
                 currentInput += i.ToString();
+                GameAudioManager.PlayTyping();
                 UpdateInputText();
                 return;
             }
@@ -127,6 +187,7 @@ public class MathQuizGame : MiniGameBase
             0,
             currentInput.Length - 1);
 
+        GameAudioManager.PlayTyping();
         UpdateInputText();
     }
 
@@ -151,6 +212,7 @@ public class MathQuizGame : MiniGameBase
 
         if (playerAnswer != correctAnswer)
         {
+            ShowWrongFeedback();
             mistakeCount++;
 
             if (resultText != null)
@@ -169,6 +231,8 @@ public class MathQuizGame : MiniGameBase
             UpdateInputText();
             return;
         }
+
+        ShowCorrectFeedback();
 
         if (resultText != null)
         {

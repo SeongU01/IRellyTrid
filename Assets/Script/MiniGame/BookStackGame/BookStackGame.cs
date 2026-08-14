@@ -10,6 +10,14 @@ public class BookStackGame : MiniGameBase
     [SerializeField] private TMP_Text progressText;
     [SerializeField] private TMP_Text resultText;
 
+    private const int TargetRingTextureSize = 128;
+    private const float TargetRingScale = 1.35f;
+    private const float TargetRingThickness = 7f;
+
+    private Image targetRingImage;
+    private Sprite targetRingSprite;
+    private Texture2D targetRingTexture;
+
     [Header("Book Spawn")]
     [SerializeField] private Transform bookRoot;
     [SerializeField] private Transform pileCenter;
@@ -30,6 +38,9 @@ public class BookStackGame : MiniGameBase
 
     private readonly List<BookData> remainingTargetBooks =
         new List<BookData>();
+
+    private readonly List<BookAssetVariant> availableAssetVariants =
+        new List<BookAssetVariant>();
 
     private int currentStageIndex;
     private int nextSortingOrder;
@@ -84,8 +95,10 @@ public class BookStackGame : MiniGameBase
 
         if (targetImage != null)
         {
+            EnsureTargetRing();
             targetImage.sprite = null;
             targetImage.enabled = false;
+            targetRingImage.enabled = false;
         }
 
         if (Stages != null &&
@@ -145,11 +158,21 @@ private BookData GetNextTargetBook()
         return null;
     }
 
-    int lastIndex = remainingTargetBooks.Count - 1;
-    BookData targetBook =
-        remainingTargetBooks[lastIndex];
+    CollectAvailableAssetVariants(
+        remainingTargetBooks,
+        availableAssetVariants);
 
-    remainingTargetBooks.RemoveAt(lastIndex);
+    BookAssetVariant selectedVariant =
+        availableAssetVariants[
+            Random.Range(0, availableAssetVariants.Count)];
+
+    int selectedIndex = GetRandomBookIndexForVariant(
+        remainingTargetBooks,
+        selectedVariant,
+        null);
+    BookData targetBook = remainingTargetBooks[selectedIndex];
+
+    remainingTargetBooks.RemoveAt(selectedIndex);
     return targetBook;
 }
     private void CreateStage()
@@ -213,32 +236,79 @@ private BookData GetNextTargetBook()
 
         stageBooks.Add((targetBook, true));
 
-        for (int i = 0; i < similarBookCount; i++)
+        bool requiresUniqueBooks =
+            CurrentDay >= 6 &&
+            CurrentDay <= 9 &&
+            AssetVariant == MiniGameAssetVariant.Second;
+
+        if (requiresUniqueBooks)
         {
-            stageBooks.Add((matchingSimilarBook, false));
+            HashSet<Sprite> usedSprites =
+                new HashSet<Sprite> { targetBook.sprite };
+            List<BookData> uniqueSimilarBooks =
+                GetUniqueMatchingSimilarBooks(
+                    targetBook,
+                    similarBookCount,
+                    usedSprites);
+
+            for (int i = 0; i < uniqueSimilarBooks.Count; i++)
+            {
+                stageBooks.Add((uniqueSimilarBooks[i], false));
+            }
+
+            normalBookCount = bookCount - stageBooks.Count;
+            List<BookData> uniqueNormalBooks =
+                GetRandomUniqueBooks(
+                    NormalBooks,
+                    normalBookCount,
+                    usedSprites);
+
+            for (int i = 0; i < uniqueNormalBooks.Count; i++)
+            {
+                stageBooks.Add((uniqueNormalBooks[i], false));
+            }
+        }
+        else
+        {
+            for (int i = 0; i < similarBookCount; i++)
+            {
+                CollectAvailableAssetVariants(
+                    SimilarBooks,
+                    availableAssetVariants);
+                BookAssetVariant selectedVariant =
+                    availableAssetVariants[
+                        Random.Range(0, availableAssetVariants.Count)];
+                BookData selectedSimilarBook =
+                    GetMatchingSimilarBook(
+                        targetBook,
+                        selectedVariant);
+
+                stageBooks.Add((selectedSimilarBook, false));
+            }
+
+            List<BookData> selectedNormalBooks =
+                GetRandomBooksAllowingRepeats(
+                    NormalBooks,
+                    normalBookCount,
+                    targetBook.sprite,
+                    matchingSimilarBook.sprite);
+
+            for (int i = 0; i < selectedNormalBooks.Count; i++)
+            {
+                stageBooks.Add((selectedNormalBooks[i], false));
+            }
         }
 
-        List<BookData> selectedNormalBooks =
-            GetRandomBooksAllowingRepeats(
-                NormalBooks,
-                normalBookCount,
-                matchingSimilarBook.sprite);
-
-        if (selectedNormalBooks.Count < normalBookCount)
+        if (stageBooks.Count < bookCount)
         {
 #if UNITY_EDITOR
             Debug.LogError(
-                $"사용 가능한 일반책이 없습니다. " +
-                $"필요: {normalBookCount}, " +
-                $"사용 가능: {selectedNormalBooks.Count}");
+                $"사용 가능한 서로 다른 책이 부족합니다. " +
+                $"필요: {bookCount}, " +
+                $"사용 가능: {stageBooks.Count}");
 #endif
             Fail();
             return;
-        }
-
-        for (int i = 0; i < selectedNormalBooks.Count; i++)
-        {
-            stageBooks.Add((selectedNormalBooks[i], false));
         }
 
         Shuffle(stageBooks);
@@ -250,6 +320,10 @@ private BookData GetNextTargetBook()
             targetImage.color = Color.white;
             targetImage.preserveAspect = true;
             targetImage.enabled = true;
+
+            EnsureTargetRing();
+            UpdateTargetRingSize(targetBook.sprite);
+            targetRingImage.enabled = true;
         }
 
         if (progressText != null)
@@ -301,6 +375,8 @@ private BookData GetNextTargetBook()
 
         if (!book.IsTarget)
         {
+            ShowWrongFeedback();
+
             if (resultText != null)
             {
                 resultText.text = "X";
@@ -313,6 +389,7 @@ private BookData GetNextTargetBook()
             return;
         }
 
+        ShowCorrectFeedback();
         PlaceTargetBook(book);
         NextStage();
     }
@@ -457,6 +534,17 @@ private BookData GetNextTargetBook()
     private BookData GetMatchingSimilarBook(
         BookData targetBook)
     {
+        return GetMatchingSimilarBook(
+            targetBook,
+            targetBook != null
+                ? targetBook.assetVariant
+                : BookAssetVariant.Base);
+    }
+
+    private BookData GetMatchingSimilarBook(
+        BookData targetBook,
+        BookAssetVariant desiredVariant)
+    {
         if (targetBook == null ||
             TargetBooks == null ||
             SimilarBooks == null)
@@ -464,22 +552,58 @@ private BookData GetNextTargetBook()
             return null;
         }
 
+        int targetVariantIndex = 0;
+
         for (int i = 0; i < TargetBooks.Length; i++)
         {
             BookData registeredTarget = TargetBooks[i];
 
             if (registeredTarget == null ||
-                registeredTarget.sprite != targetBook.sprite)
+                registeredTarget.assetVariant !=
+                targetBook.assetVariant)
             {
                 continue;
             }
 
-            if (i >= SimilarBooks.Length)
+            if (registeredTarget.sprite == targetBook.sprite)
+                break;
+
+            targetVariantIndex++;
+        }
+
+        int desiredVariantCount = 0;
+
+        for (int i = 0; i < SimilarBooks.Length; i++)
+        {
+            BookData similarBook = SimilarBooks[i];
+
+            if (similarBook != null &&
+                similarBook.assetVariant == desiredVariant)
             {
-                return null;
+                desiredVariantCount++;
+            }
+        }
+
+        if (desiredVariantCount == 0)
+            return null;
+
+        int desiredVariantIndex =
+            targetVariantIndex % desiredVariantCount;
+
+        for (int i = 0; i < SimilarBooks.Length; i++)
+        {
+            BookData similarBook = SimilarBooks[i];
+
+            if (similarBook == null ||
+                similarBook.assetVariant != desiredVariant)
+            {
+                continue;
             }
 
-            return SimilarBooks[i];
+            if (desiredVariantIndex == 0)
+                return similarBook;
+
+            desiredVariantIndex--;
         }
 
         return null;
@@ -488,7 +612,8 @@ private BookData GetNextTargetBook()
     private List<BookData> GetRandomBooksAllowingRepeats(
         BookData[] books,
         int count,
-        Sprite excludedSprite)
+        Sprite excludedTargetSprite,
+        Sprite excludedSimilarSprite)
     {
         List<BookData> candidates =
             new List<BookData>();
@@ -509,7 +634,8 @@ private BookData GetNextTargetBook()
 
             if (book == null ||
                 book.sprite == null ||
-                book.sprite == excludedSprite ||
+                book.sprite == excludedTargetSprite ||
+                book.sprite == excludedSimilarSprite ||
                 !addedSprites.Add(book.sprite))
             {
                 continue;
@@ -521,30 +647,215 @@ private BookData GetNextTargetBook()
         while (candidates.Count > 0 &&
                selectedBooks.Count < count)
         {
-            Shuffle(candidates);
+            CollectAvailableAssetVariants(
+                candidates,
+                availableAssetVariants);
 
-            if (selectedBooks.Count > 0 &&
-                candidates.Count > 1 &&
-                selectedBooks[selectedBooks.Count - 1].sprite ==
-                candidates[0].sprite)
-            {
-                int swapIndex = Random.Range(1, candidates.Count);
-                (candidates[0], candidates[swapIndex]) =
-                    (candidates[swapIndex], candidates[0]);
-            }
+            BookAssetVariant selectedVariant =
+                availableAssetVariants[
+                    Random.Range(0, availableAssetVariants.Count)];
+            Sprite previousSprite = selectedBooks.Count > 0
+                ? selectedBooks[selectedBooks.Count - 1].sprite
+                : null;
+            int selectedIndex = GetRandomBookIndexForVariant(
+                candidates,
+                selectedVariant,
+                previousSprite);
 
-            int remainingCount = count - selectedBooks.Count;
-            int addCount = Mathf.Min(
-                remainingCount,
-                candidates.Count);
-
-            for (int i = 0; i < addCount; i++)
-            {
-                selectedBooks.Add(candidates[i]);
-            }
+            selectedBooks.Add(candidates[selectedIndex]);
         }
 
         return selectedBooks;
+    }
+
+    private List<BookData> GetUniqueMatchingSimilarBooks(
+        BookData targetBook,
+        int count,
+        HashSet<Sprite> usedSprites)
+    {
+        List<BookData> candidates = new List<BookData>();
+        HashSet<Sprite> candidateSprites =
+            new HashSet<Sprite>();
+
+        CollectAvailableAssetVariants(
+            SimilarBooks,
+            availableAssetVariants);
+
+        for (int i = 0; i < availableAssetVariants.Count; i++)
+        {
+            BookData book = GetMatchingSimilarBook(
+                targetBook,
+                availableAssetVariants[i]);
+
+            if (book != null &&
+                book.sprite != null &&
+                !usedSprites.Contains(book.sprite) &&
+                candidateSprites.Add(book.sprite))
+            {
+                candidates.Add(book);
+            }
+        }
+
+        Shuffle(candidates);
+
+        if (candidates.Count > count)
+        {
+            candidates.RemoveRange(
+                count,
+                candidates.Count - count);
+        }
+
+        for (int i = 0; i < candidates.Count; i++)
+        {
+            usedSprites.Add(candidates[i].sprite);
+        }
+
+        return candidates;
+    }
+
+    private List<BookData> GetRandomUniqueBooks(
+        BookData[] books,
+        int count,
+        HashSet<Sprite> usedSprites)
+    {
+        List<BookData> candidates = new List<BookData>();
+        List<BookData> selectedBooks =
+            new List<BookData>(Mathf.Max(0, count));
+        HashSet<Sprite> candidateSprites =
+            new HashSet<Sprite>();
+
+        if (books == null || count <= 0)
+            return selectedBooks;
+
+        for (int i = 0; i < books.Length; i++)
+        {
+            BookData book = books[i];
+
+            if (book != null &&
+                book.sprite != null &&
+                !usedSprites.Contains(book.sprite) &&
+                candidateSprites.Add(book.sprite))
+            {
+                candidates.Add(book);
+            }
+        }
+
+        while (candidates.Count > 0 &&
+               selectedBooks.Count < count)
+        {
+            CollectAvailableAssetVariants(
+                candidates,
+                availableAssetVariants);
+            BookAssetVariant selectedVariant =
+                availableAssetVariants[
+                    Random.Range(0, availableAssetVariants.Count)];
+            int selectedIndex = GetRandomBookIndexForVariant(
+                candidates,
+                selectedVariant,
+                null);
+            BookData selectedBook = candidates[selectedIndex];
+
+            selectedBooks.Add(selectedBook);
+            usedSprites.Add(selectedBook.sprite);
+            candidates.RemoveAt(selectedIndex);
+        }
+
+        return selectedBooks;
+    }
+
+    private static void CollectAvailableAssetVariants(
+        List<BookData> books,
+        List<BookAssetVariant> variants)
+    {
+        variants.Clear();
+
+        for (int i = 0; i < books.Count; i++)
+        {
+            BookData book = books[i];
+
+            if (book != null &&
+                !variants.Contains(book.assetVariant))
+            {
+                variants.Add(book.assetVariant);
+            }
+        }
+    }
+
+    private static void CollectAvailableAssetVariants(
+        BookData[] books,
+        List<BookAssetVariant> variants)
+    {
+        variants.Clear();
+
+        if (books == null)
+            return;
+
+        for (int i = 0; i < books.Length; i++)
+        {
+            BookData book = books[i];
+
+            if (book != null &&
+                !variants.Contains(book.assetVariant))
+            {
+                variants.Add(book.assetVariant);
+            }
+        }
+    }
+
+    private static int GetRandomBookIndexForVariant(
+        List<BookData> books,
+        BookAssetVariant variant,
+        Sprite excludedPreviousSprite)
+    {
+        bool hasAlternative = HasAlternativeSprite(
+            books,
+            variant,
+            excludedPreviousSprite);
+        int selectedIndex = -1;
+        int matchingCount = 0;
+
+        for (int i = 0; i < books.Count; i++)
+        {
+            BookData book = books[i];
+
+            if (book == null ||
+                book.assetVariant != variant ||
+                (hasAlternative &&
+                 book.sprite == excludedPreviousSprite))
+            {
+                continue;
+            }
+
+            matchingCount++;
+
+            if (Random.Range(0, matchingCount) == 0)
+                selectedIndex = i;
+        }
+
+        return selectedIndex;
+    }
+
+    private static bool HasAlternativeSprite(
+        List<BookData> books,
+        BookAssetVariant variant,
+        Sprite excludedSprite)
+    {
+        if (excludedSprite == null)
+            return false;
+
+        for (int i = 0; i < books.Count; i++)
+        {
+            BookData book = books[i];
+
+            if (book != null &&
+                book.assetVariant == variant &&
+                book.sprite != excludedSprite)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private BookData GetRandomValidBook(
@@ -610,9 +921,137 @@ private BookData GetNextTargetBook()
         placedBooks.Clear();
     }
 
+    private void EnsureTargetRing()
+    {
+        if (targetRingImage != null || targetImage == null)
+            return;
+
+        GameObject ringObject = new GameObject(
+            "TargetBookRing",
+            typeof(RectTransform),
+            typeof(CanvasRenderer),
+            typeof(Image));
+        ringObject.layer = targetImage.gameObject.layer;
+
+        RectTransform ringRect =
+            ringObject.GetComponent<RectTransform>();
+        ringRect.SetParent(targetImage.rectTransform, false);
+        ringRect.anchorMin = new Vector2(0.5f, 0.5f);
+        ringRect.anchorMax = new Vector2(0.5f, 0.5f);
+        ringRect.anchoredPosition = Vector2.zero;
+        ringRect.pivot = new Vector2(0.5f, 0.5f);
+
+        targetRingImage = ringObject.GetComponent<Image>();
+        targetRingImage.sprite = CreateTargetRingSprite();
+        targetRingImage.color = Color.white;
+        targetRingImage.preserveAspect = true;
+        targetRingImage.raycastTarget = false;
+        targetRingImage.enabled = false;
+    }
+
+    private void UpdateTargetRingSize(Sprite targetSprite)
+    {
+        if (targetRingImage == null || targetSprite == null)
+            return;
+
+        RectTransform targetRect = targetImage.rectTransform;
+        Vector2 availableSize = targetRect.rect.size;
+
+        if (availableSize.x <= 0f || availableSize.y <= 0f)
+            availableSize = targetRect.sizeDelta;
+
+        float spriteAspect =
+            targetSprite.rect.width / targetSprite.rect.height;
+        float availableAspect = availableSize.x / availableSize.y;
+        Vector2 displayedSize;
+
+        if (spriteAspect > availableAspect)
+        {
+            displayedSize = new Vector2(
+                availableSize.x,
+                availableSize.x / spriteAspect);
+        }
+        else
+        {
+            displayedSize = new Vector2(
+                availableSize.y * spriteAspect,
+                availableSize.y);
+        }
+
+        float diameter =
+            Mathf.Max(displayedSize.x, displayedSize.y) * TargetRingScale;
+        targetRingImage.rectTransform.sizeDelta =
+            new Vector2(diameter, diameter);
+    }
+
+    private Sprite CreateTargetRingSprite()
+    {
+        targetRingTexture = new Texture2D(
+            TargetRingTextureSize,
+            TargetRingTextureSize,
+            TextureFormat.RGBA32,
+            false);
+        targetRingTexture.name = "TargetBookRingTexture";
+        targetRingTexture.filterMode = FilterMode.Bilinear;
+        targetRingTexture.wrapMode = TextureWrapMode.Clamp;
+
+        Color32[] pixels =
+            new Color32[TargetRingTextureSize * TargetRingTextureSize];
+        float center = (TargetRingTextureSize - 1) * 0.5f;
+        float outerRadius = center;
+        float innerRadius = outerRadius - TargetRingThickness;
+        float outerSquared = outerRadius * outerRadius;
+        float innerSquared = innerRadius * innerRadius;
+        Color32 ringColor = new Color32(255, 0, 0, 255);
+
+        for (int y = 0; y < TargetRingTextureSize; y++)
+        {
+            for (int x = 0; x < TargetRingTextureSize; x++)
+            {
+                float offsetX = x - center;
+                float offsetY = y - center;
+                float distanceSquared =
+                    offsetX * offsetX + offsetY * offsetY;
+
+                if (distanceSquared <= outerSquared &&
+                    distanceSquared >= innerSquared)
+                {
+                    pixels[y * TargetRingTextureSize + x] = ringColor;
+                }
+            }
+        }
+
+        targetRingTexture.SetPixels32(pixels);
+        targetRingTexture.Apply(false, true);
+
+        targetRingSprite = Sprite.Create(
+            targetRingTexture,
+            new Rect(
+                0f,
+                0f,
+                TargetRingTextureSize,
+                TargetRingTextureSize),
+            new Vector2(0.5f, 0.5f),
+            100f);
+        targetRingSprite.name = "TargetBookRingSprite";
+        return targetRingSprite;
+    }
+
+    private void OnDestroy()
+    {
+        if (targetRingSprite != null)
+            Destroy(targetRingSprite);
+
+        if (targetRingTexture != null)
+            Destroy(targetRingTexture);
+    }
+
     protected override void OnEnd()
     {
         ClearAllBooks();
+
+        if (targetRingImage != null)
+            targetRingImage.enabled = false;
 
 #if UNITY_EDITOR
         Debug.Log("책 찾기 미니게임 종료");

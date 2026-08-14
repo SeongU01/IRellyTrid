@@ -1,7 +1,10 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class FatigueController : MonoBehaviour
 {
+    private const float DebugFatiguePerSecond = 6.67f;
+
     [SerializeField] private MiniGameManager miniGameManager;
 
     // 누적 시간 변수
@@ -32,7 +35,17 @@ public class FatigueController : MonoBehaviour
             elapsedTime -= increaseInterval;
 
             // 게임 밸런스 설정의 초당 피로도 증가값 참조
-            float fatiguePerSec = PlayerStatus.Instance.Settings.FatiguePerSecond;
+            bool isDebugAccelerationActive = Keyboard.current != null &&
+                Keyboard.current.f12Key.isPressed;
+            float fatiguePerSec = isDebugAccelerationActive
+                ? DebugFatiguePerSecond
+                : PlayerStatus.Instance.Settings.FatiguePerSecond;
+
+            if (!isDebugAccelerationActive &&
+                miniGameManager.IsBonusMiniGamePlaying)
+            {
+                fatiguePerSec *= 0.5f;
+            }
 
             // 플레이어 피로도 증가 함수 호출
             PlayerStatus.Instance.AddFatigue(fatiguePerSec);

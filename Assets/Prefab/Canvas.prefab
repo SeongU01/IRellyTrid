@@ -167,7 +167,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &54494137712326074
 RectTransform:
   m_ObjectHideFlags: 0
@@ -733,7 +733,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1177060368091516106
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1063,7 +1063,6 @@ GameObject:
   - component: {fileID: 1409608231516684808}
   - component: {fileID: 9191632174087891137}
   - component: {fileID: 3578536565127847650}
-  - component: {fileID: 4999573347259950627}
   m_Layer: 5
   m_Name: OptionCloseButton
   m_TagString: Untagged
@@ -1185,19 +1184,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &4999573347259950627
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2604069225485395100}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fdf67bc6ac02f04eb5479233a3ea5e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::OptionWindowManager
-  optionPanel: {fileID: 8343109506232987093}
 --- !u!1 &2700384284718453786
 GameObject:
   m_ObjectHideFlags: 0
@@ -1330,7 +1316,7 @@ GameObject:
   - component: {fileID: 5749205383707283618}
   - component: {fileID: 6224889931567074069}
   m_Layer: 5
-  m_Name: LeftOpenedEye
+  m_Name: AnimatedEyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1352,8 +1338,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -458, y: -3}
-  m_SizeDelta: {x: 400, y: 200}
+  m_AnchoredPosition: {x: -191, y: 25}
+  m_SizeDelta: {x: 1102, y: 256}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &5749205383707283618
 CanvasRenderer:
@@ -1377,14 +1363,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 4472666407855572533, guid: 4230c8f31b3adea45a86922df1e6dabf, type: 3}
-  m_Type: 3
+  m_Sprite: {fileID: 710000000000000001, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 1
@@ -1682,12 +1668,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf661cb67b2b9bf4485b48e6462607c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EyeBlinkEffect
-  openedEyesImages:
-  - {fileID: 6224889931567074069}
-  - {fileID: 7865409363677445257}
-  closedEyesImages:
-  - {fileID: 7679467919643884247}
-  - {fileID: 5894565822542108571}
+  miniGameManager: {fileID: 0}
+  animatedEyesImage: {fileID: 6224889931567074069}
+  earlyDayEyeFrames:
+  - {fileID: 720000000000000001, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000002, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000003, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000004, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000005, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000006, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000007, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000008, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000009, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000010, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000011, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000012, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000013, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000014, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000015, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000016, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000017, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000018, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  - {fileID: 720000000000000019, guid: 4f8a2c7d1e934b5aa6c8d0e2f4173b59, type: 3}
+  lateDayEyeFrames:
+  - {fileID: 710000000000000001, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
+  - {fileID: 710000000000000002, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
+  - {fileID: 710000000000000003, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
+  - {fileID: 710000000000000004, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
+  - {fileID: 710000000000000005, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
+  - {fileID: 710000000000000006, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
+  - {fileID: 710000000000000007, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
+  - {fileID: 710000000000000008, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
+  - {fileID: 710000000000000009, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
+  - {fileID: 710000000000000010, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
+  - {fileID: 710000000000000011, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
+  - {fileID: 710000000000000012, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
+  - {fileID: 710000000000000013, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
+  - {fileID: 710000000000000014, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
+  - {fileID: 710000000000000015, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
+  - {fileID: 710000000000000016, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
+  - {fileID: 710000000000000017, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
+  - {fileID: 710000000000000018, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
+  - {fileID: 710000000000000019, guid: e9a4d88c27ae4c0d987f58d66f3b1221, type: 3}
+  lateDayStartDay: 6
 --- !u!1 &5427777918181116506
 GameObject:
   m_ObjectHideFlags: 0
@@ -1804,12 +1827,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -2217,7 +2240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fdf67bc6ac02f04eb5479233a3ea5e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OptionWindowManager
-  optionPanel: {fileID: 8343109506232987093}
+  optionPanel: {fileID: 2700384284718453786}
 --- !u!1 &7919711887212232854
 GameObject:
   m_ObjectHideFlags: 0
@@ -2665,7 +2688,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5771228041494366385
 RectTransform:
   m_ObjectHideFlags: 0

@@ -22,6 +22,25 @@ public class EndingSequenceController : MonoBehaviour
     [Header("크레딧 씬 설정")]
     public string nextSceneName; // 연출 종료 후 호출할 씬 이름 (예: "EndingCredit")
 
+    private void Awake()
+    {
+        HashSet<CanvasGroup> initializedGroups = new HashSet<CanvasGroup>();
+
+        foreach (FadeStep step in fadeSteps)
+        {
+            CanvasGroup canvasGroup = step.targetFadeUtility != null
+                ? step.targetFadeUtility.targetCanvasGroup
+                : null;
+
+            if (canvasGroup == null || !initializedGroups.Add(canvasGroup))
+                continue;
+
+            canvasGroup.alpha = step.isFadeIn ? 0f : 1f;
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
+        }
+    }
+
     // 객체 활성화 시 자동 호출되는 콜백 함수
     private void OnEnable()
     {
@@ -45,6 +64,14 @@ public class EndingSequenceController : MonoBehaviour
                 if (step.isFadeIn)
                 {
                     yield return step.targetFadeUtility.DoFadeIn(step.fadeDuration);
+
+                    CanvasGroup canvasGroup =
+                        step.targetFadeUtility.targetCanvasGroup;
+                    if (canvasGroup != null)
+                    {
+                        canvasGroup.interactable = true;
+                        canvasGroup.blocksRaycasts = true;
+                    }
                 }
                 else
                 {

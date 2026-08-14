@@ -75,6 +75,10 @@ crashlytics-build.properties
 
 InitTestScene*.unity*
 
+# OMO Evidence
+
+/.omo/**/*.md
+
 # Addressables
 
 /ServerData/

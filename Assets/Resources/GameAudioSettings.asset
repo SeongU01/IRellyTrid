@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ed8915e18e246f3a41c2fd3d50a4f7a, type: 3}
+  m_Name: GameAudioSettings
+  m_EditorClassIdentifier: Assembly-CSharp::GameAudioSettings
+  dayOneToFiveBgm: {fileID: 8300000, guid: a64645128c54eb948a16a667a40e3537, type: 3}
+  daySixToNineBgm: {fileID: 8300000, guid: 48bdd83c6614fbe49b27282b7923104a, type: 3}
+  dayStart: {fileID: 8300000, guid: 3e0142d52dad6f14182bbee992a77488, type: 3}
+  uiButtonClick: {fileID: 8300000, guid: 32e6b96a79c81cf4eb50ef12e55f819e, type: 3}
+  mouseClick: {fileID: 8300000, guid: 8b45abb13f626d24db8612b2cbadfe44, type: 3}
+  miniGameMistake: {fileID: 8300000, guid: 4234316ae08d49e4f8554e8c3b48a5bd, type: 3}
+  miniGameMistakeStartOffset: 0.6
+  miniGameFailure: {fileID: 8300000, guid: c8c3bd26522c4d347b1c9d1c0d3af728, type: 3}
+  typing: {fileID: 8300000, guid: ebe21ed09eee2674f9785d2e337e2df4, type: 3}
+  sortingCorrect: {fileID: 8300000, guid: 6640146801da7564c868c45a3b968743, type: 3}

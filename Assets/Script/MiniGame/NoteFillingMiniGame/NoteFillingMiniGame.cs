@@ -62,6 +62,7 @@ public sealed class NoteFillingMiniGame : MiniGameBase
     private readonly StringBuilder currentCharacters = new();
     private RectTransform pageRoot;
     private PageView currentPage;
+    private BonusRewardPopup rewardPopup;
     private int completedPageCount;
     private int totalCharacterCount;
 
@@ -123,6 +124,7 @@ public sealed class NoteFillingMiniGame : MiniGameBase
         int randomIndex = UnityEngine.Random.Range(0, Alphabet.Length);
         currentCharacters.Append(Alphabet[randomIndex]);
         totalCharacterCount++;
+        GameAudioManager.PlayTyping();
         RefreshCurrentPageText();
 
         if (currentCharacters.Length < charactersPerPage)
@@ -141,6 +143,11 @@ public sealed class NoteFillingMiniGame : MiniGameBase
         StartCoroutine(StackCompletedPage(
             completedPage,
             completedPageCount - 1));
+
+        if (completedPageCount == 2)
+            rewardPopup?.Show(1.5f);
+        else if (completedPageCount == 3)
+            rewardPopup?.Show(2f);
 
 #if UNITY_EDITOR
         Debug.Log(
@@ -201,16 +208,30 @@ public sealed class NoteFillingMiniGame : MiniGameBase
 
     private void CompleteGame()
     {
+        float nextDayStudyMultiplier = GetNextDayStudyMultiplier();
+
 #if UNITY_EDITOR
         Debug.Log(
             $"[NoteFillingMiniGame] Completed pages: " +
             $"{completedPageCount}, current page: " +
             $"{currentCharacters.Length}/{charactersPerPage}, " +
             $"total characters: {totalCharacterCount}. " +
-            "The next-day study multiplier is not applied yet.");
+            $"Next-day study multiplier: " +
+            $"x{nextDayStudyMultiplier:0.##}.");
 #endif
 
-        SuccessWithStudyReward(0);
+        SuccessWithNextDayStudyMultiplier(nextDayStudyMultiplier);
+    }
+
+    private float GetNextDayStudyMultiplier()
+    {
+        if (completedPageCount >= 3)
+            return 2f;
+
+        if (completedPageCount == 2)
+            return 1.5f;
+
+        return 1f;
     }
 
     private void CreateRuntimeView()
@@ -230,6 +251,10 @@ public sealed class NoteFillingMiniGame : MiniGameBase
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1920f, 1080f);
         scaler.matchWidthOrHeight = 0.5f;
+
+        rewardPopup = BonusRewardPopup.Create(
+            canvasObject.transform,
+            KoreanFontBootstrap.FontAsset ?? fontAsset);
 
         GameObject rootObject = new GameObject(
             "PageRoot",

@@ -8,9 +8,17 @@ using UnityEngine.UI;
 public class SortingMiniGame : MiniGameBase
 {
     private const float BoardCenterX = -165f;
+    private const int MaxGuideRows = 3;
+    private const float GuideColumnSpacing = 140f;
 
     [Header("Categories")]
     [SerializeField] private SortCategoryData[] categories;
+
+    [Header("Category Asset Variants")]
+    [SerializeField] private Sprite[] firstBookSprites;
+    [SerializeField] private Sprite[] secondBookSprites;
+    [SerializeField] private Sprite[] firstObjectSprites;
+    [SerializeField] private Sprite[] secondObjectSprites;
 
     [Header("Day Difficulties")]
     [SerializeField]
@@ -41,6 +49,16 @@ public class SortingMiniGame : MiniGameBase
         new List<SortingCategoryView>();
     private readonly Dictionary<int, SortSide> categorySides =
         new Dictionary<int, SortSide>();
+    private readonly Dictionary<int, Sprite> resolvedCategorySprites =
+        new Dictionary<int, Sprite>();
+    private readonly List<Sprite> firstBookSpriteBag =
+        new List<Sprite>();
+    private readonly List<Sprite> secondBookSpriteBag =
+        new List<Sprite>();
+    private readonly List<Sprite> firstObjectSpriteBag =
+        new List<Sprite>();
+    private readonly List<Sprite> secondObjectSpriteBag =
+        new List<Sprite>();
 
     private SortingDayDifficulty currentDifficulty;
     private RectTransform canvasRoot;
@@ -76,6 +94,7 @@ public class SortingMiniGame : MiniGameBase
 
         ClearRuntimeData();
         AssignConfiguredCategorySides();
+        ResolveCategorySprites();
         FillItemQueue();
         BuildInterface();
         RefreshItemQueueViews();
@@ -217,6 +236,11 @@ public class SortingMiniGame : MiniGameBase
         itemViews.Clear();
         guideViews.Clear();
         categorySides.Clear();
+        resolvedCategorySprites.Clear();
+        firstBookSpriteBag.Clear();
+        secondBookSpriteBag.Clear();
+        firstObjectSpriteBag.Clear();
+        secondObjectSpriteBag.Clear();
 
         int[] configuredCategoryIndices =
             currentDifficulty.categoryIndices;
@@ -237,6 +261,79 @@ public class SortingMiniGame : MiniGameBase
         }
     }
 
+    private void ResolveCategorySprites()
+    {
+        for (int i = 0; i < activeCategoryIndices.Count; i++)
+        {
+            int categoryIndex = activeCategoryIndices[i];
+            SortCategoryData category = categories[categoryIndex];
+            Sprite resolvedSprite = category.sprite;
+
+            int variantTier = SelectVariantTier();
+            if (variantTier == 1)
+            {
+                resolvedSprite = TakeVariantSprite(
+                    category.side == SortSide.Left
+                        ? firstBookSprites
+                        : firstObjectSprites,
+                    category.side == SortSide.Left
+                        ? firstBookSpriteBag
+                        : firstObjectSpriteBag) ?? category.sprite;
+            }
+            else if (variantTier == 2)
+            {
+                resolvedSprite = TakeVariantSprite(
+                    category.side == SortSide.Left
+                        ? secondBookSprites
+                        : secondObjectSprites,
+                    category.side == SortSide.Left
+                        ? secondBookSpriteBag
+                        : secondObjectSpriteBag) ?? category.sprite;
+            }
+
+            resolvedCategorySprites[categoryIndex] = resolvedSprite;
+        }
+    }
+
+    private int SelectVariantTier()
+    {
+        if (DifficultyDay < 5)
+            return 0;
+
+        return DifficultyDay >= 6
+            ? Random.Range(0, 3)
+            : Random.Range(0, 2);
+    }
+
+    private static Sprite TakeVariantSprite(
+        Sprite[] source,
+        List<Sprite> bag)
+    {
+        if (bag.Count == 0 && source != null)
+        {
+            for (int i = 0; i < source.Length; i++)
+            {
+                if (source[i] != null)
+                    bag.Add(source[i]);
+            }
+
+            for (int i = bag.Count - 1; i > 0; i--)
+            {
+                int swapIndex = Random.Range(0, i + 1);
+                (bag[i], bag[swapIndex]) =
+                    (bag[swapIndex], bag[i]);
+            }
+        }
+
+        if (bag.Count == 0)
+            return null;
+
+        int lastIndex = bag.Count - 1;
+        Sprite sprite = bag[lastIndex];
+        bag.RemoveAt(lastIndex);
+        return sprite;
+    }
+
     private void SubmitSide(SortSide selectedSide)
     {
         if (!IsPlaying ||
@@ -251,6 +348,7 @@ public class SortingMiniGame : MiniGameBase
 
         if (selectedSide != answer)
         {
+            ShowWrongFeedback();
             mistakeCount++;
             UpdateStatus("X");
 
@@ -262,6 +360,8 @@ public class SortingMiniGame : MiniGameBase
             return;
         }
 
+        GameAudioManager.PlaySortingCorrect();
+        ShowCorrectFeedback();
         sortedCount++;
         itemQueue.RemoveAt(0);
 
@@ -457,11 +557,23 @@ public class SortingMiniGame : MiniGameBase
             }
         }
 
+        int columnCount = Mathf.CeilToInt(
+            sideCategories.Count / (float)MaxGuideRows);
+        int rowsPerColumn = Mathf.CeilToInt(
+            sideCategories.Count / (float)columnCount);
         float step = guideSize.y + guideSpacing;
 
         for (int i = 0; i < sideCategories.Count; i++)
         {
             int categoryIndex = sideCategories[i];
+            int columnIndex = i / rowsPerColumn;
+            int rowIndex = i % rowsPerColumn;
+            int rowCount = Mathf.Min(
+                rowsPerColumn,
+                sideCategories.Count - columnIndex * rowsPerColumn);
+            float columnOffset =
+                (columnIndex - (columnCount - 1) * 0.5f) *
+                GuideColumnSpacing;
             GameObject guideObject = new GameObject(
                 $"{side}Guide_{i + 1}",
                 typeof(RectTransform),
@@ -474,8 +586,8 @@ public class SortingMiniGame : MiniGameBase
             guideRect.anchorMax = new Vector2(0.5f, 0.5f);
             guideRect.sizeDelta = guideSize;
             guideRect.anchoredPosition = new Vector2(
-                xPosition,
-                (i - (sideCategories.Count - 1) * 0.5f) * step - 128f);
+                xPosition + columnOffset,
+                (rowIndex - (rowCount - 1) * 0.5f) * step - 128f);
 
             Image icon = CreateImage(
                 "GuideImage",
@@ -494,7 +606,11 @@ public class SortingMiniGame : MiniGameBase
 
             SortingCategoryView view =
                 guideObject.GetComponent<SortingCategoryView>();
-            view.Initialize(icon, label, categories[categoryIndex]);
+            view.Initialize(
+                icon,
+                label,
+                categories[categoryIndex],
+                resolvedCategorySprites[categoryIndex]);
             guideViews.Add(view);
         }
     }
@@ -548,8 +664,10 @@ public class SortingMiniGame : MiniGameBase
             }
 
             SortCategoryData category = categories[itemQueue[i]];
-            itemView.sprite = category.sprite;
-            itemView.color = category.sprite != null
+            Sprite resolvedSprite =
+                resolvedCategorySprites[itemQueue[i]];
+            itemView.sprite = resolvedSprite;
+            itemView.color = resolvedSprite != null
                 ? Color.white
                 : category.fallbackColor;
             itemView.preserveAspect = true;

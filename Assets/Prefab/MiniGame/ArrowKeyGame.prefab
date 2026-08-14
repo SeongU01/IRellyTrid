@@ -44,10 +44,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cf85db9e52a409b8f6a31e41a975564, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowKeyGame
-  rightArrow: {fileID: 6552060196920312030, guid: 002b7ab7935f8524485f833e7523b0a9, type: 3}
-  leftArrow: {fileID: 30064537844054092, guid: 002b7ab7935f8524485f833e7523b0a9, type: 3}
-  downArrow: {fileID: -4639942764790953303, guid: 002b7ab7935f8524485f833e7523b0a9, type: 3}
-  upArrow: {fileID: 4337145382710925652, guid: 002b7ab7935f8524485f833e7523b0a9, type: 3}
+  rightArrow: {fileID: 1001001, guid: c77a4b89fa913b74e9d1188b6cfcc2d7, type: 3}
+  leftArrow: {fileID: 1001002, guid: c77a4b89fa913b74e9d1188b6cfcc2d7, type: 3}
+  downArrow: {fileID: 1001003, guid: c77a4b89fa913b74e9d1188b6cfcc2d7, type: 3}
+  upArrow: {fileID: 1001004, guid: c77a4b89fa913b74e9d1188b6cfcc2d7, type: 3}
+  firstRightArrow: {fileID: 2001001, guid: c77a4b89fa913b74e9d1188b6cfcc2d7, type: 3}
+  firstLeftArrow: {fileID: 2001002, guid: c77a4b89fa913b74e9d1188b6cfcc2d7, type: 3}
+  firstDownArrow: {fileID: 2001004, guid: c77a4b89fa913b74e9d1188b6cfcc2d7, type: 3}
+  firstUpArrow: {fileID: 2001003, guid: c77a4b89fa913b74e9d1188b6cfcc2d7, type: 3}
+  secondRightArrow: {fileID: 3001001, guid: c77a4b89fa913b74e9d1188b6cfcc2d7, type: 3}
+  secondLeftArrow: {fileID: 3001002, guid: c77a4b89fa913b74e9d1188b6cfcc2d7, type: 3}
+  secondDownArrow: {fileID: 3001004, guid: c77a4b89fa913b74e9d1188b6cfcc2d7, type: 3}
+  secondUpArrow: {fileID: 3001003, guid: c77a4b89fa913b74e9d1188b6cfcc2d7, type: 3}
   dayDifficulties:
   - startDay: 1
     boardSize: {x: 8, y: 6}

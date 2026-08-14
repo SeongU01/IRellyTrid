@@ -82,7 +82,7 @@ public class GameBalanceSettings : ScriptableObject
     [Min(0)]
     [SerializeField] private int studyAmountPerMiniGame = 5;
     [Min(0f)]
-    [SerializeField] private float fatiguePerSecond = 0.5f;
+    [SerializeField] private float fatiguePerSecond = 0.3f;
     [Min(1)]
     [SerializeField] private int normalMiniGamesPerDay = 5;
     [Min(0)]

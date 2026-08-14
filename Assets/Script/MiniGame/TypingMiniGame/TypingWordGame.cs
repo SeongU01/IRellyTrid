@@ -1,10 +1,19 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TypingWordGame : MiniGameBase
 {
     [Header("UI")]
+    [SerializeField] private Image promptBackground;
+    [SerializeField] private Image inputBackground;
+    [SerializeField] private Sprite basePromptSprite;
+    [SerializeField] private Sprite firstPromptSprite;
+    [SerializeField] private Sprite secondPromptSprite;
+    [SerializeField] private Sprite baseInputSprite;
+    [SerializeField] private Sprite firstInputSprite;
+    [SerializeField] private Sprite secondInputSprite;
     [SerializeField] private TMP_Text wordText;
     [SerializeField] private TMP_Text progressText;
     [SerializeField] private TMP_Text resultText;
@@ -26,6 +35,8 @@ public class TypingWordGame : MiniGameBase
 
     protected override void OnStart()
     {
+        ApplyVariantVisuals();
+
         currentDifficulty =
             DayDifficultySelector.GetForDay(
                 dayDifficulties,
@@ -63,6 +74,8 @@ public class TypingWordGame : MiniGameBase
 
         if (inputField != null)
         {
+            inputField.onValidateInput -= ValidateTypingInput;
+            inputField.onValidateInput += ValidateTypingInput;
             inputField.text = "";
             inputField.ActivateInputField();
         }
@@ -176,6 +189,7 @@ public class TypingWordGame : MiniGameBase
 
         if (playerInput != currentAnswer)
         {
+            ShowWrongFeedback();
             mistakeCount++;
 
             if (resultText != null)
@@ -195,6 +209,8 @@ public class TypingWordGame : MiniGameBase
             return;
         }
 
+        ShowCorrectFeedback();
+
         if (resultText != null)
         {
             resultText.text = "O";
@@ -211,10 +227,65 @@ public class TypingWordGame : MiniGameBase
         GenerateQuestion();
     }
 
+    private void ApplyVariantVisuals()
+    {
+        (Sprite promptSprite, Sprite inputSprite) = AssetVariant switch
+        {
+            MiniGameAssetVariant.First =>
+                (firstPromptSprite, firstInputSprite),
+            MiniGameAssetVariant.Second =>
+                (secondPromptSprite, secondInputSprite),
+            _ => (basePromptSprite, baseInputSprite)
+        };
+
+        if (promptBackground != null && promptSprite != null)
+            promptBackground.sprite = promptSprite;
+
+        if (inputBackground != null && inputSprite != null)
+            inputBackground.sprite = inputSprite;
+
+        if (wordText != null)
+            wordText.alignment = TextAlignmentOptions.Center;
+
+        if (inputField == null)
+            return;
+
+        if (inputField.textViewport != null)
+        {
+            RectTransform viewport = inputField.textViewport;
+            viewport.anchorMin = Vector2.zero;
+            viewport.anchorMax = Vector2.one;
+            viewport.offsetMin = new Vector2(12f, 10f);
+            viewport.offsetMax = new Vector2(-12f, -10f);
+        }
+
+        if (inputField.textComponent != null)
+        {
+            inputField.textComponent.alignment =
+                TextAlignmentOptions.Center;
+        }
+
+        if (inputField.placeholder is TMP_Text placeholderText)
+            placeholderText.alignment = TextAlignmentOptions.Center;
+    }
+
+    private char ValidateTypingInput(
+        string text,
+        int characterIndex,
+        char addedCharacter)
+    {
+        if (addedCharacter == ' ')
+            return '\0';
+
+        GameAudioManager.PlayTyping();
+        return addedCharacter;
+    }
+
     protected override void OnEnd()
     {
         if (inputField != null)
         {
+            inputField.onValidateInput -= ValidateTypingInput;
             inputField.DeactivateInputField();
         }
 

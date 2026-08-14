@@ -325,6 +325,38 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4685291867557253175, guid: d1f0dfdf6443d9f4aa18387087276636, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.845
+      objectReference: {fileID: 0}
+    - target: {fileID: 4685291867557253175, guid: d1f0dfdf6443d9f4aa18387087276636, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.845
+      objectReference: {fileID: 0}
+    - target: {fileID: 4685291867557253175, guid: d1f0dfdf6443d9f4aa18387087276636, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.845
+      objectReference: {fileID: 0}
+    - target: {fileID: 4685291867557253175, guid: d1f0dfdf6443d9f4aa18387087276636, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 172.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6126770708396364203, guid: d1f0dfdf6443d9f4aa18387087276636, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6126770708396364203, guid: d1f0dfdf6443d9f4aa18387087276636, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6126770708396364203, guid: d1f0dfdf6443d9f4aa18387087276636, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 6126770708396364203, guid: d1f0dfdf6443d9f4aa18387087276636, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -18
+      objectReference: {fileID: 0}
     - target: {fileID: 6466261507401560097, guid: d1f0dfdf6443d9f4aa18387087276636, type: 3}
       propertyPath: m_Name
       value: Canvas
@@ -466,6 +498,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: MiniGameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 6739251840274613308, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
+      propertyPath: bonusConfigurations.Array.data[0].firstBonus.commandText
+      value: "\uB9C9\uC544\uB77C!"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6739251840274613308, guid: 314ce39f3efb16649b18d5003f51e52d, type: 3}
+      propertyPath: bonusConfigurations.Array.data[0].secondBonus.commandText
+      value: "\uD074\uB9AD\uD574\uC11C \uCC44\uC6CC\uB77C!"
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -476,6 +516,6 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 497616754}
-  - {fileID: 1398271760}
   - {fileID: 515620334}
+  - {fileID: 1398271760}
   - {fileID: 1642087391}

@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(MiniGameManager))]
@@ -6,9 +8,15 @@ public sealed class GameFlowController : MonoBehaviour
 {
     [SerializeField] private MiniGameManager miniGameManager;
     [SerializeField] private bool startNewGameOnStart = true;
+    [SerializeField] private string outOfHealthEndingScene =
+        "BadEnding_OutOfHp";
+    [SerializeField] private string lowStudyEndingScene =
+        "BadEnding_LackOfStudy";
+    [SerializeField] private string goodEndingScene = "GoodEnding";
 
     private DaySystem daySystem;
     private PlayerStatus playerStatus;
+    private bool endingTransitionRequested;
 
     private void Reset()
     {
@@ -51,7 +59,10 @@ public sealed class GameFlowController : MonoBehaviour
         }
 
         if (daySystem != null)
+        {
             daySystem.OnDayStarted += HandleDayStarted;
+            daySystem.OnFinalDayCompleted += HandleFinalDayCompleted;
+        }
 
         if (playerStatus != null)
             playerStatus.GameOverTriggered += HandleGameOver;
@@ -62,8 +73,19 @@ public sealed class GameFlowController : MonoBehaviour
         if (!startNewGameOnStart || daySystem == null)
             return;
 
-        daySystem.StartNewGame();
-        daySystem.StartCurrentDay();
+        StartNewGame();
+    }
+
+    private void Update()
+    {
+        if (Keyboard.current == null ||
+            !Keyboard.current.f7Key.wasPressedThisFrame ||
+            daySystem == null)
+        {
+            return;
+        }
+
+        daySystem.AdvanceDayForDebug();
     }
 
     private void OnDisable()
@@ -77,7 +99,10 @@ public sealed class GameFlowController : MonoBehaviour
         }
 
         if (daySystem != null)
+        {
             daySystem.OnDayStarted -= HandleDayStarted;
+            daySystem.OnFinalDayCompleted -= HandleFinalDayCompleted;
+        }
 
         if (playerStatus != null)
             playerStatus.GameOverTriggered -= HandleGameOver;
@@ -88,7 +113,9 @@ public sealed class GameFlowController : MonoBehaviour
         if (playerStatus == null || daySystem == null)
             return;
 
+        endingTransitionRequested = false;
         playerStatus.ResetStatus();
+        miniGameManager.ResetInstructionHistory();
         daySystem.StartNewGame();
         daySystem.StartCurrentDay();
     }
@@ -130,5 +157,49 @@ public sealed class GameFlowController : MonoBehaviour
     private void HandleGameOver(GameOverReason reason)
     {
         daySystem.SetGameOver(reason);
+
+        if (reason == GameOverReason.HealthDepleted)
+            LoadEndingScene(outOfHealthEndingScene);
+    }
+
+    private void HandleFinalDayCompleted(int completedDay)
+    {
+        if (daySystem == null ||
+            playerStatus == null ||
+            completedDay < daySystem.FinalDay)
+        {
+            return;
+        }
+
+        int targetStudyAmount = GetTargetStudyAmount();
+        string endingScene = playerStatus.StudyAmount >= targetStudyAmount
+            ? goodEndingScene
+            : lowStudyEndingScene;
+
+        Debug.Log(
+            $"[GameFlowController] Final study amount: " +
+            $"{playerStatus.StudyAmount}/{targetStudyAmount}. " +
+            $"Loading {endingScene}.");
+        LoadEndingScene(endingScene);
+    }
+
+    private int GetTargetStudyAmount()
+    {
+        GameBalanceSettings settings = playerStatus.Settings;
+
+        return settings.StudyAmountPerMiniGame *
+               settings.NormalMiniGamesPerDay *
+               settings.FinalDay;
+    }
+
+    private void LoadEndingScene(string sceneName)
+    {
+        if (endingTransitionRequested || string.IsNullOrWhiteSpace(sceneName))
+            return;
+
+        endingTransitionRequested = true;
+        miniGameManager.StopMiniGameFlow();
+        Time.timeScale = 1f;
+        SceneManager.LoadSceneAsync(sceneName);
     }
 }

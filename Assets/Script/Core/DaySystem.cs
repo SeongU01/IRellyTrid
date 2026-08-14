@@ -9,6 +9,8 @@ public sealed class DaySystem : MonoBehaviour
     private int studyAmountAtDayStart;
     private int previousHealth;
     private GameOverReason? lastGameOverReason;
+    private float activeStudyMultiplier = 1f;
+    private float nextDayStudyMultiplier = 1f;
 
     public static DaySystem Instance
     {
@@ -40,6 +42,7 @@ public sealed class DaySystem : MonoBehaviour
             ? 0
             : Mathf.Max(0, playerStatus.StudyAmount - studyAmountAtDayStart);
     public GameOverReason? LastGameOverReason => lastGameOverReason;
+    public float ActiveStudyMultiplier => activeStudyMultiplier;
 
     public event Action<int> OnDayStarted;
     public event Action<int, int> OnDayChanged;
@@ -112,6 +115,8 @@ public sealed class DaySystem : MonoBehaviour
             playerStatus != null ? playerStatus.StudyAmount : 0;
         previousHealth = playerStatus != null ? playerStatus.Health : 0;
         lastGameOverReason = null;
+        activeStudyMultiplier = 1f;
+        nextDayStudyMultiplier = 1f;
         ChangePhase(DayPhase.NotStarted);
 
         if (previousDay != CurrentDay)
@@ -137,6 +142,8 @@ public sealed class DaySystem : MonoBehaviour
         TodayLostHealth = 0;
         studyAmountAtDayStart = playerStatus.StudyAmount;
         previousHealth = playerStatus.Health;
+        activeStudyMultiplier = nextDayStudyMultiplier;
+        nextDayStudyMultiplier = 1f;
         ChangePhase(DayPhase.NormalMiniGames);
         OnNormalMiniGameProgressChanged?.Invoke(
             CompletedNormalMiniGames,
@@ -148,6 +155,25 @@ public sealed class DaySystem : MonoBehaviour
             $"[DaySystem] Day {CurrentDay} started. " +
             $"Normal mini games: {NormalMiniGamesPerDay}");
         OnDayStarted?.Invoke(CurrentDay);
+    }
+
+    public void ScheduleNextDayStudyMultiplier(float multiplier)
+    {
+        nextDayStudyMultiplier = Mathf.Max(
+            nextDayStudyMultiplier,
+            Mathf.Max(1f, multiplier));
+        Debug.Log(
+            $"[DaySystem] Next-day study multiplier scheduled: " +
+            $"x{nextDayStudyMultiplier:0.##}.");
+    }
+
+    public int ApplyStudyMultiplier(int studyAmount)
+    {
+        if (studyAmount <= 0)
+            return 0;
+
+        return Mathf.FloorToInt(
+            studyAmount * activeStudyMultiplier + 0.5f);
     }
 
     public void RegisterNormalMiniGameCompleted()
@@ -304,6 +330,30 @@ public sealed class DaySystem : MonoBehaviour
         CurrentDay++;
         OnDayChanged?.Invoke(previousDay, CurrentDay);
         StartCurrentDay();
+    }
+
+    public bool AdvanceDayForDebug()
+    {
+        if (!CanContinue())
+            return false;
+
+        if (IsFinalDay)
+        {
+            Debug.LogWarning(
+                "[DaySystem] F7 debug shortcut cannot advance past " +
+                $"the final day ({FinalDay}).");
+            return false;
+        }
+
+        int previousDay = CurrentDay;
+        CurrentDay++;
+
+        Debug.Log(
+            $"[DaySystem] F7 debug shortcut: Day {previousDay} -> " +
+            $"Day {CurrentDay}.");
+        OnDayChanged?.Invoke(previousDay, CurrentDay);
+        StartCurrentDay();
+        return true;
     }
 
     public void SetGameOver(GameOverReason reason)

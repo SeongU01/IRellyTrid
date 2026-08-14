@@ -1,142 +1,200 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class EyeBlinkEffect : MonoBehaviour
 {
     [SerializeField] private MiniGameManager miniGameManager;
 
-    // 뜬 눈 이미지 배열 연결
-    public Image[] openedEyesImages;
-    // 감은 눈 이미지 배열 연결
-    public Image[] closedEyesImages;
+    [Header("Frame Animation")]
+    [SerializeField] private Image animatedEyesImage;
+    [SerializeField] private Sprite[] earlyDayEyeFrames;
+    [SerializeField] private Sprite[] lateDayEyeFrames;
+    [SerializeField, Min(1)] private int lateDayStartDay = 6;
 
-    // 완전한 눈 감김 목표 시간
-    private float maxCloseTime;
-    // 현재 눈 감김 누적 시간
-    private float currentCloseTime = 0f;
-    // Space 키 입력 시 회복 시간
-    private float recoveryTime;
-
-    // 완전히 감긴 상태 유지 시간
-    private float fullyClosedTimer = 0f;
-    // 체력 감소 간격 시간
-    private float damageInterval;
+    private float maxCloseTime = 20f;
+    private float currentCloseTime;
+    private float fullyClosedTimer;
+    private float damageInterval = 5f;
+    private int configuredDay = -1;
+    private int eyeFrameDay = 1;
+    private int spaceTapCount;
+    private int spaceTapsPerStep = 1;
 
     private void Start()
     {
-        if (PlayerStatus.Instance != null && PlayerStatus.Instance.Settings != null)
-        {
-            // GameBalanceSettings 설정값 동기화
-            maxCloseTime = PlayerStatus.Instance.Settings.EyeCloseDuration;
-            recoveryTime = PlayerStatus.Instance.Settings.EyeRecoveryPerSpace;
-            damageInterval = PlayerStatus.Instance.Settings.ClosedEyeDamageInterval;
-        }
-
-        UpdateEyeRatio(0f);
+        ApplyBalanceSettings();
+        RefreshDayConfiguration(true);
+        UpdateEyeFrame();
     }
 
     private void Update()
     {
-        if (!IsMiniGamePlaying())
-        {
+        bool isMiniGamePlaying = IsMiniGamePlaying();
+
+        if (isMiniGamePlaying || IsDayTransitionCovered())
+            RefreshDayConfiguration(false);
+
+        if (!isMiniGamePlaying)
             return;
-        }
 
-        // 매 프레임 시간 누적
-        currentCloseTime += Time.deltaTime;
-        
-        // Space 키 입력 감지
-        if (Input.GetKeyDown(KeyCode.Space))
+        currentCloseTime = Mathf.Clamp(
+            currentCloseTime + Time.deltaTime,
+            0f,
+            maxCloseTime);
+
+        Keyboard keyboard = Keyboard.current;
+
+        if (keyboard != null &&
+            keyboard.spaceKey.wasPressedThisFrame)
         {
-            // 누적 시간 차감 적용
-            currentCloseTime -= recoveryTime;
+            HandleSpaceRecovery();
         }
 
-        // 시간값 범위 제한
-        currentCloseTime = Mathf.Clamp(currentCloseTime, 0f, maxCloseTime);
-
-        // 현재 진행도 비율 계산
-        float fillRatio = 0f;
-        if (maxCloseTime > 0)
-        {
-            // 0 나누기 방지 및 비율 산출
-            fillRatio = currentCloseTime / maxCloseTime;
-        }
-
-        // 눈 이미지 배열 비율 갱신 호출
-        UpdateEyeRatio(fillRatio);
-
-        // 체력 감소 로직 실행
+        UpdateEyeFrame();
         CheckDamageCondition();
     }
 
-    // 이미지 배열 비율 갱신
-    private void UpdateEyeRatio(float ratio)
+    private void ApplyBalanceSettings()
     {
-        // 감은 눈 배열 순회 및 비율 적용
-        if (closedEyesImages != null)
-        {
-            foreach (Image img in closedEyesImages)
-            {
-                if (img != null)
-                {
-                    img.fillAmount = ratio;
-                }
-            }
-        }
-        
-        // 뜬 눈 배열 순회 및 반전 비율 적용
-        if (openedEyesImages != null)
-        {
-            foreach (Image img in openedEyesImages)
-            {
-                if (img != null)
-                {
-                    img.fillAmount = 1f - ratio;
-                }
-            }
-        }
+        PlayerStatus playerStatus = PlayerStatus.Instance;
+
+        if (playerStatus == null || playerStatus.Settings == null)
+            return;
+
+        maxCloseTime = Mathf.Max(
+            0.1f,
+            playerStatus.Settings.EyeCloseDuration);
+        damageInterval = Mathf.Max(
+            0.1f,
+            playerStatus.Settings.ClosedEyeDamageInterval);
     }
 
-    // 눈 감김 상태에 따른 체력 감소 확인
-    private void CheckDamageCondition()
+    private void RefreshDayConfiguration(bool force)
     {
-        // 완전한 눈 감김 상태 확인
-        if (currentCloseTime >= maxCloseTime)
-        {
-            // 완전히 감긴 시간 누적
-            fullyClosedTimer += Time.deltaTime;
+        DaySystem daySystem = DaySystem.Instance;
+        int currentDay = daySystem != null
+            ? Mathf.Max(1, daySystem.CurrentDay)
+            : 1;
 
-            // 목표 시간 경과 확인
-            if (fullyClosedTimer >= damageInterval)
+        if (!force && configuredDay == currentDay)
+            return;
+
+        configuredDay = currentDay;
+        eyeFrameDay = currentDay == 10 ? 1 : currentDay;
+        spaceTapCount = 0;
+        spaceTapsPerStep = 1;
+
+        PlayerStatus playerStatus = PlayerStatus.Instance;
+
+        if (playerStatus != null && playerStatus.Settings != null)
+        {
+            GameDaySettings daySettings =
+                playerStatus.Settings.GetDaySettings(currentDay);
+
+            if (daySettings != null)
             {
-                if (PlayerStatus.Instance != null)
-                {
-                    // 플레이어 체력 감소 호출
-                    PlayerStatus.Instance.TakeDamage(1);
-                }
-                
-                // 유지 시간 초기화
-                fullyClosedTimer = 0f;
-                // 눈 감김 누적 시간 초기화
-                currentCloseTime = 0f;
+                spaceTapsPerStep =
+                    Mathf.Max(1, daySettings.EyeSpaceTapsPerStep);
             }
         }
-        else
+
+        UpdateEyeFrame();
+    }
+
+    private void HandleSpaceRecovery()
+    {
+        spaceTapCount++;
+
+        if (spaceTapCount < spaceTapsPerStep)
+            return;
+
+        spaceTapCount = 0;
+        Sprite[] frames = GetActiveEyeFrames();
+        int frameStepCount = Mathf.Max(
+            1,
+            frames != null ? frames.Length - 1 : 1);
+        float recoveryPerStep = maxCloseTime / frameStepCount;
+        currentCloseTime = Mathf.Max(
+            0f,
+            currentCloseTime - recoveryPerStep);
+        fullyClosedTimer = 0f;
+    }
+
+    private void UpdateEyeFrame()
+    {
+        if (animatedEyesImage == null)
+            return;
+
+        Sprite[] frames = GetActiveEyeFrames();
+
+        if (frames == null || frames.Length == 0)
+            return;
+
+        float ratio = maxCloseTime > 0f
+            ? Mathf.Clamp01(currentCloseTime / maxCloseTime)
+            : 0f;
+        int frameIndex = Mathf.Clamp(
+            Mathf.RoundToInt(ratio * (frames.Length - 1)),
+            0,
+            frames.Length - 1);
+        animatedEyesImage.sprite = frames[frameIndex];
+        animatedEyesImage.enabled = true;
+    }
+
+    private Sprite[] GetActiveEyeFrames()
+    {
+        bool useLateDayFrames = eyeFrameDay >= lateDayStartDay;
+
+        if (!useLateDayFrames &&
+            earlyDayEyeFrames != null &&
+            earlyDayEyeFrames.Length > 0)
         {
-            // 유지 시간 초기화
-            fullyClosedTimer = 0f;
+            return earlyDayEyeFrames;
         }
+
+        if (lateDayEyeFrames != null && lateDayEyeFrames.Length > 0)
+            return lateDayEyeFrames;
+
+        return earlyDayEyeFrames;
+    }
+
+    private void CheckDamageCondition()
+    {
+        if (currentCloseTime < maxCloseTime)
+        {
+            fullyClosedTimer = 0f;
+            return;
+        }
+
+        fullyClosedTimer += Time.deltaTime;
+
+        if (fullyClosedTimer < damageInterval)
+            return;
+
+        PlayerStatus playerStatus = PlayerStatus.Instance;
+
+        if (playerStatus != null)
+            playerStatus.TakeDamage(1);
+
+        fullyClosedTimer = 0f;
+        currentCloseTime = 0f;
+        spaceTapCount = 0;
+        UpdateEyeFrame();
     }
 
     private bool IsMiniGamePlaying()
     {
         if (miniGameManager == null)
-        {
             miniGameManager = FindAnyObjectByType<MiniGameManager>();
-        }
 
         return miniGameManager != null &&
             miniGameManager.IsMiniGamePlaying;
+    }
+
+    private bool IsDayTransitionCovered()
+    {
+        return miniGameManager != null &&
+            miniGameManager.IsDayTransitionCovered;
     }
 }

@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public enum MiniGameEndReason
 {
     Success,
@@ -17,18 +19,21 @@ public class MiniGameResult
     public int Day { get; }
     public float PlayDuration { get; }
     public int? StudyRewardOverride { get; }
+    public float NextDayStudyMultiplier { get; }
 
     public MiniGameResult(
         MiniGameEndReason endReason,
         MiniGameData data,
         int day,
         float playDuration,
-        int? studyRewardOverride = null)
+        int? studyRewardOverride = null,
+        float nextDayStudyMultiplier = 1f)
     {
         EndReason = endReason;
         Data = data;
         Day = day;
         PlayDuration = playDuration;
         StudyRewardOverride = studyRewardOverride;
+        NextDayStudyMultiplier = Mathf.Max(1f, nextDayStudyMultiplier);
     }
 }
