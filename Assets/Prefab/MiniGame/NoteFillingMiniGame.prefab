@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5941826407319052101
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5941826407319052102}
+  - component: {fileID: 5941826407319052103}
+  m_Layer: 0
+  m_Name: NoteFillingMiniGame
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5941826407319052102
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5941826407319052101}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5941826407319052103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5941826407319052101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aa04aa421bc49cab28b5ef3bf41e72a, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::NoteFillingMiniGame
+  gameAreaCenter: {x: -165, y: -150}
+  gameAreaSize: {x: 860, y: 700}
+  activePagePosition: {x: -210, y: 0}
+  completedPageStackPosition: {x: 210, y: 0}
+  pageSize: {x: 360, y: 509}
+  noteSprite: {fileID: 0}
+  temporaryPageColor: {r: 1, g: 1, b: 1, a: 1}
+  pageBorderColor: {r: 0.65, g: 0.65, b: 0.65, a: 1}
+  pageShadowColor: {r: 0, g: 0, b: 0, a: 0.28}
+  fontAsset: {fileID: 11400000, guid: 67ff194e978520846a1405404b4bc7ef, type: 2}
+  textColor: {r: 0, g: 0, b: 0, a: 1}
+  fontSize: 48
+  lineSpacing: -12
+  textPadding: 24
+  charactersPerPage: 100
+  charactersPerLine: 10
+  pageSlideDuration: 0.35
+  completedPageStackOffset: {x: 5, y: -5}
+  maximumVisibleStackOffset: 8
+  stackRotationStep: 1.25

@@ -1,0 +1,121 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f6556e90ec940f0b84acc497e18cf91, type: 3}
+  m_Name: GameBalanceSettings
+  m_EditorClassIdentifier: 
+  maxHealth: 5
+  maxFatigue: 100
+  eyeCloseDuration: 20
+  eyeRecoveryPerSpace: 2
+  closedEyeDamageInterval: 5
+  studyAmountPerMiniGame: 5
+  fatiguePerSecond: 0.3
+  normalMiniGamesPerDay: 5
+  failureHealthDamage: 1
+  timeoutHealthDamage: 1
+  miniGameReadyDuration: 1
+  miniGameResultDuration: 1
+  sleepRecoveryAmount: 50
+  oneBonusRecoveryAmount: 20
+  twoBonusRecoveryAmount: 0
+  finalDay: 10
+  daySettings:
+  - startDay: 1
+    randomizeMiniGameOrder: 0
+    miniGameTimeLimit: 30
+    miniGameDifficultyDay: 0
+    miniGameOverrides: []
+    eyeSpaceTapsPerStep: 1
+    popupChancePerSecond: 0
+    minimumPopupCount: 0
+    maximumPopupCount: 0
+  - startDay: 2
+    randomizeMiniGameOrder: 0
+    miniGameTimeLimit: 30
+    miniGameDifficultyDay: 0
+    miniGameOverrides: []
+    eyeSpaceTapsPerStep: 1
+    popupChancePerSecond: 0
+    minimumPopupCount: 0
+    maximumPopupCount: 0
+  - startDay: 3
+    randomizeMiniGameOrder: 0
+    miniGameTimeLimit: 30
+    miniGameDifficultyDay: 0
+    miniGameOverrides: []
+    eyeSpaceTapsPerStep: 1
+    popupChancePerSecond: 0.02
+    minimumPopupCount: 1
+    maximumPopupCount: 1
+  - startDay: 4
+    randomizeMiniGameOrder: 0
+    miniGameTimeLimit: 30
+    miniGameDifficultyDay: 0
+    miniGameOverrides: []
+    eyeSpaceTapsPerStep: 1
+    popupChancePerSecond: 0.02
+    minimumPopupCount: 1
+    maximumPopupCount: 1
+  - startDay: 5
+    randomizeMiniGameOrder: 0
+    miniGameTimeLimit: 30
+    miniGameDifficultyDay: 0
+    miniGameOverrides: []
+    eyeSpaceTapsPerStep: 1
+    popupChancePerSecond: 0.02
+    minimumPopupCount: 1
+    maximumPopupCount: 1
+  - startDay: 6
+    randomizeMiniGameOrder: 1
+    miniGameTimeLimit: 20
+    miniGameDifficultyDay: 0
+    miniGameOverrides: []
+    eyeSpaceTapsPerStep: 2
+    popupChancePerSecond: 0.04
+    minimumPopupCount: 1
+    maximumPopupCount: 3
+  - startDay: 7
+    randomizeMiniGameOrder: 1
+    miniGameTimeLimit: 20
+    miniGameDifficultyDay: 0
+    miniGameOverrides: []
+    eyeSpaceTapsPerStep: 2
+    popupChancePerSecond: 0.04
+    minimumPopupCount: 1
+    maximumPopupCount: 3
+  - startDay: 8
+    randomizeMiniGameOrder: 1
+    miniGameTimeLimit: 17
+    miniGameDifficultyDay: 0
+    miniGameOverrides: []
+    eyeSpaceTapsPerStep: 2
+    popupChancePerSecond: 0.04
+    minimumPopupCount: 1
+    maximumPopupCount: 3
+  - startDay: 9
+    randomizeMiniGameOrder: 1
+    miniGameTimeLimit: 15
+    miniGameDifficultyDay: 0
+    miniGameOverrides: []
+    eyeSpaceTapsPerStep: 2
+    popupChancePerSecond: 0.05
+    minimumPopupCount: 1
+    maximumPopupCount: 3
+  - startDay: 10
+    randomizeMiniGameOrder: 0
+    miniGameTimeLimit: 30
+    miniGameDifficultyDay: 1
+    miniGameOverrides: []
+    eyeSpaceTapsPerStep: 1
+    popupChancePerSecond: 0
+    minimumPopupCount: 0
+    maximumPopupCount: 0
