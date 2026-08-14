@@ -18,6 +18,8 @@ public sealed class MiniGameFeedbackEffect : MonoBehaviour
     private const float ClearPeakScale = 1.15f;
     private const float ClearFlashAlpha = 0.18f;
     private const float FailureFlashAlpha = 0.2f;
+    private static readonly Vector2 ComboBasePosition =
+        new Vector2(270f, 220f);
 
     private RectTransform feedbackTarget;
     private CanvasGroup feedbackCanvasGroup;
@@ -207,12 +209,12 @@ public sealed class MiniGameFeedbackEffect : MonoBehaviour
         RectTransform comboRect = comboObject.GetComponent<RectTransform>();
         comboRect.anchorMin = new Vector2(0.5f, 0.5f);
         comboRect.anchorMax = new Vector2(0.5f, 0.5f);
-        comboRect.pivot = new Vector2(0.5f, 0.5f);
-        comboRect.anchoredPosition = new Vector2(0f, -120f);
+        comboRect.pivot = Vector2.one;
+        comboRect.anchoredPosition = ComboBasePosition;
         comboRect.sizeDelta = new Vector2(500f, 100f);
 
         comboText = comboObject.GetComponent<TMP_Text>();
-        comboText.alignment = TextAlignmentOptions.Center;
+        comboText.alignment = TextAlignmentOptions.TopRight;
         comboText.color = Color.clear;
         comboText.fontSize = 54f;
         comboText.fontStyle = FontStyles.Bold;
@@ -230,7 +232,11 @@ public sealed class MiniGameFeedbackEffect : MonoBehaviour
         clearText.text = "CLEAR";
         clearText.color = Color.clear;
         clearText.fontSize = 72f;
+        clearText.alignment = TextAlignmentOptions.Center;
         clearText.raycastTarget = false;
+        clearText.rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+        clearText.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+        clearText.rectTransform.pivot = new Vector2(0.5f, 0.5f);
         clearText.rectTransform.anchoredPosition = Vector2.zero;
         clearText.rectTransform.sizeDelta = new Vector2(600f, 140f);
 
@@ -383,7 +389,7 @@ public sealed class MiniGameFeedbackEffect : MonoBehaviour
         int glitchLevel = isGlitched ? currentDay - 5 : 0;
         RectTransform comboRect = comboText.rectTransform;
         RectTransform ghostRect = comboGhostText.rectTransform;
-        Vector2 basePosition = new Vector2(0f, -120f);
+        Vector2 basePosition = ComboBasePosition;
 
         while (elapsed < duration)
         {
@@ -499,7 +505,7 @@ public sealed class MiniGameFeedbackEffect : MonoBehaviour
 
         comboText.color = Color.clear;
         comboText.rectTransform.localScale = Vector3.one;
-        comboText.rectTransform.anchoredPosition = new Vector2(0f, -120f);
+        comboText.rectTransform.anchoredPosition = ComboBasePosition;
         comboText.rectTransform.localRotation = Quaternion.identity;
         comboText.characterSpacing = 0f;
 
@@ -515,7 +521,7 @@ public sealed class MiniGameFeedbackEffect : MonoBehaviour
         comboGhostText.color = Color.clear;
         comboGhostText.rectTransform.localScale = Vector3.one;
         comboGhostText.rectTransform.anchoredPosition =
-            new Vector2(0f, -120f);
+            ComboBasePosition;
         comboGhostText.rectTransform.localRotation = Quaternion.identity;
         comboGhostText.characterSpacing = 0f;
     }
